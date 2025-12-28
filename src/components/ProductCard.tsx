@@ -23,10 +23,11 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
             {/* Image Container - Aspect Ratio Square */}
             <div className="relative aspect-square w-full overflow-hidden border-b border-black dark:border-white md:aspect-[3/4]">
                 <Image
-                    src={product.image}
+                    src={product.image || '/mockups/placeholder.jpg'}
                     alt={product.name}
                     fill
                     className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    unoptimized
                 />
             </div>
 

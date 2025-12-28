@@ -65,8 +65,18 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
 
                 <div className="p-6 grid gap-6 font-mono text-xs">
                     <div className="flex gap-6">
-                        <div className="w-1/3 aspect-square relative border border-[#333]">
-                            <Image src={formData.image} alt="Preview" fill className="object-cover" />
+                        <div className="w-1/3 aspect-square relative border border-[#333] bg-[#222] flex items-center justify-center">
+                            {formData.image ? (
+                                <Image
+                                    src={formData.image}
+                                    alt="Preview"
+                                    fill
+                                    className="object-cover"
+                                    unoptimized
+                                />
+                            ) : (
+                                <span className="text-gray-600 text-xs">NO IMAGE</span>
+                            )}
                         </div>
                         <div className="w-2/3 grid gap-4">
                             <div>
