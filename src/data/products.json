@@ -56,11 +56,11 @@
         },
         {
             "id": "d7",
-            "name": "Denji Crazy",
+            "name": "Reze Crazy",
             "price": "$7.00",
-            "image": "",
+            "image": "/mockups/1766898148900-1000027955.jpg",
             "buyUrl": "https://www.redbubble.com/",
-            "category": "STICKERS",
+            "category": "APPAREL",
             "description": "Denji crzyyy"
         }
     ],
@@ -123,9 +123,9 @@
             "id": "d7",
             "name": "Denji Crazy",
             "price": "$7.00",
-            "image": "",
+            "image": "/mockups/1766898148900-1000027955.jpg",
             "buyUrl": "https://www.redbubble.com/",
-            "category": "STICKERS",
+            "category": "APPAREL",
             "description": "Denji crzyyy"
         }
     ]
