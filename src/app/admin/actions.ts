@@ -100,5 +100,6 @@ export async function updateProductAction(updatedProduct: any) {
         return { error: error.message || 'Update failed' };
     }
 
-    redirect('/admin');
+    // redirect('/admin'); 
+    return { success: true };
 }
