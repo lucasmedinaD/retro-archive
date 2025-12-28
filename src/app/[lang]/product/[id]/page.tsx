@@ -6,6 +6,7 @@ import { ArrowLeft, Instagram, Twitter } from 'lucide-react';
 import Header from '@/components/Header';
 import MockupGenerator from '@/components/MockupGenerator';
 import ShareButtons from '@/components/ShareButtons';
+import ImageZoom from '@/components/ImageZoom';
 
 // Social Icon helper (duplicated for now to keep pages self contained or can be shared later)
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -80,13 +81,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Product Detail */}
             <section className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row gap-12">
-                {/* Image */}
-                <div className="flex-1 w-full relative aspect-square border-2 border-black dark:border-white shadow-[8px_8px_0px_#111111] dark:shadow-[8px_8px_0px_#f4f4f0]">
-                    <Image
+                {/* Image with Zoom */}
+                <div className="flex-1 w-full">
+                    <ImageZoom
                         src={product.image}
                         alt={product.name}
-                        fill
-                        className="object-cover"
                     />
                 </div>
 

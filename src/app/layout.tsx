@@ -18,6 +18,13 @@ export const metadata: Metadata = {
     default: 'RETRO.ARCHIVE'
   },
   description: 'Anime Aesthetic Streetwear & Digital Artifacts. Limited drops and experimental gear.',
+  manifest: '/manifest.json',
+  themeColor: '#00ff00',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'RETRO.ARCHIVE',
+  },
   openGraph: {
     title: 'RETRO.ARCHIVE',
     description: 'Anime Aesthetic Streetwear & Digital Artifacts.',
