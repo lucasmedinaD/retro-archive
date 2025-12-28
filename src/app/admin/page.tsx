@@ -1,11 +1,24 @@
-import { getProducts } from '@/data/products';
+'use client';
+
 import { logoutAction } from './actions';
 import Image from 'next/image';
+import { useState } from 'react';
+import ProductEditor from './ProductEditor';
+import { Product } from '@/data/products';
 
-export default async function AdminDashboard() {
-    // We'll just load English data for editing to keep it simple, or load both structure
-    // Ideally we edit the abstraction, but let's just show the EN list for the MVP
-    const products = getProducts('en');
+// This is a client component now receiving data via props or just importing directly (since it's a file read)
+// However, direct file read of 'src/data/json' works in Server Components better.
+// Let's keep it simple: We fetch the data via a server action or we accept that for this MVP
+// we import the JSON directly which works in Client Components during build time (static).
+// For real dynamic updates without rebuild, we need to fetch from an API route.
+// BUT, since we are REWRITING the file, the next build will have new data.
+// For instant gratification, we can update local state.
+
+import productsRaw from '@/data/products.json';
+
+export default function AdminDashboard() {
+    const [products, setProducts] = useState<Product[]>(productsRaw.en as Product[]);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
     return (
         <main className="min-h-screen bg-[#111] text-accent font-mono p-8">
@@ -14,7 +27,7 @@ export default async function AdminDashboard() {
                     <h1 className="text-4xl font-black uppercase tracking-tighter text-white">
                         Admin <span className="text-accent">Console</span>
                     </h1>
-                    <p className="text-xs text-gray-500">Access Level: 0 (ROOT)</p>
+                    <p className="text-xs text-gray-500">Access Level: 0 (ROOT) | Connected to GitHub</p>
                 </div>
                 <div className="flex gap-4">
                     <form action={logoutAction}>
@@ -80,7 +93,10 @@ export default async function AdminDashboard() {
                                 {product.buyUrl}
                             </div>
                             <div>
-                                <button className="text-xs text-white underline hover:no-underline hover:text-accent">
+                                <button
+                                    onClick={() => setEditingProduct(product)}
+                                    className="text-xs text-white underline hover:no-underline hover:text-accent"
+                                >
                                     EDIT
                                 </button>
                             </div>
@@ -88,6 +104,13 @@ export default async function AdminDashboard() {
                     ))}
                 </div>
             </section>
+
+            {editingProduct && (
+                <ProductEditor
+                    product={editingProduct}
+                    onCancel={() => setEditingProduct(null)}
+                />
+            )}
         </main>
     );
 }

@@ -27,3 +27,78 @@ export async function logoutAction() {
     cookieStore.delete('admin_session');
     redirect('/admin/login');
 }
+
+// --- GITHUB PERSISTENCE ---
+
+const REPO_OWNER = 'lucasmedinaD';
+const REPO_NAME = 'retro-archive';
+const FILE_PATH = 'src/data/products.json';
+
+export async function updateProductAction(updatedProduct: any) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current file (SHA is needed to update)
+        const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+            },
+            cache: 'no-store'
+        });
+
+        if (!getRes.ok) throw new Error('Failed to fetch current inventory');
+        const fileData = await getRes.json();
+        const sha = fileData.sha;
+        const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+
+        // 2. Modify JSON
+        const productsJson = JSON.parse(content);
+        const lang = 'en'; // Editing English for now (or find in both)
+
+        const index = productsJson[lang].findIndex((p: any) => p.id === updatedProduct.id);
+        if (index !== -1) {
+            productsJson[lang][index] = { ...productsJson[lang][index], ...updatedProduct };
+
+            // Also sync to ES if it exists/matches
+            const indexEs = productsJson['es'].findIndex((p: any) => p.id === updatedProduct.id);
+            if (indexEs !== -1) {
+                // Keep spanish translation but update shared fields like price/image/category
+                productsJson['es'][indexEs].price = updatedProduct.price;
+                productsJson['es'][indexEs].image = updatedProduct.image;
+                productsJson['es'][indexEs].category = updatedProduct.category;
+                productsJson['es'][indexEs].buyUrl = updatedProduct.buyUrl;
+                // Name/Desc we don't auto-translate yet to avoid overwriting spanish text with english
+            }
+        } else {
+            // New Product logic could go here
+            return { error: 'Product not found globally' };
+        }
+
+        // 3. Commit Update
+        const newContent = Buffer.from(JSON.stringify(productsJson, null, 4)).toString('base64');
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Update product: ${updatedProduct.name}`,
+                content: newContent,
+                sha: sha
+            })
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected write request');
+
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Update failed' };
+    }
+
+    redirect('/admin');
+}
