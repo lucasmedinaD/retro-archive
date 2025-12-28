@@ -26,7 +26,8 @@
     "product_detail": {
         "buy_redbubble": "COMPRAR EN REDBUBBLE",
         "related": "RELACIONADOS",
-        "back": "VOLVER AL CATÁLOGO"
+        "back": "VOLVER AL CATÁLOGO",
+        "customize": "PERSONALIZAR"
     },
     "newsletter": {
         "title": "ÚNETE AL ARCHIVO",
