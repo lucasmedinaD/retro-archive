@@ -1,6 +1,6 @@
 'use client';
 
-import { logoutAction } from './actions';
+import { logoutAction, deleteProductAction } from './actions';
 import Image from 'next/image';
 import { useState } from 'react';
 import ProductEditor from './ProductEditor';
@@ -23,6 +23,30 @@ export default function AdminDashboard() {
     const [products, setProducts] = useState<Product[]>((productsRaw?.en || []) as Product[]);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filter products based on search
+    const filteredProducts = products.filter(p =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleDelete = async (product: Product) => {
+        if (!confirm(`⚠️ DELETE UNIT ${product.id}?\n\nThis action cannot be undone. The product will be permanently removed from the mainframe.`)) {
+            return;
+        }
+
+        const result = await deleteProductAction(product.id);
+        // @ts-ignore
+        if (result?.error) {
+            // @ts-ignore
+            alert(`DELETE FAILED: ${result.error}`);
+        } else {
+            setProducts(prev => prev.filter(p => p.id !== product.id));
+            alert('DELETE SUCCESSFUL: Unit removed from inventory. Deployment initiated.');
+        }
+    };
 
     // Sync with GitHub on mount (to show latest commits even if Vercel is building)
     useEffect(() => {
@@ -115,12 +139,19 @@ export default function AdminDashboard() {
                             <div className="text-xs text-gray-600 truncate font-mono">
                                 {product.buyUrl}
                             </div>
-                            <div>
+                            <div className="flex gap-2">
                                 <button
                                     onClick={() => setEditingProduct(product)}
                                     className="text-xs text-white underline hover:no-underline hover:text-accent"
                                 >
                                     EDIT
+                                </button>
+                                <span className="text-gray-600">|</span>
+                                <button
+                                    onClick={() => handleDelete(product)}
+                                    className="text-xs text-red-500 underline hover:no-underline hover:text-red-400"
+                                >
+                                    DELETE
                                 </button>
                             </div>
                         </div>

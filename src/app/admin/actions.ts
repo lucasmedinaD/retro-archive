@@ -235,3 +235,55 @@ export async function uploadImageAction(imageFile: File) {
         return { error: error.message || 'Image upload failed' };
     }
 }
+
+export async function deleteProductAction(productId: string) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current file
+        const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+            },
+            cache: 'no-store'
+        });
+
+        if (!getRes.ok) throw new Error('Failed to fetch current inventory');
+        const fileData = await getRes.json();
+        const sha = fileData.sha;
+        const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+
+        // 2. Remove product from both languages
+        const productsJson = JSON.parse(content);
+        productsJson.en = productsJson.en.filter((p: any) => p.id !== productId);
+        productsJson.es = productsJson.es.filter((p: any) => p.id !== productId);
+
+        // 3. Commit Update
+        const newContent = Buffer.from(JSON.stringify(productsJson, null, 4)).toString('base64');
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Delete product: ${productId}`,
+                content: newContent,
+                sha: sha
+            })
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected delete request');
+
+        revalidatePath('/');
+        revalidatePath('/admin');
+        return { success: true };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Delete failed' };
+    }
+}
