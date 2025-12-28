@@ -22,6 +22,7 @@ export default function AdminDashboard() {
     // Initial state from build-time file (instant load)
     const [products, setProducts] = useState<Product[]>((productsRaw?.en || []) as Product[]);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [isCreating, setIsCreating] = useState(false);
 
     // Sync with GitHub on mount (to show latest commits even if Vercel is building)
     useEffect(() => {
@@ -46,6 +47,12 @@ export default function AdminDashboard() {
                     <p className="text-xs text-gray-500">Access Level: 0 (ROOT) | Connected to GitHub</p>
                 </div>
                 <div className="flex gap-4">
+                    <button
+                        onClick={() => setIsCreating(true)}
+                        className="px-4 py-2 bg-accent text-black hover:bg-white transition-colors uppercase text-xs font-bold"
+                    >
+                        + NEW PRODUCT
+                    </button>
                     <form action={logoutAction}>
                         <button className="px-4 py-2 border border-[#333] hover:bg-white hover:text-black hover:border-white transition-colors uppercase text-xs">
                             Terminate Session
@@ -128,6 +135,27 @@ export default function AdminDashboard() {
                     onSave={(updatedProduct) => {
                         setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
                         alert('UPDATE SUCCESSFUL: Changes committed to Mainframe. Deployment of static assets initiated (ETA: 2 mins). Local view updated.');
+                    }}
+                />
+            )}
+
+            {isCreating && (
+                <ProductEditor
+                    product={{
+                        id: '',
+                        name: '',
+                        price: '$0.00',
+                        image: '',
+                        buyUrl: 'https://www.redbubble.com/',
+                        category: 'DESIGN',
+                        description: ''
+                    }}
+                    isNew={true}
+                    onCancel={() => setIsCreating(false)}
+                    onSave={(newProduct) => {
+                        setProducts(prev => [...prev, newProduct]);
+                        alert('PRODUCT CREATED: New unit added to inventory. GitHub commit initiated. Deployment ETA: 2 mins.');
+                        setIsCreating(false);
                     }}
                 />
             )}

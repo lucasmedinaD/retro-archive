@@ -128,3 +128,70 @@ export async function fetchLatestInventory() {
         return { error: 'Failed to sync with Mainframe' };
     }
 }
+
+export async function createProductAction(newProduct: any) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current file
+        const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+            },
+            cache: 'no-store'
+        });
+
+        if (!getRes.ok) throw new Error('Failed to fetch current inventory');
+        const fileData = await getRes.json();
+        const sha = fileData.sha;
+        const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+
+        // 2. Parse and generate new ID
+        const productsJson = JSON.parse(content);
+        const existingIds = productsJson.en.map((p: any) => p.id);
+        let newId = 'd1';
+        let counter = 1;
+        while (existingIds.includes(newId)) {
+            counter++;
+            newId = `d${counter}`;
+        }
+
+        // 3. Create product objects for both languages
+        const productEn = { ...newProduct, id: newId };
+        const productEs = {
+            ...newProduct,
+            id: newId
+        };
+
+        productsJson.en.push(productEn);
+        productsJson.es.push(productEs);
+
+        // 4. Commit Update
+        const newContent = Buffer.from(JSON.stringify(productsJson, null, 4)).toString('base64');
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Add product: ${newProduct.name}`,
+                content: newContent,
+                sha: sha
+            })
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected write request');
+
+        revalidatePath('/');
+        revalidatePath('/admin');
+        return { success: true, product: productEn };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Creation failed' };
+    }
+}

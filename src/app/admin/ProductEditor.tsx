@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { updateProductAction } from './actions';
+import { updateProductAction, createProductAction } from './actions';
 import Image from 'next/image';
 
-export default function ProductEditor({ product, onCancel, onSave }: { product: any, onCancel: () => void, onSave: (p: any) => void }) {
+export default function ProductEditor({ product, onCancel, onSave, isNew }: { product: any, onCancel: () => void, onSave: (p: any) => void, isNew?: boolean }) {
     const [formData, setFormData] = useState(product);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -14,7 +14,9 @@ export default function ProductEditor({ product, onCancel, onSave }: { product: 
 
     const handleSave = async () => {
         setIsSaving(true);
-        const result = await updateProductAction(formData);
+        const result = isNew
+            ? await createProductAction(formData)
+            : await updateProductAction(formData);
         setIsSaving(false);
 
         // @ts-ignore
@@ -22,7 +24,8 @@ export default function ProductEditor({ product, onCancel, onSave }: { product: 
             // @ts-ignore
             alert(`ERROR: ${result.error}`);
         } else {
-            onSave(formData);
+            // @ts-ignore
+            onSave(result?.product || formData);
             onCancel();
         }
     };
@@ -31,7 +34,7 @@ export default function ProductEditor({ product, onCancel, onSave }: { product: 
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-[#111] border border-accent w-full max-w-2xl max-h-[90vh] overflow-y-auto brutal-shadow">
                 <div className="bg-accent text-white p-2 flex justify-between items-center">
-                    <h3 className="font-bold uppercase tracking-widest">Editing Unit: {product.id}</h3>
+                    <h3 className="font-bold uppercase tracking-widest">{isNew ? 'Creating New Unit' : `Editing Unit: ${product.id}`}</h3>
                     <button onClick={onCancel} className="text-black font-mono font-bold hover:bg-white px-2">X</button>
                 </div>
 
