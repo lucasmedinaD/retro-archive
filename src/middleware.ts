@@ -28,6 +28,24 @@ export function middleware(request: NextRequest) {
         return;
     }
 
+    // --- ADMIN PROTECTION ---
+    if (pathname.startsWith('/admin')) {
+        // Allow access to login page
+        if (pathname === '/admin/login') {
+            return;
+        }
+
+        // Check for session cookie
+        const session = request.cookies.get('admin_session');
+        if (!session) {
+            return NextResponse.redirect(new URL('/admin/login', request.url));
+        }
+
+        // If authenticated, allow through (skip i18n)
+        return;
+    }
+    // -------------------------
+
     const pathnameIsMissingLocale = locales.every(
         (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
     );
