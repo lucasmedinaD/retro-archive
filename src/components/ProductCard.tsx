@@ -62,6 +62,15 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
                         {product.name}
                     </h3>
                     <p className="text-xs font-mono text-gray-500">REF: {product.id.toUpperCase()}</p>
+                    {product.tags && product.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                            {product.tags.slice(0, 3).map((tag, i) => (
+                                <span key={i} className="text-[10px] px-1.5 py-0.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 font-mono">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex items-end justify-between border-t border-black dark:border-white pt-3">

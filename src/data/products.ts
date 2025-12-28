@@ -8,6 +8,7 @@ export interface Product {
     buyUrl: string;
     category: 'DESIGN' | 'ART' | 'DIGITAL';
     description: string;
+    tags?: string[];
     [key: string]: any;
 }
 
