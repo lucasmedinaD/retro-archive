@@ -4,7 +4,8 @@
         "apparel": "Ropa",
         "about": "Nosotros",
         "cart": "CARRITO",
-        "favorites": "FAVORITOS"
+        "favorites": "FAVORITOS",
+        "search": "Buscar productos..."
     },
     "hero": {
         "title_less": "MENOS",
@@ -48,5 +49,12 @@
         "product_count_plural": "productos",
         "copy_link": "Copiar Link",
         "link_copied": "¡Link copiado!"
+    },
+    "search": {
+        "placeholder": "Buscar productos...",
+        "no_results": "No se encontraron productos",
+        "no_results_desc": "Prueba con otras palabras clave o explora todos los productos",
+        "results_count_singular": "resultado",
+        "results_count_plural": "resultados"
     }
 }

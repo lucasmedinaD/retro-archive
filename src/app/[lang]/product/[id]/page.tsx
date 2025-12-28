@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import ShareButtons from '@/components/ShareButtons';
 import ImageZoom from '@/components/ImageZoom';
+import BuyButton from '@/components/BuyButton';
 
 interface ProductPageProps {
     params: Promise<{
@@ -99,14 +100,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         description={product.description}
                     />
 
-                    <a
-                        href={product.buyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <BuyButton
+                        productId={product.id}
+                        productName={product.name}
+                        buyUrl={product.buyUrl}
+                        platform="redbubble"
+                        label={dict.product_detail.buy_redbubble}
                         className="w-full md:w-auto text-center bg-accent text-white px-8 py-5 font-bold text-lg uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black border-2 border-black dark:border-white transition-all shadow-[4px_4px_0px_#111111] dark:shadow-[4px_4px_0px_#f4f4f0] transform hover:-translate-y-1 mt-6 inline-block"
-                    >
-                        {dict.product_detail.buy_redbubble}
-                    </a>
+                    />
                 </div>
             </section>
 

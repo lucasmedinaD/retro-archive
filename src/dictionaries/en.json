@@ -4,7 +4,8 @@
         "apparel": "Apparel",
         "about": "About",
         "cart": "CART",
-        "favorites": "FAVORITES"
+        "favorites": "FAVORITES",
+        "search": "Search products..."
     },
     "hero": {
         "title_less": "LESS",
@@ -48,5 +49,12 @@
         "product_count_plural": "products",
         "copy_link": "Copy Link",
         "link_copied": "Link copied!"
+    },
+    "search": {
+        "placeholder": "Search products...",
+        "no_results": "No products found",
+        "no_results_desc": "Try different keywords or browse all products",
+        "results_count_singular": "result",
+        "results_count_plural": "results"
     }
 }

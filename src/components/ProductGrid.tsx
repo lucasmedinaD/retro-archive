@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { getProducts, Product } from '@/data/products';
+import { Search, X } from 'lucide-react';
 
 // Dynamically import ProductCard with SSR disabled
 const ProductCard = dynamic(() => import('@/components/ProductCard'), { ssr: false });
@@ -23,13 +24,20 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
     // Get unique categories from products
     const uniqueCategories = Array.from(new Set(products.map(p => p.category.toUpperCase())));
 
-    // Filter by category and search term
+    // Enhanced filter by category and search term (including tags)
     const filteredProducts = products.filter(p => {
         const matchesCategory = filter === 'ALL' || p.category.toUpperCase() === filter;
-        const matchesSearch = searchTerm === '' ||
-            p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.description.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearch;
+
+        if (searchTerm === '') return matchesCategory;
+
+        const searchLower = searchTerm.toLowerCase();
+        const matchesName = p.name.toLowerCase().includes(searchLower);
+        const matchesDescription = p.description.toLowerCase().includes(searchLower);
+        const matchesTags = p.tags?.some(tag =>
+            tag.toLowerCase().includes(searchLower)
+        ) || false;
+
+        return matchesCategory && (matchesName || matchesDescription || matchesTags);
     });
 
     // Paginated products
@@ -48,8 +56,43 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
         setVisibleCount(prev => prev + ITEMS_PER_PAGE);
     };
 
+    const clearSearch = () => {
+        setSearchTerm('');
+    };
+
     return (
         <div>
+            {/* Search Bar */}
+            <div className="mb-8">
+                <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setVisibleCount(ITEMS_PER_PAGE); // Reset pagination on search
+                        }}
+                        placeholder={dict.search?.placeholder || 'Search products...'}
+                        className="w-full pl-12 pr-12 py-4 border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white font-mono text-sm uppercase placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    />
+                    {searchTerm && (
+                        <button
+                            onClick={clearSearch}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                            aria-label="Clear search"
+                        >
+                            <X size={20} />
+                        </button>
+                    )}
+                </div>
+                {searchTerm && (
+                    <p className="mt-2 text-xs font-mono text-gray-600 dark:text-gray-400">
+                        {filteredProducts.length} {filteredProducts.length === 1 ? dict.search?.results_count_singular : dict.search?.results_count_plural}
+                    </p>
+                )}
+            </div>
+
             {/* Filter Bar */}
             <div className="flex flex-wrap gap-4 mb-8 border-b border-black dark:border-white pb-4">
                 {categories.map((cat) => (
@@ -80,8 +123,24 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                     />
                 ))}
                 {filteredProducts.length === 0 && (
-                    <div className="col-span-full py-20 text-center font-mono text-gray-400">
-                        NO SIGNALS FOUND.
+                    <div className="col-span-full py-20 text-center font-mono">
+                        {searchTerm ? (
+                            <>
+                                <Search size={64} className="mx-auto mb-6 text-gray-300 dark:text-gray-700" />
+                                <h3 className="text-2xl font-black mb-2">{dict.search?.no_results || 'No products found'}</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                                    {dict.search?.no_results_desc || 'Try different keywords'}
+                                </p>
+                                <button
+                                    onClick={clearSearch}
+                                    className="bg-black dark:bg-white text-white dark:text-black px-6 py-3 font-bold uppercase text-xs hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+                                >
+                                    CLEAR SEARCH
+                                </button>
+                            </>
+                        ) : (
+                            <p className="text-gray-400">NO SIGNALS FOUND.</p>
+                        )}
                     </div>
                 )}
             </div>

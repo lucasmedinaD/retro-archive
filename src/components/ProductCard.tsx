@@ -6,6 +6,7 @@ import { Product } from '@/data/products';
 import { Heart } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useState } from 'react';
+import { trackFavorite, trackProductClick } from '@/lib/analytics';
 
 interface ProductCardProps {
     product: Product;
@@ -19,7 +20,11 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.preventDefault();
+        const wasFavorite = isFavorite(product.id);
         toggleFavorite(product.id);
+
+        // Track the action
+        trackFavorite(wasFavorite ? 'remove' : 'add', product.id);
     };
 
     const handleImageTouch = (e: React.TouchEvent) => {
@@ -27,8 +32,16 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
         setIsTouched(!isTouched);
     };
 
+    const handleProductClick = () => {
+        trackProductClick(product.id, product.name, product.category);
+    };
+
     return (
-        <Link href={`/${lang}/product/${product.id}`} className="group relative border border-black dark:border-white bg-white dark:bg-[#111111] flex flex-col h-full transition-all duration-300 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_#f4f4f0] hover:-translate-y-1 hover:-translate-x-1 block">
+        <Link
+            href={`/${lang}/product/${product.id}`}
+            onClick={handleProductClick}
+            className="group relative border border-black dark:border-white bg-white dark:bg-[#111111] flex flex-col h-full transition-all duration-300 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_#f4f4f0] hover:-translate-y-1 hover:-translate-x-1 block"
+        >
             {/* Category Tag */}
             <div className="absolute top-2 left-2 z-10">
                 <span className="bg-black dark:bg-white text-white dark:text-black text-[10px] font-mono px-2 py-1 uppercase tracking-tighter">
