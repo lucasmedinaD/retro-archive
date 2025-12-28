@@ -42,9 +42,9 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
                 <div className="flex items-end justify-between border-t border-black dark:border-white pt-3">
                     <span className="text-sm font-bold font-mono text-black dark:text-white">***</span>
                     <span
-                        className="text-xs font-bold uppercase underline hover:no-underline hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-1 transition-colors text-black dark:text-white"
+                        className="bg-black text-white dark:bg-white dark:text-black px-3 py-1 text-xs font-bold uppercase tracking-wider hover:invert border border-black dark:border-white transition-all"
                     >
-                        [ {label} ]
+                        {label} &rarr;
                     </span>
                 </div>
             </div>
