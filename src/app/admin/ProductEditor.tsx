@@ -1,15 +1,40 @@
 'use client';
 
 import { useState } from 'react';
-import { updateProductAction, createProductAction } from './actions';
+import { updateProductAction, createProductAction, uploadImageAction } from './actions';
 import Image from 'next/image';
 
 export default function ProductEditor({ product, onCancel, onSave, isNew }: { product: any, onCancel: () => void, onSave: (p: any) => void, isNew?: boolean }) {
     const [formData, setFormData] = useState(product);
     const [isSaving, setIsSaving] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
 
     const handleChange = (e: any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('ERROR: Please select an image file');
+            return;
+        }
+
+        setIsUploadingImage(true);
+        const result = await uploadImageAction(file);
+        setIsUploadingImage(false);
+
+        // @ts-ignore
+        if (result?.error) {
+            // @ts-ignore
+            alert(`IMAGE UPLOAD ERROR: ${result.error}`);
+        } else {
+            // @ts-ignore
+            setFormData({ ...formData, image: result.path });
+        }
     };
 
     const handleSave = async () => {
@@ -45,8 +70,20 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
                         </div>
                         <div className="w-2/3 grid gap-4">
                             <div>
-                                <label className="text-gray-500 block mb-1">IMAGE URL</label>
-                                <input name="image" value={formData.image} onChange={handleChange} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none" />
+                                <label className="text-gray-500 block mb-1">UPLOAD IMAGE</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                    disabled={isUploadingImage}
+                                    className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-accent file:text-black file:font-mono file:text-xs file:uppercase file:cursor-pointer hover:file:bg-white"
+                                />
+                                {isUploadingImage && (
+                                    <p className="text-accent text-xs mt-1 animate-pulse">UPLOADING TO MAINFRAME...</p>
+                                )}
+                                {formData.image && !isUploadingImage && (
+                                    <p className="text-gray-500 text-xs mt-1">✓ {formData.image}</p>
+                                )}
                             </div>
                             <div>
                                 <label className="text-gray-500 block mb-1">NAME</label>

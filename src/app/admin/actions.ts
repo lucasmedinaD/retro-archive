@@ -195,3 +195,43 @@ export async function createProductAction(newProduct: any) {
         return { error: error.message || 'Creation failed' };
     }
 }
+
+export async function uploadImageAction(imageFile: File) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Convert file to base64
+        const bytes = await imageFile.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const base64Content = buffer.toString('base64');
+
+        // 2. Generate unique filename
+        const timestamp = Date.now();
+        const sanitizedName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const filename = `${timestamp}-${sanitizedName}`;
+        const filePath = `public/mockups/${filename}`;
+
+        // 3. Upload to GitHub
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Upload mockup image: ${filename}`,
+                content: base64Content
+            })
+        });
+
+        if (!putRes.ok) throw new Error('Failed to upload image to GitHub');
+
+        // Return public URL path
+        return { success: true, path: `/mockups/${filename}` };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Image upload failed' };
+    }
+}
