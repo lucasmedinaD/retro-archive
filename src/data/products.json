@@ -14,15 +14,6 @@
             "featured": true
         },
         {
-            "id": "d7",
-            "name": "Reze Crazy",
-            "price": "$7.00",
-            "image": "/mockups/1766898148900-1000027955.jpg",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "APPAREL",
-            "description": "Denji crzyyy"
-        },
-        {
             "id": "d2",
             "name": "Makima Original Anime Art",
             "price": "23",
@@ -47,15 +38,6 @@
             "buyUrl": "https://www.redbubble.com/es/i/sudadera/Bomb-Girl-Anime-Chib-de-sosacrash/177145943.0C5ES",
             "category": "DESIGN",
             "description": "Sigilos ciber-demoníacos de alto contraste. Optimizado para superposición en ropa y consumo digital."
-        },
-        {
-            "id": "d7",
-            "name": "Denji Crazy",
-            "price": "$7.00",
-            "image": "/mockups/1766898148900-1000027955.jpg",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "APPAREL",
-            "description": "Denji crzyyy"
         },
         {
             "id": "d2",
