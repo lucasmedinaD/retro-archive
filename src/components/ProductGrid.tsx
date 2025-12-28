@@ -9,16 +9,16 @@ const ProductCard = dynamic(() => import('@/components/ProductCard'), { ssr: fal
 
 interface ProductGridProps {
     lang: 'en' | 'es';
-    dict: any; // Using any for simplicity with complex recursive dictionary types
+    dict: any;
+    products: Product[];
 }
 
-export default function ProductGrid({ lang, dict }: ProductGridProps) {
-    const allProducts = getProducts(lang);
+export default function ProductGrid({ lang, dict, products }: ProductGridProps) {
     const [filter, setFilter] = useState<'ALL' | 'APPAREL' | 'ACCESSORIES' | 'STICKERS'>('ALL');
 
     const filteredProducts = filter === 'ALL'
-        ? allProducts
-        : allProducts.filter(p => p.category === filter);
+        ? products
+        : products.filter(p => p.category === filter);
 
     const categories = [
         { key: 'ALL', label: dict.catalog.filters.all },
@@ -36,8 +36,8 @@ export default function ProductGrid({ lang, dict }: ProductGridProps) {
                         key={cat.key}
                         onClick={() => setFilter(cat.key as any)}
                         className={`text-xs font-bold font-mono uppercase px-3 py-1 border transition-all ${filter === cat.key
-                                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                                : 'bg-transparent text-gray-500 hover:text-black dark:hover:text-white border-transparent hover:border-black dark:hover:border-white'
+                            ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                            : 'bg-transparent text-gray-500 hover:text-black dark:hover:text-white border-transparent hover:border-black dark:hover:border-white'
                             }`}
                     >
                         [ {cat.label} ]

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ProductGrid from '@/components/ProductGrid';
+import { getProducts } from '@/data/products';
 import { getDictionary } from '@/get-dictionary';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -93,7 +94,7 @@ export default async function Home({ params }: HomeProps) {
           </div>
         </div>
 
-        <ProductGrid lang={lang} dict={dict} />
+        <ProductGrid lang={lang} dict={dict} products={await getProducts(lang)} />
       </section>
 
       {/* Newsletter Section */}
