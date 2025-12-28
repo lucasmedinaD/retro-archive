@@ -85,16 +85,32 @@ export async function updateProductAction(updatedProduct: any) {
 
         const index = productsJson[lang].findIndex((p: any) => p.id === updatedProduct.id);
         if (index !== -1) {
+            // If marking as featured, unfeatured all others
+            if (updatedProduct.featured) {
+                productsJson[lang].forEach((p: any) => {
+                    if (p.id !== updatedProduct.id) {
+                        p.featured = false;
+                    }
+                });
+                productsJson['es'].forEach((p: any) => {
+                    if (p.id !== updatedProduct.id) {
+                        p.featured = false;
+                    }
+                });
+            }
+
             productsJson[lang][index] = { ...productsJson[lang][index], ...updatedProduct };
 
             // Also sync to ES if it exists/matches
             const indexEs = productsJson['es'].findIndex((p: any) => p.id === updatedProduct.id);
             if (indexEs !== -1) {
-                // Keep spanish translation but update shared fields like price/image/category
+                // Keep spanish translation but update shared fields
                 productsJson['es'][indexEs].price = updatedProduct.price;
                 productsJson['es'][indexEs].image = updatedProduct.image;
                 productsJson['es'][indexEs].category = updatedProduct.category;
                 productsJson['es'][indexEs].buyUrl = updatedProduct.buyUrl;
+                productsJson['es'][indexEs].featured = updatedProduct.featured; // Sync featured status
+                productsJson['es'][indexEs].tags = updatedProduct.tags; // Sync tags too
                 // Name/Desc we don't auto-translate yet to avoid overwriting spanish text with english
             }
         } else {
