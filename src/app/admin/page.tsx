@@ -124,7 +124,7 @@ export default function AdminDashboard() {
                         <div>Action</div>
                     </div>
 
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                         <div key={product.id} className="grid grid-cols-[80px_1fr_1fr_1fr_100px] gap-4 p-4 border-b border-[#333] items-center hover:bg-[#1a1a1a] transition-colors group">
                             <div className="relative w-12 h-12 border border-[#333] overflow-hidden bg-black">
                                 <Image src={product.image} alt={product.name} fill className="object-cover" />

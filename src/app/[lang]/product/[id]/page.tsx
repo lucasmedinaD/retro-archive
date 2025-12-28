@@ -5,6 +5,7 @@ import { getDictionary } from '@/get-dictionary';
 import { ArrowLeft, Instagram, Twitter } from 'lucide-react';
 import Header from '@/components/Header';
 import MockupGenerator from '@/components/MockupGenerator';
+import ShareButtons from '@/components/ShareButtons';
 
 // Social Icon helper (duplicated for now to keep pages self contained or can be shared later)
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -68,15 +69,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">{product.name}</h1>
 
 
-                    <p className="font-mono text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-md">
+                    <p className="font-mono text-gray-600 dark:text-gray-400 mb-6 leading-relaxed max-w-md">
                         {product.description}
                     </p>
+
+                    <ShareButtons
+                        url={`https://retro-archive.vercel.app/${lang}/product/${product.id}`}
+                        title={product.name}
+                        description={product.description}
+                    />
 
                     <a
                         href={product.buyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full md:w-auto text-center bg-accent text-white px-8 py-5 font-bold text-lg uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black border-2 border-black dark:border-white transition-all shadow-[4px_4px_0px_#111111] dark:shadow-[4px_4px_0px_#f4f4f0] transform hover:-translate-y-1"
+                        className="w-full md:w-auto text-center bg-accent text-white px-8 py-5 font-bold text-lg uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black border-2 border-black dark:border-white transition-all shadow-[4px_4px_0px_#111111] dark:shadow-[4px_4px_0px_#f4f4f0] transform hover:-translate-y-1 mt-6 inline-block"
                     >
                         {dict.product_detail.buy_redbubble}
                     </a>
