@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { updateProductAction } from './actions';
 import Image from 'next/image';
 
-export default function ProductEditor({ product, onCancel }: { product: any, onCancel: () => void }) {
+export default function ProductEditor({ product, onCancel, onSave }: { product: any, onCancel: () => void, onSave: (p: any) => void }) {
     const [formData, setFormData] = useState(product);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -14,9 +14,17 @@ export default function ProductEditor({ product, onCancel }: { product: any, onC
 
     const handleSave = async () => {
         setIsSaving(true);
-        await updateProductAction(formData);
+        const result = await updateProductAction(formData);
         setIsSaving(false);
-        onCancel(); // Close editor matching success redirect or just close
+
+        // @ts-ignore
+        if (result?.error) {
+            // @ts-ignore
+            alert(`ERROR: ${result.error}`);
+        } else {
+            onSave(formData);
+            onCancel();
+        }
     };
 
     return (

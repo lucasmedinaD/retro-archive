@@ -109,6 +109,10 @@ export default function AdminDashboard() {
                 <ProductEditor
                     product={editingProduct}
                     onCancel={() => setEditingProduct(null)}
+                    onSave={(updatedProduct) => {
+                        setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+                        alert('UPDATE SUCCESSFUL: Changes committed to Mainframe. Deployment of static assets initiated (ETA: 2 mins). Local view updated.');
+                    }}
                 />
             )}
         </main>
