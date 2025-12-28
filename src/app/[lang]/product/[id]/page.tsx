@@ -21,6 +21,35 @@ interface ProductPageProps {
     }>;
 }
 
+export async function generateMetadata({ params }: ProductPageProps) {
+    const { lang, id } = await params;
+    const products = getProducts(lang);
+    const product = products.find(p => p.id === id);
+
+    if (!product) {
+        return {
+            title: '404 - Product Not Found',
+        };
+    }
+
+    return {
+        title: `${product.name} | Retro Archive`,
+        description: product.description,
+        openGraph: {
+            title: product.name,
+            description: product.description,
+            images: [product.image],
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: product.name,
+            description: product.description,
+            images: [product.image],
+        },
+    };
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
     const { lang, id } = await params;
     const products = getProducts(lang);

@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/data/products';
+import { Heart } from 'lucide-react';
+import { useFavorites } from '@/hooks/useFavorites';
 
 interface ProductCardProps {
     product: Product;
@@ -11,6 +13,13 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, lang, label }: ProductCardProps) {
+    const { isFavorite, toggleFavorite, isLoaded } = useFavorites();
+
+    const handleFavoriteClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        toggleFavorite(product.id);
+    };
+
     return (
         <Link href={`/${lang}/product/${product.id}`} className="group relative border border-black dark:border-white bg-white dark:bg-[#111111] flex flex-col h-full transition-all duration-300 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_#f4f4f0] hover:-translate-y-1 hover:-translate-x-1 block">
             {/* Category Tag */}
@@ -19,6 +28,21 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
                     {product.category}
                 </span>
             </div>
+
+            {/* Favorite Button */}
+            {isLoaded && (
+                <button
+                    onClick={handleFavoriteClick}
+                    className="absolute top-2 right-2 z-10 p-2 bg-white dark:bg-black border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                    aria-label="Toggle favorite"
+                >
+                    <Heart
+                        size={16}
+                        fill={isFavorite(product.id) ? 'currentColor' : 'none'}
+                        className={isFavorite(product.id) ? 'text-red-500' : ''}
+                    />
+                </button>
+            )}
 
             {/* Image Container - Aspect Ratio Square */}
             <div className="relative aspect-square w-full overflow-hidden border-b border-black dark:border-white md:aspect-[3/4]">
