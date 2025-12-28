@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -100,6 +101,7 @@ export async function updateProductAction(updatedProduct: any) {
         return { error: error.message || 'Update failed' };
     }
 
-    // redirect('/admin'); 
+    revalidatePath('/');
+    revalidatePath('/admin');
     return { success: true };
 }
