@@ -4,7 +4,7 @@ export interface Product {
     price: string;
     image: string;
     buyUrl: string;
-    category: 'APPAREL' | 'ACCESSORIES' | 'STICKERS';
+    category: 'APPAREL' | 'ACCESSORIES' | 'STICKERS' | 'ROPA' | 'ACCESORIOS';
     description: string;
 }
 
@@ -124,5 +124,5 @@ const productsData = {
 };
 
 export const getProducts = (lang: 'en' | 'es'): Product[] => {
-    return productsData[lang] || productsData['en'];
+    return (productsData[lang] || productsData['en']) as Product[];
 };
