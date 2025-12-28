@@ -94,7 +94,7 @@ export default async function Home({ params }: HomeProps) {
           </div>
         </div>
 
-        <ProductGrid lang={lang} dict={dict} products={await getProducts(lang)} />
+        <ProductGrid lang={lang} dict={dict} products={getProducts(lang)} />
       </section>
 
       {/* Newsletter Section */}
