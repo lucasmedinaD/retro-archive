@@ -132,10 +132,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="text-center md:text-left">
                         <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
-                        <div className="flex justify-center md:justify-start gap-4 mb-4">
-                            <SocialIcon Icon={Instagram} />
-                            <SocialIcon Icon={Twitter} />
-                        </div>
                         <p className="font-mono text-xs max-w-xs text-gray-500">
                             {dict.footer.description}
                         </p>
