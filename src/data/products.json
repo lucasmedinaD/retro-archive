@@ -10,15 +10,6 @@
             "description": "High-contrast cyber-demonic sigils. Optimized for apparel overlay and digital consumption."
         },
         {
-            "id": "d6",
-            "name": "VOID WALKER",
-            "price": "$18.00",
-            "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DIGITAL",
-            "description": "Insignia of the void walkers branch. Minimalist vector."
-        },
-        {
             "id": "d7",
             "name": "Reze Crazy",
             "price": "$7.00",
@@ -37,15 +28,6 @@
             "buyUrl": "https://www.redbubble.com/",
             "category": "DESIGN",
             "description": "Sigilos ciber-demoníacos de alto contraste. Optimizado para superposición en ropa y consumo digital."
-        },
-        {
-            "id": "d6",
-            "name": "VOID WALKER",
-            "price": "$18.00",
-            "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DIGITAL",
-            "description": "Insignia de la rama void walkers. Vector minimalista."
         },
         {
             "id": "d7",
