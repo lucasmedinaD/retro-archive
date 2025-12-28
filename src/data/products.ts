@@ -6,7 +6,7 @@ export interface Product {
     price: string;
     image: string;
     buyUrl: string;
-    category: 'DESIGN' | 'ART' | 'DIGITAL';
+    category: string; // Dynamic categories instead of fixed enum
     description: string;
     tags?: string[];
     [key: string]: any;
