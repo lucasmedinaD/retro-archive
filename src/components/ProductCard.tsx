@@ -50,7 +50,7 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
                     src={product.image || '/mockups/placeholder.jpg'}
                     alt={product.name}
                     fill
-                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    className="object-cover transition-all duration-500 group-hover:scale-105"
                     unoptimized
                 />
             </div>
