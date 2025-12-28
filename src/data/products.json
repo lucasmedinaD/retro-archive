@@ -14,6 +14,21 @@
             ],
             "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
             "featured": true
+        },
+        {
+            "id": "d1",
+            "name": "",
+            "price": "$16",
+            "image": "/mockups/1766963800686-Gemini_Generated_Image_gcxe4agcxe4agcxe.jpg",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "DESIGN",
+            "description": "",
+            "name_en": "Social Skills Loading 1%",
+            "description_en": "Social Skills Loading 1% - Komi Anime Introvert Pixel Art",
+            "tags": [
+                "anime"
+            ],
+            "featured": true
         }
     ],
     "es": [
@@ -28,6 +43,21 @@
             "tags": [
                 "makima-chainsawman-denji"
             ]
+        },
+        {
+            "id": "d1",
+            "name": "",
+            "price": "$16",
+            "image": "/mockups/1766963800686-Gemini_Generated_Image_gcxe4agcxe4agcxe.jpg",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "DESIGN",
+            "description": "",
+            "name_en": "Social Skills Loading 1%",
+            "description_en": "Social Skills Loading 1% - Komi Anime Introvert Pixel Art",
+            "tags": [
+                "anime"
+            ],
+            "featured": true
         }
     ]
 }
