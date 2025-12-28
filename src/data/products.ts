@@ -14,7 +14,7 @@ const productsData = {
             id: "p1",
             name: "CYBER DEMON TEE",
             price: "$35.00",
-            image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1000&auto=format&fit=crop",
+            image: "/mockups/reze-mokup1.jpg",
             buyUrl: "https://www.redbubble.com/",
             category: "APPAREL",
             description: "Heavyweight cotton tee featuring high-contrast cyber-demonic sigils. Puff print finish. Oversized fit for maximum dystopian comfort."
@@ -70,7 +70,7 @@ const productsData = {
             id: "p1",
             name: "CAMISETA CYBER DEMON",
             price: "$35.00",
-            image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1000&auto=format&fit=crop",
+            image: "/mockups/reze-mokup1.jpg",
             buyUrl: "https://www.redbubble.com/",
             category: "ROPA",
             description: "Camiseta de algodón pesado con símbolos ciber-demoníacos de alto contraste. Acabado en relieve. Corte oversize para máximo confort distópico."
