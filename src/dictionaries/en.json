@@ -1,0 +1,40 @@
+{
+    "nav": {
+        "index": "Index",
+        "apparel": "Apparel",
+        "about": "About",
+        "cart": "CART"
+    },
+    "hero": {
+        "title_less": "LESS",
+        "title_is_more": "IS MORE",
+        "description": "Curated collection of minimal anime aesthetics. Stripped back to the essentials. Raw materials. Bold graphics.",
+        "cta": "Start Browsing",
+        "featured": "FEATURED ITEM // VOL. 01"
+    },
+    "catalog": {
+        "marquee": "CATALOG // AUTUMN // WINTER // SPRING // SUMMER // CATALOG // AUTUMN //",
+        "collection": "The Collection",
+        "get_it": "VIEW DETAILS",
+        "filters": {
+            "all": "ALL",
+            "apparel": "APPAREL",
+            "accessories": "ACCESSORIES",
+            "stickers": "STICKERS"
+        }
+    },
+    "product_detail": {
+        "buy_redbubble": "BUY ON REDBUBBLE",
+        "related": "RELATED ITEMS",
+        "back": "BACK TO CATALOG"
+    },
+    "newsletter": {
+        "title": "JOIN THE ARCHIVE",
+        "placeholder": "ENTER_EMAIL_ADDRESS",
+        "button": "SUBSCRIBE"
+    },
+    "footer": {
+        "description": "A digital storefront experiment. Designed without permission.",
+        "rights": "ALL RIGHTS RESERVED"
+    }
+}

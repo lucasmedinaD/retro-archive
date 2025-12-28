@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: #ff3333;
+  /* Retro Red */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f4f4f0;
+  /* Off-white / Eggshell */
+  --foreground: #111111;
+  /* Soft Black */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111111;
+    --foreground: #f4f4f0;
+  }
+}
+
+/* Specificity Boost */
+html.dark {
+  --background: #111111 !important;
+  --foreground: #f4f4f0 !important;
+}
+
+/* Allow .dark on body as fallback if needed */
+.dark body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Retro / Brutalist Utilities */
+.brutal-border {
+  border: 1px solid #111111;
+}
+
+.brutal-shadow {
+  box-shadow: 4px 4px 0px #111111;
+}
+
+.brutal-shadow-hover:hover {
+  box-shadow: 2px 2px 0px #111111;
+  transform: translate(2px, 2px);
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+::selection {
+  background: #111111;
+  color: #ffffff;
+}

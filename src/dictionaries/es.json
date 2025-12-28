@@ -1,0 +1,40 @@
+{
+    "nav": {
+        "index": "Índice",
+        "apparel": "Ropa",
+        "about": "Nosotros",
+        "cart": "CARRITO"
+    },
+    "hero": {
+        "title_less": "MENOS",
+        "title_is_more": "ES MÁS",
+        "description": "Colección curada de estética anime minimalista. Reducida a lo esencial. Materiales crudos. Gráficos audaces.",
+        "cta": "Explorar",
+        "featured": "DESTACADO // VOL. 01"
+    },
+    "catalog": {
+        "marquee": "CATÁLOGO // OTOÑO // INVIERNO // PRIMAVERA // VERANO // CATÁLOGO // OTOÑO //",
+        "collection": "La Colección",
+        "get_it": "VER DETALLES",
+        "filters": {
+            "all": "TODO",
+            "apparel": "ROPA",
+            "accessories": "ACCESORIOS",
+            "stickers": "STICKERS"
+        }
+    },
+    "product_detail": {
+        "buy_redbubble": "COMPRAR EN REDBUBBLE",
+        "related": "RELACIONADOS",
+        "back": "VOLVER AL CATÁLOGO"
+    },
+    "newsletter": {
+        "title": "ÚNETE AL ARCHIVO",
+        "placeholder": "INGRESA_TU_EMAIL",
+        "button": "SUSCRIBIRSE"
+    },
+    "footer": {
+        "description": "Un experimento de tienda digital. Diseñado sin permiso.",
+        "rights": "TODOS LOS DERECHOS RESERVADOS"
+    }
+}
