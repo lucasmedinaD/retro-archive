@@ -10,15 +10,6 @@
             "description": "High-contrast cyber-demonic sigils. Optimized for apparel overlay and digital consumption."
         },
         {
-            "id": "d3",
-            "name": "MECHA PROTOCOL",
-            "price": "$25.00",
-            "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "ART",
-            "description": "Structured mecha protocol schematics. Industrial design language."
-        },
-        {
             "id": "d6",
             "name": "VOID WALKER",
             "price": "$18.00",
@@ -46,15 +37,6 @@
             "buyUrl": "https://www.redbubble.com/",
             "category": "DESIGN",
             "description": "Sigilos ciber-demoníacos de alto contraste. Optimizado para superposición en ropa y consumo digital."
-        },
-        {
-            "id": "d3",
-            "name": "MECHA PROTOCOL",
-            "price": "$25.00",
-            "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "ART",
-            "description": "Esquemas estructurados del protocolo mecha. Lenguaje de diseño industrial."
         },
         {
             "id": "d6",
