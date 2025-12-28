@@ -40,7 +40,7 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
                 </div>
 
                 <div className="flex items-end justify-between border-t border-black dark:border-white pt-3">
-                    <span className="text-xl font-bold font-mono text-black dark:text-white">{product.price}</span>
+                    <span className="text-sm font-bold font-mono text-black dark:text-white">***</span>
                     <span
                         className="text-xs font-bold uppercase underline hover:no-underline hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black px-1 transition-colors text-black dark:text-white"
                     >

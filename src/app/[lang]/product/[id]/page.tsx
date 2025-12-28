@@ -66,7 +66,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         <span className="bg-black dark:bg-white text-white dark:text-black font-mono text-xs px-2 py-1 uppercase">{product.category}</span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">{product.name}</h1>
-                    <p className="text-2xl font-mono mb-8 border-b border-black dark:border-white pb-4 inline-block">{product.price}</p>
+
 
                     <p className="font-mono text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-md">
                         {product.description}
