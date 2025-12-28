@@ -92,17 +92,16 @@ export default function AdminDashboard() {
                     <div className="text-3xl font-bold text-white">{products.length}</div>
                 </div>
                 <div className="border border-[#333] p-6 bg-black/50">
-                    <div className="text-xs text-gray-500 uppercase mb-2">Systems Online</div>
-                    <div className="text-3xl font-bold text-green-500">100%</div>
+                    <div className="text-xs text-gray-500 uppercase mb-2">Design</div>
+                    <div className="text-3xl font-bold text-accent">{products.filter(p => p.category === 'DESIGN').length}</div>
                 </div>
-                {/* Placeholder stats */}
-                <div className="border border-[#333] p-6 bg-black/50 opacity-50">
-                    <div className="text-xs text-gray-500 uppercase mb-2">Traffic</div>
-                    <div className="text-3xl font-bold text-white">---</div>
+                <div className="border border-[#333] p-6 bg-black/50">
+                    <div className="text-xs text-gray-500 uppercase mb-2">Art</div>
+                    <div className="text-3xl font-bold text-accent">{products.filter(p => p.category === 'ART').length}</div>
                 </div>
-                <div className="border border-[#333] p-6 bg-black/50 opacity-50">
-                    <div className="text-xs text-gray-500 uppercase mb-2">Sales</div>
-                    <div className="text-3xl font-bold text-white">---</div>
+                <div className="border border-[#333] p-6 bg-black/50">
+                    <div className="text-xs text-gray-500 uppercase mb-2">Digital</div>
+                    <div className="text-3xl font-bold text-accent">{products.filter(p => p.category === 'DIGITAL').length}</div>
                 </div>
             </div>
 
