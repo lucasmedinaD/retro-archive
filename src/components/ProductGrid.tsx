@@ -19,19 +19,28 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
 
     // Filter by category and search term
     const filteredProducts = products.filter(p => {
-        const matchesCategory = filter === 'ALL' || p.category === filter;
+        const matchesCategory = filter === 'ALL' || p.category.toUpperCase() === filter;
         const matchesSearch = searchTerm === '' ||
             p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             p.description.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesCategory && matchesSearch;
     });
 
+    // Paginated products
+    const visibleProducts = filteredProducts.slice(0, visibleCount);
+    const hasMore = visibleCount < filteredProducts.length;
+
     const categories = [
-        { key: 'ALL', label: dict.catalog.filters.all },
-        { key: 'DESIGN', label: dict.catalog.filters.designs || 'DESIGNS' },
-        { key: 'ART', label: dict.catalog.filters.art || 'ART' },
-        // { key: 'DIGITAL', label: dict.catalog.filters.digital || 'DIGITAL' }, 
+        { key: 'ALL', label: dict.catalog?.filters?.all || 'ALL' },
+        ...uniqueCategories.map(cat => ({
+            key: cat,
+            label: cat
+        }))
     ];
+
+    const loadMore = () => {
+        setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+    };
 
     return (
         <div>
@@ -40,7 +49,10 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                 {categories.map((cat) => (
                     <button
                         key={cat.key}
-                        onClick={() => setFilter(cat.key as any)}
+                        onClick={() => {
+                            setFilter(cat.key);
+                            setVisibleCount(ITEMS_PER_PAGE); // Reset pagination on filter change
+                        }}
                         className={`text-xs font-bold font-mono uppercase px-3 py-1 border transition-all ${filter === cat.key
                             ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
                             : 'bg-transparent text-gray-500 hover:text-black dark:hover:text-white border-transparent hover:border-black dark:hover:border-white'
@@ -53,7 +65,7 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProducts.map((product) => (
+                {visibleProducts.map((product) => (
                     <ProductCard
                         key={product.id}
                         product={product}
@@ -67,6 +79,18 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                     </div>
                 )}
             </div>
+
+            {/* Load More Button */}
+            {hasMore && (
+                <div className="flex justify-center mt-12">
+                    <button
+                        onClick={loadMore}
+                        className="bg-black dark:bg-white text-white dark:text-black px-8 py-4 font-bold uppercase tracking-wider border-2 border-black dark:border-white hover:bg-white hover:text-black dark:hover:bg-black dark:hover:text-white transition-all"
+                    >
+                        LOAD MORE ({filteredProducts.length - visibleCount} remaining)
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

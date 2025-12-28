@@ -109,11 +109,14 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
                         </div>
                         <div>
                             <label className="text-gray-500 block mb-1">CATEGORY</label>
-                            <select name="category" value={formData.category} onChange={handleChange} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none">
-                                <option value="APPAREL">APPAREL</option>
-                                <option value="ACCESSORIES">ACCESSORIES</option>
-                                <option value="STICKERS">STICKERS</option>
-                            </select>
+                            <input
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                placeholder="DESIGN, APPAREL, STICKERS, etc."
+                                className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none uppercase"
+                            />
+                            <p className="text-[10px] text-gray-600 mt-1">Examples: DESIGN, ART, APPAREL, PRINTS</p>
                         </div>
                     </div>
 
