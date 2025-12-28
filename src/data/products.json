@@ -53,6 +53,15 @@
             "buyUrl": "https://www.redbubble.com/",
             "category": "DIGITAL",
             "description": "Insignia of the void walkers branch. Minimalist vector."
+        },
+        {
+            "id": "d7",
+            "name": "Denji Crazy",
+            "price": "$7.00",
+            "image": "",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "STICKERS",
+            "description": "Denji crzyyy"
         }
     ],
     "es": [
@@ -109,6 +118,15 @@
             "buyUrl": "https://www.redbubble.com/",
             "category": "DIGITAL",
             "description": "Insignia de la rama void walkers. Vector minimalista."
+        },
+        {
+            "id": "d7",
+            "name": "Denji Crazy",
+            "price": "$7.00",
+            "image": "",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "STICKERS",
+            "description": "Denji crzyyy"
         }
     ]
 }
