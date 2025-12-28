@@ -17,7 +17,7 @@ import { Product } from '@/data/products';
 import productsRaw from '@/data/products.json';
 
 export default function AdminDashboard() {
-    const [products, setProducts] = useState<Product[]>(productsRaw.en as Product[]);
+    const [products, setProducts] = useState<Product[]>((productsRaw?.en || []) as Product[]);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
     return (
