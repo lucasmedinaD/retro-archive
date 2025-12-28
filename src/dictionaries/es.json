@@ -3,7 +3,8 @@
         "index": "Índice",
         "apparel": "Ropa",
         "about": "Nosotros",
-        "cart": "CARRITO"
+        "cart": "CARRITO",
+        "favorites": "FAVORITOS"
     },
     "hero": {
         "title_less": "MENOS",
@@ -37,5 +38,15 @@
     "footer": {
         "description": "Un experimento de tienda digital. Diseñado sin permiso.",
         "rights": "TODOS LOS DERECHOS RESERVADOS"
+    },
+    "favorites": {
+        "title": "TUS FAVORITOS",
+        "empty_title": "Aún no tienes favoritos",
+        "empty_description": "Comienza a agregar productos a tus favoritos haciendo clic en el ícono de corazón en cualquier producto.",
+        "browse_catalog": "VER CATÁLOGO",
+        "product_count_singular": "producto",
+        "product_count_plural": "productos",
+        "copy_link": "Copiar Link",
+        "link_copied": "¡Link copiado!"
     }
 }

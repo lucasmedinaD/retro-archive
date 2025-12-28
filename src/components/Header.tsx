@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useFavorites } from '@/hooks/useFavorites';
 
 interface HeaderProps {
     lang: 'en' | 'es';
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export default function Header({ lang, dict }: HeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { favorites } = useFavorites();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -27,6 +29,14 @@ export default function Header({ lang, dict }: HeaderProps) {
                 <nav className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wide">
                     <Link href={`/${lang}`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.index}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
+                    <Link href={`/${lang}/favorites`} className="hover:underline decoration-2 underline-offset-4 relative">
+                        {dict.nav.favorites}
+                        {favorites.length > 0 && (
+                            <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                                {favorites.length}
+                            </span>
+                        )}
+                    </Link>
                 </nav>
 
                 <div className="flex gap-4 items-center z-50">
@@ -48,6 +58,14 @@ export default function Header({ lang, dict }: HeaderProps) {
                     <nav className="flex flex-col items-center gap-6 text-2xl font-black uppercase tracking-widest">
                         <Link href={`/${lang}`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.index}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
+                        <Link href={`/${lang}/favorites`} onClick={toggleMenu} className="hover:text-accent relative">
+                            {dict.nav.favorites}
+                            {favorites.length > 0 && (
+                                <span className="absolute -top-2 -right-6 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
+                                    {favorites.length}
+                                </span>
+                            )}
+                        </Link>
                     </nav>
 
                     <div className="flex gap-6 mt-8">

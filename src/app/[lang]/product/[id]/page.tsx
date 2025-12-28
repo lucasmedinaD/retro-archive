@@ -94,7 +94,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     </p>
 
                     <ShareButtons
-                        url={`https://retro-archive.vercel.app/${lang}/product/${product.id}`}
+                        url={`/${lang}/product/${product.id}`}
                         title={product.name}
                         description={product.description}
                     />

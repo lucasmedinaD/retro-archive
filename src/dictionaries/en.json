@@ -3,7 +3,8 @@
         "index": "Index",
         "apparel": "Apparel",
         "about": "About",
-        "cart": "CART"
+        "cart": "CART",
+        "favorites": "FAVORITES"
     },
     "hero": {
         "title_less": "LESS",
@@ -37,5 +38,15 @@
     "footer": {
         "description": "A digital storefront experiment. Designed without permission.",
         "rights": "ALL RIGHTS RESERVED"
+    },
+    "favorites": {
+        "title": "YOUR FAVORITES",
+        "empty_title": "No favorites yet",
+        "empty_description": "Start adding products to your favorites by clicking the heart icon on any product.",
+        "browse_catalog": "BROWSE CATALOG",
+        "product_count_singular": "product",
+        "product_count_plural": "products",
+        "copy_link": "Copy Link",
+        "link_copied": "Link copied!"
     }
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import { Share2, Twitter, Facebook } from 'lucide-react';
+import { Share2, Twitter, Facebook, Copy, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface ShareButtonsProps {
     url: string;
@@ -9,7 +10,23 @@ interface ShareButtonsProps {
 }
 
 export default function ShareButtons({ url, title, description }: ShareButtonsProps) {
-    const shareUrl = encodeURIComponent(url);
+    const [fullUrl, setFullUrl] = useState(url);
+    const [copied, setCopied] = useState(false);
+
+    useEffect(() => {
+        // Build the full URL dynamically on the client side
+        if (typeof window !== 'undefined') {
+            const origin = window.location.origin;
+            // If url is relative or doesn't contain the origin, prepend it
+            if (!url.startsWith('http')) {
+                setFullUrl(`${origin}${url.startsWith('/') ? '' : '/'}${url}`);
+            } else {
+                setFullUrl(url);
+            }
+        }
+    }, [url]);
+
+    const shareUrl = encodeURIComponent(fullUrl);
     const shareTitle = encodeURIComponent(title);
     const shareDesc = encodeURIComponent(description);
 
@@ -25,7 +42,7 @@ export default function ShareButtons({ url, title, description }: ShareButtonsPr
                 await navigator.share({
                     title: title,
                     text: description,
-                    url: url,
+                    url: fullUrl,
                 });
             } catch (err) {
                 console.log('Share cancelled');
@@ -33,12 +50,35 @@ export default function ShareButtons({ url, title, description }: ShareButtonsPr
         }
     };
 
+    const handleCopyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(fullUrl);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
+
     return (
         <div className="flex gap-2 items-center">
             <span className="text-xs font-mono uppercase text-gray-500 mr-2">Share:</span>
 
+            {/* Copy Link Button */}
+            <button
+                onClick={handleCopyLink}
+                className={`p-2 border transition-colors ${copied
+                        ? 'bg-green-500 text-white border-green-500'
+                        : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                    }`}
+                aria-label="Copy link"
+                title={copied ? 'Link copied!' : 'Copy link'}
+            >
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+            </button>
+
             {/* Native Share (mobile) */}
-            {typeof navigator !== 'undefined' && navigator.share && (
+            {typeof navigator !== 'undefined' && 'share' in navigator && (
                 <button
                     onClick={handleNativeShare}
                     className="p-2 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
