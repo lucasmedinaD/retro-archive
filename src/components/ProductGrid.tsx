@@ -13,9 +13,15 @@ interface ProductGridProps {
     products: Product[];
 }
 
+const ITEMS_PER_PAGE = 9;
+
 export default function ProductGrid({ lang, dict, products }: ProductGridProps) {
-    const [filter, setFilter] = useState<'ALL' | 'DESIGN' | 'ART' | 'DIGITAL'>('ALL');
+    const [filter, setFilter] = useState<string>('ALL');
     const [searchTerm, setSearchTerm] = useState('');
+    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+
+    // Get unique categories from products
+    const uniqueCategories = Array.from(new Set(products.map(p => p.category.toUpperCase())));
 
     // Filter by category and search term
     const filteredProducts = products.filter(p => {

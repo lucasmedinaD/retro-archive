@@ -69,7 +69,7 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
             <div className="p-4 flex flex-col justify-between flex-grow">
                 <div className="mb-4">
                     <h3 className="text-lg font-bold uppercase tracking-tight leading-none mb-1 text-black dark:text-white">
-                        {product.name}
+                        {lang === 'es' && product.name_es ? product.name_es : (product.name_en || product.name)}
                     </h3>
                     <p className="text-xs font-mono text-gray-500">REF: {product.id.toUpperCase()}</p>
                     {product.tags && product.tags.length > 0 && (

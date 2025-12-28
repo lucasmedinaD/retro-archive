@@ -96,8 +96,12 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
                                 )}
                             </div>
                             <div>
-                                <label className="text-gray-500 block mb-1">NAME</label>
-                                <input name="name" value={formData.name} onChange={handleChange} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none font-bold text-lg" />
+                                <label className="text-gray-500 block mb-1">NAME (English)</label>
+                                <input name="name_en" value={formData.name_en || formData.name} onChange={handleChange} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none font-bold text-lg" placeholder="English name" />
+                            </div>
+                            <div>
+                                <label className="text-gray-500 block mb-1">NAME (Español)</label>
+                                <input name="name_es" value={formData.name_es || ''} onChange={handleChange} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none font-bold text-lg" placeholder="Nombre en español" />
                             </div>
                         </div>
                     </div>
@@ -126,8 +130,13 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
                     </div>
 
                     <div>
-                        <label className="text-gray-500 block mb-1">DESCRIPTION</label>
-                        <textarea name="description" value={formData.description} onChange={handleChange} rows={4} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none resize-none" />
+                        <label className="text-gray-500 block mb-1">DESCRIPTION (English)</label>
+                        <textarea name="description_en" value={formData.description_en || formData.description} onChange={handleChange} rows={3} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none resize-none" placeholder="English description" />
+                    </div>
+
+                    <div>
+                        <label className="text-gray-500 block mb-1">DESCRIPTION (Español)</label>
+                        <textarea name="description_es" value={formData.description_es || ''} onChange={handleChange} rows={3} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none resize-none" placeholder="Descripción en español" />
                     </div>
 
                     <div>

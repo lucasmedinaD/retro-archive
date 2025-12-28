@@ -2,12 +2,16 @@ import data from './products.json';
 
 export interface Product {
     id: string;
-    name: string;
+    name: string; // Fallback/display name
+    name_en?: string;
+    name_es?: string;
     price: string;
     image: string;
     buyUrl: string;
     category: string; // Dynamic categories instead of fixed enum
-    description: string;
+    description: string; // Fallback/display description
+    description_en?: string;
+    description_es?: string;
     tags?: string[];
     [key: string]: any;
 }
