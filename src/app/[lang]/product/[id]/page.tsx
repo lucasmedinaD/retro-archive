@@ -2,18 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, Product } from '@/data/products';
 import { getDictionary } from '@/get-dictionary';
-import { ArrowLeft, Instagram, Twitter } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
-import MockupGenerator from '@/components/MockupGenerator';
 import ShareButtons from '@/components/ShareButtons';
 import ImageZoom from '@/components/ImageZoom';
-
-// Social Icon helper (duplicated for now to keep pages self contained or can be shared later)
-const SocialIcon = ({ Icon }: { Icon: any }) => (
-    <div className="p-2 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer">
-        <Icon size={18} />
-    </div>
-);
 
 interface ProductPageProps {
     params: Promise<{
@@ -117,28 +109,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     </a>
                 </div>
             </section>
-
-            {/* Mockup Generator (Only for Apparel) */}
-            {(product.category === 'APPAREL' || product.category === 'ROPA') && (
-                <section className="max-w-7xl mx-auto px-6 py-20 border-t border-black dark:border-white">
-                    <div className="mb-10 text-center">
-                        <h3 className="text-3xl font-black uppercase italic mb-2">{dict.product_detail.customize || "CUSTOMIZE IT"}</h3>
-                        <p className="font-mono text-sm text-gray-500">Visualize this design on premium gear.</p>
-                    </div>
-
-                    {/* Dynamic import or just direct usage if it's client component */}
-                    <div className="flex justify-center">
-                        {/* We pass the current product image as a design option, plus maybe related products for fun */}
-                        <MockupGenerator
-                            baseImage="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop"
-                            designs={[
-                                { id: 'd1', name: product.name, url: product.image },
-                                ...related.map((r, i) => ({ id: `r-${i}`, name: r.name, url: r.image }))
-                            ]}
-                        />
-                    </div>
-                </section>
-            )}
 
             {/* Related Grid */}
             <section className="max-w-7xl mx-auto px-6 pt-20 border-t border-black dark:border-white">

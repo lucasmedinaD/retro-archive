@@ -6,14 +6,6 @@ import { useState } from 'react';
 import ProductEditor from './ProductEditor';
 import { Product } from '@/data/products';
 
-// This is a client component now receiving data via props or just importing directly (since it's a file read)
-// However, direct file read of 'src/data/json' works in Server Components better.
-// Let's keep it simple: We fetch the data via a server action or we accept that for this MVP
-// we import the JSON directly which works in Client Components during build time (static).
-// For real dynamic updates without rebuild, we need to fetch from an API route.
-// BUT, since we are REWRITING the file, the next build will have new data.
-// For instant gratification, we can update local state.
-
 import productsRaw from '@/data/products.json';
 import { useEffect } from 'react';
 import { fetchLatestInventory } from './actions';

@@ -27,16 +27,12 @@ export default function Header({ lang, dict }: HeaderProps) {
                 <nav className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wide">
                     <Link href={`/${lang}`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.index}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
-                    <Link href="#" className="hover:underline decoration-2 underline-offset-4">{dict.nav.about}</Link>
                 </nav>
 
                 <div className="flex gap-4 items-center z-50">
                     <div className="hidden md:flex gap-4 items-center">
                         <LanguageSwitcher currentLang={lang} />
                         <ThemeToggle />
-                        <div className="font-mono text-xs border border-black dark:border-white px-2 py-1">
-                            {dict.nav.cart} (0)
-                        </div>
                     </div>
 
                     {/* Mobile Toggle */}
@@ -52,7 +48,6 @@ export default function Header({ lang, dict }: HeaderProps) {
                     <nav className="flex flex-col items-center gap-6 text-2xl font-black uppercase tracking-widest">
                         <Link href={`/${lang}`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.index}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
-                        <Link href="#" onClick={toggleMenu} className="hover:text-accent">{dict.nav.about}</Link>
                     </nav>
 
                     <div className="flex gap-6 mt-8">
