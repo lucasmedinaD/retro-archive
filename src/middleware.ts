@@ -1,67 +1,33 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-const locales = ["en", "es"];
-const defaultLocale = "en";
-
-// Get locale from path or default
-function getLocale(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
-    const pathnameIsMissingLocale = locales.every(
-        (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-    );
-
-    if (pathnameIsMissingLocale) {
-        return defaultLocale;
-    }
-}
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    const pathname = request.nextUrl.pathname;
+    const { pathname } = request.nextUrl;
 
-    // Static assets and API routes should be ignored
-    if (
-        pathname.includes('.') || // files
-        pathname.startsWith('/api') ||
-        pathname.startsWith('/_next')
-    ) {
-        return;
+    // Check if accessing root path
+    if (pathname === '/') {
+        // Get preferred language from Accept-Language header
+        const acceptLanguage = request.headers.get('accept-language') || '';
+
+        // Simple language detection - check if Spanish is preferred
+        const preferredLang = acceptLanguage.toLowerCase().includes('es') ? 'es' : 'en';
+
+        // Redirect to detected language
+        return NextResponse.redirect(new URL(`/${preferredLang}`, request.url));
     }
 
-    // --- ADMIN PROTECTION ---
-    if (pathname.startsWith('/admin')) {
-        // Allow access to login page
-        if (pathname === '/admin/login') {
-            return;
-        }
-
-        // Check for session cookie
+    // Admin routes protection
+    if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
         const session = request.cookies.get('admin_session');
-        if (!session) {
+
+        if (!session || session.value !== 'authenticated') {
             return NextResponse.redirect(new URL('/admin/login', request.url));
         }
-
-        // If authenticated, allow through (skip i18n)
-        return;
     }
-    // -------------------------
 
-    const pathnameIsMissingLocale = locales.every(
-        (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-    );
-
-    // Redirect if there is no locale
-    if (pathnameIsMissingLocale) {
-        const locale = getLocale(request);
-        return NextResponse.redirect(
-            new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
-        );
-    }
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: [
-        // Skip all internal paths (_next)
-        '/((?!_next).*)',
-    ],
+    matcher: ['/', '/admin/:path*'],
 };

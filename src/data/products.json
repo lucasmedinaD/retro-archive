@@ -5,62 +5,17 @@
             "name": "Reze DEMON",
             "price": "$35.00",
             "image": "/mockups/reze-mokup1.jpg",
-            "buyUrl": "https://www.redbubble.com/",
+            "buyUrl": "https://www.redbubble.com/es/i/sudadera/Bomb-Girl-Anime-Chib-de-sosacrash/177145943.0C5ES",
             "category": "DESIGN",
             "description": "High-contrast cyber-demonic sigils. Optimized for apparel overlay and digital consumption."
         },
         {
-            "id": "d2",
-            "name": "NEON SOUL",
-            "price": "$30.00",
-            "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DESIGN",
-            "description": "Bio-luminescent aesthetic configuration. Available for print and display."
-        },
-        {
-            "id": "d3",
-            "name": "MECHA PROTOCOL",
-            "price": "$25.00",
-            "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "ART",
-            "description": "Structured mecha protocol schematics. Industrial design language."
-        },
-        {
-            "id": "d4",
-            "name": "DATA LOSS",
-            "price": "$4.00",
-            "image": "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "ART",
-            "description": "Visual representation of corrupted memory sectors. Die-cut ready."
-        },
-        {
-            "id": "d5",
-            "name": "GLITCH REALITY",
-            "price": "$20.00",
-            "image": "https://images.unsplash.com/photo-1586105251261-72a756497a11?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DESIGN",
-            "description": "Reality distortion field artifact. Glitch art print."
-        },
-        {
-            "id": "d6",
-            "name": "VOID WALKER",
-            "price": "$18.00",
-            "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DIGITAL",
-            "description": "Insignia of the void walkers branch. Minimalist vector."
-        },
-        {
             "id": "d7",
-            "name": "Denji Crazy",
+            "name": "Reze Crazy",
             "price": "$7.00",
-            "image": "",
+            "image": "/mockups/1766898148900-1000027955.jpg",
             "buyUrl": "https://www.redbubble.com/",
-            "category": "STICKERS",
+            "category": "APPAREL",
             "description": "Denji crzyyy"
         }
     ],
@@ -70,62 +25,17 @@
             "name": "CYBER DEMON",
             "price": "$35.00",
             "image": "/mockups/reze-mokup1.jpg",
-            "buyUrl": "https://www.redbubble.com/",
+            "buyUrl": "https://www.redbubble.com/es/i/sudadera/Bomb-Girl-Anime-Chib-de-sosacrash/177145943.0C5ES",
             "category": "DESIGN",
             "description": "Sigilos ciber-demoníacos de alto contraste. Optimizado para superposición en ropa y consumo digital."
-        },
-        {
-            "id": "d2",
-            "name": "NEON SOUL",
-            "price": "$30.00",
-            "image": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DESIGN",
-            "description": "Configuración estética bioluminiscente. Disponible para impresión y visualización."
-        },
-        {
-            "id": "d3",
-            "name": "MECHA PROTOCOL",
-            "price": "$25.00",
-            "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "ART",
-            "description": "Esquemas estructurados del protocolo mecha. Lenguaje de diseño industrial."
-        },
-        {
-            "id": "d4",
-            "name": "DATA LOSS",
-            "price": "$4.00",
-            "image": "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "ART",
-            "description": "Representación visual de sectores de memoria corruptos. Listo para troquelado."
-        },
-        {
-            "id": "d5",
-            "name": "GLITCH REALITY",
-            "price": "$20.00",
-            "image": "https://images.unsplash.com/photo-1586105251261-72a756497a11?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DESIGN",
-            "description": "Artefacto de campo de distorsión de la realidad. Impresión glitch art."
-        },
-        {
-            "id": "d6",
-            "name": "VOID WALKER",
-            "price": "$18.00",
-            "image": "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "DIGITAL",
-            "description": "Insignia de la rama void walkers. Vector minimalista."
         },
         {
             "id": "d7",
             "name": "Denji Crazy",
             "price": "$7.00",
-            "image": "",
+            "image": "/mockups/1766898148900-1000027955.jpg",
             "buyUrl": "https://www.redbubble.com/",
-            "category": "STICKERS",
+            "category": "APPAREL",
             "description": "Denji crzyyy"
         }
     ]

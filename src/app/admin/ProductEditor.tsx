@@ -127,6 +127,21 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
                         <textarea name="description" value={formData.description} onChange={handleChange} rows={4} className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none resize-none" />
                     </div>
 
+                    <div>
+                        <label className="text-gray-500 block mb-1">TAGS (comma-separated)</label>
+                        <input
+                            type="text"
+                            value={Array.isArray(formData.tags) ? formData.tags.join(', ') : formData.tags || ''}
+                            onChange={(e) => {
+                                const tagsArray = e.target.value.split(',').map(t => t.trim()).filter(t => t);
+                                setFormData({ ...formData, tags: tagsArray });
+                            }}
+                            placeholder="cyber, retro, glitch, neon..."
+                            className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none text-xs"
+                        />
+                        <p className="text-[10px] text-gray-600 mt-1">Separate with commas</p>
+                    </div>
+
                     <div className="flex justify-end gap-4 mt-4 pt-4 border-t border-[#333]">
                         <button onClick={onCancel} className="px-6 py-3 border border-[#333] text-gray-400 hover:text-white hover:border-white uppercase tracking-wider">
                             Cancel
