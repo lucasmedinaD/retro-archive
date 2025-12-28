@@ -14,7 +14,7 @@ interface ProductGridProps {
 }
 
 export default function ProductGrid({ lang, dict, products }: ProductGridProps) {
-    const [filter, setFilter] = useState<'ALL' | 'APPAREL' | 'ACCESSORIES' | 'STICKERS'>('ALL');
+    const [filter, setFilter] = useState<'ALL' | 'DESIGN' | 'ART' | 'DIGITAL'>('ALL');
 
     const filteredProducts = filter === 'ALL'
         ? products
@@ -22,9 +22,9 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
 
     const categories = [
         { key: 'ALL', label: dict.catalog.filters.all },
-        { key: 'APPAREL', label: dict.catalog.filters.apparel },
-        { key: 'ACCESSORIES', label: dict.catalog.filters.accessories },
-        { key: 'STICKERS', label: dict.catalog.filters.stickers },
+        { key: 'DESIGN', label: dict.catalog.filters.designs || 'DESIGNS' },
+        { key: 'ART', label: dict.catalog.filters.art || 'ART' },
+        // { key: 'DIGITAL', label: dict.catalog.filters.digital || 'DIGITAL' }, 
     ];
 
     return (

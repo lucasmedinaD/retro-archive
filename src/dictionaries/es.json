@@ -18,9 +18,9 @@
         "get_it": "VER DETALLES",
         "filters": {
             "all": "TODO",
-            "apparel": "ROPA",
-            "accessories": "ACCESORIOS",
-            "stickers": "STICKERS"
+            "designs": "DISEÑOS",
+            "art": "ARTE",
+            "digital": "DIGITAL"
         }
     },
     "product_detail": {

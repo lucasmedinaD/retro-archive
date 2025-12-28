@@ -18,9 +18,9 @@
         "get_it": "VIEW DETAILS",
         "filters": {
             "all": "ALL",
-            "apparel": "APPAREL",
-            "accessories": "ACCESSORIES",
-            "stickers": "STICKERS"
+            "designs": "DESIGNS",
+            "art": "ARTWORK",
+            "digital": "DIGITAL"
         }
     },
     "product_detail": {

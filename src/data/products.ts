@@ -1,47 +1,129 @@
-import data from './products.json';
-
 export interface Product {
     id: string;
     name: string;
     price: string;
     image: string;
     buyUrl: string;
-    category: 'APPAREL' | 'ACCESSORIES' | 'STICKERS' | 'ROPA' | 'ACCESORIOS';
+    category: 'DESIGN' | 'ART' | 'DIGITAL';
     description: string;
     [key: string]: any;
 }
 
-const FALLBACK_DATA = {
+const productsData = {
     en: [
         {
-            id: "p1",
-            name: "CYBER DEMON TEE",
+            id: "d1",
+            name: "CYBER DEMON",
             price: "$35.00",
             image: "/mockups/reze-mokup1.jpg",
             buyUrl: "https://www.redbubble.com/",
-            category: "APPAREL",
-            description: "Heavyweight cotton tee featuring high-contrast cyber-demonic sigils. Puff print finish. Oversized fit for maximum dystopian comfort."
+            category: "DESIGN",
+            description: "High-contrast cyber-demonic sigils. Optimized for apparel overlay and digital consumption."
         },
         {
-            id: "p2",
-            name: "NEON SOUL HOODIE",
-            price: "$65.00",
+            id: "d2",
+            name: "NEON SOUL",
+            price: "$30.00",
             image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000&auto=format&fit=crop",
             buyUrl: "https://www.redbubble.com/",
-            category: "APPAREL",
-            description: "Bio-luminescent aesthetic hoodie. 400gsm fleece. Generous hood depth for avoiding facial recognition scanners."
+            category: "DESIGN",
+            description: "Bio-luminescent aesthetic configuration. Available for print and display."
         },
+        {
+            id: "d3",
+            name: "MECHA PROTOCOL",
+            price: "$25.00",
+            image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "ART",
+            description: "Structured mecha protocol schematics. Industrial design language."
+        },
+        {
+            id: "d4",
+            name: "DATA LOSS",
+            price: "$4.00",
+            image: "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "ART",
+            description: "Visual representation of corrupted memory sectors. Die-cut ready."
+        },
+        {
+            id: "d5",
+            name: "GLITCH REALITY",
+            price: "$20.00",
+            image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "DESIGN",
+            description: "Reality distortion field artifact. Glitch art print."
+        },
+        {
+            id: "d6",
+            name: "VOID WALKER",
+            price: "$18.00",
+            image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "DIGITAL",
+            description: "Insignia of the void walkers branch. Minimalist vector."
+        }
     ],
-    es: []
+    es: [
+        {
+            id: "d1",
+            name: "CYBER DEMON",
+            price: "$35.00",
+            image: "/mockups/reze-mokup1.jpg",
+            buyUrl: "https://www.redbubble.com/",
+            category: "DESIGN",
+            description: "Sigilos ciber-demoníacos de alto contraste. Optimizado para superposición en ropa y consumo digital."
+        },
+        {
+            id: "d2",
+            name: "NEON SOUL",
+            price: "$30.00",
+            image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "DESIGN",
+            description: "Configuración estética bioluminiscente. Disponible para impresión y visualización."
+        },
+        {
+            id: "d3",
+            name: "MECHA PROTOCOL",
+            price: "$25.00",
+            image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "ART",
+            description: "Esquemas estructurados del protocolo mecha. Lenguaje de diseño industrial."
+        },
+        {
+            id: "d4",
+            name: "DATA LOSS",
+            price: "$4.00",
+            image: "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "ART",
+            description: "Representación visual de sectores de memoria corruptos. Listo para troquelado."
+        },
+        {
+            id: "d5",
+            name: "GLITCH REALITY",
+            price: "$20.00",
+            image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "DESIGN",
+            description: "Artefacto de campo de distorsión de la realidad. Impresión glitch art."
+        },
+        {
+            id: "d6",
+            name: "VOID WALKER",
+            price: "$18.00",
+            image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1000&auto=format&fit=crop",
+            buyUrl: "https://www.redbubble.com/",
+            category: "DIGITAL",
+            description: "Insignia de la rama void walkers. Vector minimalista."
+        }
+    ]
 };
 
-// Cast the imported JSON to the expected type structure, with fallback
-const productsData = (data && Object.keys(data).length > 0)
-    ? (data as unknown as Record<string, Product[]>)
-    : (FALLBACK_DATA as unknown as Record<string, Product[]>);
-
 export const getProducts = (lang: 'en' | 'es'): Product[] => {
-    // Safety check to prevent 500 errors if JSON fails to load or keys are missing
-    const list = productsData?.[lang] || productsData?.['en'] || FALLBACK_DATA.en;
-    return Array.isArray(list) ? list : [];
+    return productsData[lang] || productsData['en'];
 };
