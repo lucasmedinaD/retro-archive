@@ -15,10 +15,16 @@ interface ProductGridProps {
 
 export default function ProductGrid({ lang, dict, products }: ProductGridProps) {
     const [filter, setFilter] = useState<'ALL' | 'DESIGN' | 'ART' | 'DIGITAL'>('ALL');
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredProducts = filter === 'ALL'
-        ? products
-        : products.filter(p => p.category === filter);
+    // Filter by category and search term
+    const filteredProducts = products.filter(p => {
+        const matchesCategory = filter === 'ALL' || p.category === filter;
+        const matchesSearch = searchTerm === '' ||
+            p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.description.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
 
     const categories = [
         { key: 'ALL', label: dict.catalog.filters.all },
