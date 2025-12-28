@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 
 const PASS = process.env.ADMIN_PASSWORD || 'admin123'; // Default fallback, user should change this
 
-export async function loginAction(prevState: any, formData: FormData) {
+export async function loginAction(formData: FormData) {
     const password = formData.get('password');
 
     if (password === PASS) {
