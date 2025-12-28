@@ -1,19 +1,6 @@
 {
     "en": [
         {
-            "id": "d1",
-            "name": "Reze DEMON",
-            "price": "$35.00",
-            "image": "/mockups/reze-mokup1.jpg",
-            "buyUrl": "https://www.redbubble.com/es/i/sudadera/Bomb-Girl-Anime-Chib-de-sosacrash/177145943.0C5ES",
-            "category": "DESIGN",
-            "description": "Diseñó chibi de Reze de Chainsaw Man, este diseño es adaptable a una variedad de cosas.",
-            "tags": [
-                "anime"
-            ],
-            "featured": true
-        },
-        {
             "id": "d2",
             "name": "Makima Original Anime Art",
             "price": "23",
@@ -30,15 +17,6 @@
         }
     ],
     "es": [
-        {
-            "id": "d1",
-            "name": "CYBER DEMON",
-            "price": "$35.00",
-            "image": "/mockups/reze-mokup1.jpg",
-            "buyUrl": "https://www.redbubble.com/es/i/sudadera/Bomb-Girl-Anime-Chib-de-sosacrash/177145943.0C5ES",
-            "category": "DESIGN",
-            "description": "Sigilos ciber-demoníacos de alto contraste. Optimizado para superposición en ropa y consumo digital."
-        },
         {
             "id": "d2",
             "name": "Makima Original Anime Art",
