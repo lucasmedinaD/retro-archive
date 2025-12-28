@@ -15,10 +15,26 @@ import { Product } from '@/data/products';
 // For instant gratification, we can update local state.
 
 import productsRaw from '@/data/products.json';
+import { useEffect } from 'react';
+import { fetchLatestInventory } from './actions';
 
 export default function AdminDashboard() {
+    // Initial state from build-time file (instant load)
     const [products, setProducts] = useState<Product[]>((productsRaw?.en || []) as Product[]);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+    // Sync with GitHub on mount (to show latest commits even if Vercel is building)
+    useEffect(() => {
+        const sync = async () => {
+            const result = await fetchLatestInventory();
+            // @ts-ignore
+            if (result?.success && result.data) {
+                // @ts-ignore
+                setProducts(result.data);
+            }
+        };
+        sync();
+    }, []);
 
     return (
         <main className="min-h-screen bg-[#111] text-accent font-mono p-8">

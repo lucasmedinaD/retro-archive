@@ -105,3 +105,26 @@ export async function updateProductAction(updatedProduct: any) {
     revalidatePath('/admin');
     return { success: true };
 }
+
+export async function fetchLatestInventory() {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Missing GITHUB_TOKEN' };
+
+    try {
+        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+            },
+            cache: 'no-store'
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch from GitHub');
+        const fileData = await res.json();
+        const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+        const json = JSON.parse(content);
+        return { success: true, data: json.en || [] };
+    } catch (e) {
+        return { error: 'Failed to sync with Mainframe' };
+    }
+}
