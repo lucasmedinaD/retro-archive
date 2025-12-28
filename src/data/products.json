@@ -13,14 +13,14 @@
                 "chainsaw man\""
             ],
             "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
-            "featured": true
+            "featured": false
         },
         {
             "id": "d1",
             "name": "",
             "price": "$16",
             "image": "/mockups/1766963800686-Gemini_Generated_Image_gcxe4agcxe4agcxe.jpg",
-            "buyUrl": "https://www.redbubble.com/",
+            "buyUrl": "https://www.teepublic.com/t-shirt/85608659-social-skills-loading-1-komi-anime-introvert-pixel",
             "category": "DESIGN",
             "description": "",
             "name_en": "Social Skills Loading 1%",
@@ -42,14 +42,15 @@
             "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
             "tags": [
                 "makima-chainsawman-denji"
-            ]
+            ],
+            "featured": false
         },
         {
             "id": "d1",
             "name": "",
             "price": "$16",
             "image": "/mockups/1766963800686-Gemini_Generated_Image_gcxe4agcxe4agcxe.jpg",
-            "buyUrl": "https://www.redbubble.com/",
+            "buyUrl": "https://www.teepublic.com/t-shirt/85608659-social-skills-loading-1-komi-anime-introvert-pixel",
             "category": "DESIGN",
             "description": "",
             "name_en": "Social Skills Loading 1%",
