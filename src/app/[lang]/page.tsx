@@ -5,6 +5,7 @@ import { getDictionary } from '@/get-dictionary';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
+import FeaturedProduct from '@/components/FeaturedProduct';
 import { Instagram, Twitter } from 'lucide-react';
 
 // Using a generic type for the icon since we are just rendering them
@@ -21,6 +22,8 @@ interface HomeProps {
 export default async function Home({ params }: HomeProps) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
+  const products = getProducts(lang);
+  const featuredProduct = products.find(p => p.featured === true);
 
   return (
     <main className="min-h-screen bg-[#f4f4f0] text-black pb-20 selection:bg-black selection:text-white dark:bg-[#111111] dark:text-[#f4f4f0] dark:selection:bg-white dark:selection:text-black transition-colors duration-300">
@@ -72,6 +75,11 @@ export default async function Home({ params }: HomeProps) {
 
         </div>
       </section>
+
+      {/* Featured Product Hero */}
+      {featuredProduct && (
+        <FeaturedProduct product={featuredProduct} lang={lang} dict={dict} />
+      )}
 
       {/* Catalog Marquee */}
       <div className="border-b border-black dark:border-white py-4 overflow-hidden">
