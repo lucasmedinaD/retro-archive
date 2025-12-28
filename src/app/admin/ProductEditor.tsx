@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { updateProductAction } from '../actions';
+import { updateProductAction } from './actions';
 import Image from 'next/image';
 
 export default function ProductEditor({ product, onCancel }: { product: any, onCancel: () => void }) {
