@@ -1,25 +1,50 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { checkRateLimit, recordFailedAttempt, clearAttempts } from '@/lib/rateLimiter';
 
-const PASS = process.env.ADMIN_PASSWORD || 'admin123'; // Default fallback, user should change this
+const PASS = process.env.ADMIN_PASSWORD || 'Gojo2004L.';
 
 export async function loginAction(formData: FormData) {
     const password = formData.get('password');
+    const headersList = await headers();
+    const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+
+    // Check rate limit
+    const rateLimit = checkRateLimit(ip);
+
+    if (!rateLimit.allowed) {
+        const lockedMinutes = Math.ceil((rateLimit.lockedUntil!.getTime() - Date.now()) / 60000);
+        return {
+            error: `🚫 SECURITY LOCKOUT: Too many failed attempts. Try again in ${lockedMinutes} minutes.`
+        };
+    }
 
     if (password === PASS) {
+        // Success - clear attempts
+        clearAttempts(ip);
+
         const cookieStore = await cookies();
         cookieStore.set('admin_session', 'authenticated', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 60 * 60 * 24, // 1 day
+            sameSite: 'strict',
             path: '/',
         });
         redirect('/admin');
     } else {
-        return { error: 'ACCESS DENIED: Invalid Protocol Credentials' };
+        // Failed - record attempt
+        recordFailedAttempt(ip);
+        const remaining = rateLimit.remainingAttempts! - 1;
+
+        if (remaining > 0) {
+            return { error: `ACCESS DENIED: Invalid credentials. ${remaining} attempts remaining.` };
+        } else {
+            return { error: '🚫 ACCOUNT LOCKED: Too many failed attempts. Try again in 15 minutes.' };
+        }
     }
 }
 
