@@ -13,6 +13,7 @@ export interface Product {
     description_en?: string;
     description_es?: string;
     tags?: string[];
+    featured?: boolean; // Mark product as featured/destacado
     [key: string]: any;
 }
 

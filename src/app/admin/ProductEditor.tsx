@@ -60,7 +60,18 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
             <div className="bg-[#111] border border-accent w-full max-w-2xl max-h-[90vh] overflow-y-auto brutal-shadow">
                 <div className="bg-accent text-white p-2 flex justify-between items-center">
                     <h3 className="font-bold uppercase tracking-widest">{isNew ? 'Creating New Unit' : `Editing Unit: ${product.id}`}</h3>
-                    <button onClick={onCancel} className="text-black font-mono font-bold hover:bg-white px-2">X</button>
+                    <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2 text-xs cursor-pointer hover:bg-white/10 px-2 py-1">
+                            <input
+                                type="checkbox"
+                                checked={formData.featured || false}
+                                onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                                className="cursor-pointer"
+                            />
+                            <span className="font-mono">⭐ DESTACADO</span>
+                        </label>
+                        <button onClick={onCancel} className="text-black font-mono font-bold hover:bg-white px-2">X</button>
+                    </div>
                 </div>
 
                 <div className="p-6 grid gap-6 font-mono text-xs">
