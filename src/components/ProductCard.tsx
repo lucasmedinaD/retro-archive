@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Product } from '@/data/products';
 import { Heart } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
+import { useState } from 'react';
 
 interface ProductCardProps {
     product: Product;
@@ -14,10 +15,16 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, lang, label }: ProductCardProps) {
     const { isFavorite, toggleFavorite, isLoaded } = useFavorites();
+    const [isTouched, setIsTouched] = useState(false);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.preventDefault();
         toggleFavorite(product.id);
+    };
+
+    const handleImageTouch = (e: React.TouchEvent) => {
+        e.preventDefault();
+        setIsTouched(!isTouched);
     };
 
     return (
@@ -45,12 +52,15 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
             )}
 
             {/* Image Container - Aspect Ratio Square */}
-            <div className="relative aspect-square w-full overflow-hidden border-b border-black dark:border-white md:aspect-[3/4]">
+            <div
+                className="relative aspect-square w-full overflow-hidden border-b border-black dark:border-white md:aspect-[3/4]"
+                onTouchStart={handleImageTouch}
+            >
                 <Image
                     src={product.image || '/mockups/placeholder.jpg'}
                     alt={product.name}
                     fill
-                    className="object-cover transition-all duration-500 group-hover:scale-105"
+                    className={`object-cover transition-all duration-500 ${isTouched ? '' : 'grayscale'} group-hover:grayscale-0 group-hover:scale-105`}
                     unoptimized
                 />
             </div>
