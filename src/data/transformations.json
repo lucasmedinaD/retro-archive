@@ -17,6 +17,12 @@
       "animeImage": "/transformations/anime-1767049452958.jpg",
       "realImage": "/transformations/real-1767049454796.jpg",
       "id": "transform-1767049455822"
+    },
+    {
+      "characterName": "Reze (Chainsaw Man)",
+      "animeImage": "/transformations/anime-1767049503814.webp",
+      "realImage": "/transformations/real-1767049505905.jpg",
+      "id": "transform-1767049506971"
     }
   ]
 }
