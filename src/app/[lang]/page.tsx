@@ -8,6 +8,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import FeaturedProduct from '@/components/FeaturedProduct';
+import NewsletterForm from '@/components/NewsletterForm';
 import { Instagram, Twitter } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -140,19 +141,7 @@ export default function Home({ params }: HomeProps) {
 
       {/* Newsletter Section */}
       <section className="border-t border-black dark:border-white py-20 px-6 bg-[#f4f4f0] dark:bg-[#111111]">
-        <div className="max-w-2xl mx-auto text-center">
-          <h3 className="text-3xl font-black mb-6 uppercase">{dict.newsletter.title}</h3>
-          <div className="flex gap-0 border border-black dark:border-white p-1">
-            <input
-              type="email"
-              placeholder={dict.newsletter.placeholder}
-              className="flex-1 bg-transparent p-3 font-mono text-sm outline-none placeholder:text-gray-400 uppercase"
-            />
-            <button className="bg-black text-white dark:bg-white dark:text-black px-6 py-3 font-bold text-xs uppercase tracking-widest hover:invert transition-all">
-              {dict.newsletter.button}
-            </button>
-          </div>
-        </div>
+        <NewsletterForm dict={dict} />
       </section>
 
       <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-12 px-6">

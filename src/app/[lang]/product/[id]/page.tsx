@@ -58,7 +58,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
         );
     }
 
-    const related = products.filter(p => p.id !== id).slice(0, 3);
+    // Intelligent related products
+    const calculateRelevance = (candidate: Product, current: Product): number => {
+        let score = 0;
+
+        // Same category: +10 points
+        if (candidate.category === current.category) score += 10;
+
+        // Shared tags: +2 per shared tag
+        const sharedTags = candidate.tags?.filter(t =>
+            current.tags?.includes(t)
+        )?.length || 0;
+        score += sharedTags * 2;
+
+        return score;
+    };
+
+    const related = products
+        .filter(p => p.id !== id) // Exclude current product
+        .map(p => ({
+            ...p,
+            relevance: calculateRelevance(p, product)
+        }))
+        .sort((a, b) => b.relevance - a.relevance)
+        .slice(0, 3);
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black pb-20 dark:bg-[#111111] dark:text-[#f4f4f0] transition-colors duration-300">
