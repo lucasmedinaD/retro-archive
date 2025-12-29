@@ -7,7 +7,6 @@ import { getDictionary } from '@/get-dictionary';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
-import FeaturedProduct from '@/components/FeaturedProduct';
 import NewsletterForm from '@/components/NewsletterForm';
 import { Instagram, Twitter } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -55,14 +54,14 @@ export default function Home({ params }: HomeProps) {
 
       {/* Hero Section */}
       <section className="border-b border-black dark:border-white">
-        <div className="max-w-[90rem] mx-auto px-6 py-24 md:py-40 flex flex-col md:flex-row items-center justify-between gap-12">
+        <div className="max-w-[90rem] mx-auto px-6 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-10">
 
           <div className="flex-1">
-            <h1 className="text-7xl md:text-9xl font-black leading-[0.85] tracking-tighter mb-8">
+            <h1 className="text-7xl md:text-9xl font-black leading-[0.85] tracking-tighter mb-6">
               {dict.hero.title_less} <br />
               <span className="font-serif italic font-normal text-6xl md:text-8xl text-accent">{dict.hero.title_is_more}</span>
             </h1>
-            <p className="font-mono text-sm md:text-base max-w-md  mb-10 leading-relaxed border-l-2 border-black dark:border-white pl-4 text-gray-600 dark:text-gray-400">
+            <p className="font-mono text-sm md:text-base max-w-md  mb-6 leading-relaxed border-l-2 border-black dark:border-white pl-4 text-gray-600 dark:text-gray-400">
               {dict.hero.description}
             </p>
             <Link
@@ -74,7 +73,7 @@ export default function Home({ params }: HomeProps) {
           </div>
 
           <div className="flex-1 w-full flex justify-end">
-            <div className="relative w-full max-w-md aspect-[4/5] border border-black dark:border-white p-2">
+            <div className="relative w-full max-w-md aspect-[4/5] border border-black dark:border-white p-1.5">
               <div className="w-full h-full bg-gray-200 dark:bg-gray-800 relative overflow-hidden grayscale contrast-125 dark:contrast-100">
                 {/* Placeholder for Hero Image - utilizing one from products for vibe */}
                 <img
@@ -92,13 +91,10 @@ export default function Home({ params }: HomeProps) {
         </div>
       </section>
 
-      {/* Featured Product Hero */}
-      {featuredProduct && (
-        <FeaturedProduct product={featuredProduct} lang={lang} dict={dict} />
-      )}
+
 
       {/* Catalog Marquee */}
-      <div className="border-b border-black dark:border-white py-4 overflow-hidden">
+      <div className="border-b border-black dark:border-white py-3 overflow-hidden">
         <h2 className="text-8xl font-black opacity-10 whitespace-nowrap marquee-container">
           <div className="marquee-content">
             {dict.catalog.marquee} {dict.catalog.marquee}
@@ -107,8 +103,8 @@ export default function Home({ params }: HomeProps) {
       </div>
 
       {/* Product Grid Section */}
-      <section id="catalog" className="max-w-[90rem] mx-auto px-6 py-20">
-        <div className="flex justify-between items-end mb-12">
+      <section id="catalog" className="max-w-[90rem] mx-auto px-6 py-12">
+        <div className="flex justify-between items-end mb-8">
           <h3 className="text-4xl font-serif italic text-black dark:text-white">
             {dict.catalog.collection}
           </h3>
@@ -140,11 +136,11 @@ export default function Home({ params }: HomeProps) {
       </section>
 
       {/* Newsletter Section */}
-      <section className="border-t border-black dark:border-white py-20 px-6 bg-[#f4f4f0] dark:bg-[#111111]">
+      <section className="border-t border-black dark:border-white py-12 px-6 bg-[#f4f4f0] dark:bg-[#111111]">
         <NewsletterForm dict={dict} />
       </section>
 
-      <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-12 px-6">
+      <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-8 px-6">
         <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
