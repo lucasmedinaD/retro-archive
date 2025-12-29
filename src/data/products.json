@@ -29,7 +29,7 @@
                 "funny"
             ],
             "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
-            "featured": true
+            "featured": false
         }
     ],
     "es": [
@@ -60,7 +60,7 @@
                 "funny"
             ],
             "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
-            "featured": true
+            "featured": false
         }
     ]
 }
