@@ -5,7 +5,8 @@
         "about": "About",
         "cart": "CART",
         "favorites": "FAVORITES",
-        "search": "Search products..."
+        "search": "Search products...",
+        "anime_to_real": "ANIME TO REAL"
     },
     "hero": {
         "title_less": "LESS",
@@ -56,5 +57,17 @@
         "no_results_desc": "Try different keywords or browse all products",
         "results_count_singular": "result",
         "results_count_plural": "results"
+    },
+    "anime_to_real": {
+        "title": "ANIME TO REAL",
+        "subtitle": "2.5D Transformations",
+        "description": "Compare anime characters with their real-life recreations. Drag the slider or tilt your mobile device to reveal the transformation.",
+        "cta": "VIEW COMPARISON",
+        "empty_title": "Coming Soon",
+        "empty_description": "Transformations are on their way. Check back soon.",
+        "close": "CLOSE",
+        "click_to_compare": "Click to compare",
+        "drag_to_reveal": "Drag to reveal",
+        "tilt_to_reveal": "Tilt to reveal"
     }
 }

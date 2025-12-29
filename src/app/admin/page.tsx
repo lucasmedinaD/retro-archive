@@ -74,6 +74,12 @@ export default function AdminDashboard() {
                         + NEW PRODUCT
                     </button>
                     <Link
+                        href="/admin/transformations"
+                        className="px-4 py-2 bg-purple-600 text-white hover:bg-purple-500 transition-colors uppercase text-xs font-bold flex items-center gap-2"
+                    >
+                        🎭 TRANSFORMATIONS
+                    </Link>
+                    <Link
                         href="/admin/settings"
                         className="px-4 py-2 bg-black border border-accent text-accent hover:bg-accent hover:text-black transition-colors uppercase text-xs font-bold flex items-center gap-2"
                     >
