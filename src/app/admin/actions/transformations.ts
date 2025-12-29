@@ -15,6 +15,11 @@ export interface TransformationData {
         en: string;
         es: string;
     };
+    // New filtering fields
+    series?: string; // Anime series name (e.g., "Chainsaw Man", "Jujutsu Kaisen")
+    category?: 'cosplay' | 'fanart' | '2.5d' | 'other'; // Type of transformation
+    tags?: string[]; // Custom tags (e.g., ["protagonist", "villain", "popular"])
+    likes?: number; // Vote count for ranking
 }
 
 export async function fetchTransformationsAction() {
@@ -198,5 +203,55 @@ export async function uploadTransformationImageAction(imageFile: File, type: 'an
     } catch (error: any) {
         console.error(error);
         return { error: error.message || 'Image upload failed' };
+    }
+}
+
+export async function likeTransformationAction(transformationId: string) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current transformations
+        const existing = await fetchTransformationsAction();
+        if (!existing.success || !existing.data) {
+            throw new Error('Failed to fetch current transformations');
+        }
+
+        const transformations = existing.data as TransformationData[];
+        const sha = (existing as any).sha;
+
+        // 2. Find and increment likes
+        const index = transformations.findIndex(t => t.id === transformationId);
+        if (index === -1) {
+            return { error: 'Transformation not found' };
+        }
+
+        transformations[index].likes = (transformations[index].likes || 0) + 1;
+
+        // 3. Commit Update
+        const jsonContent = { transformations };
+        const newContent = Buffer.from(JSON.stringify(jsonContent, null, 2)).toString('base64');
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${TRANSFORMATIONS_FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Like transformation: ${transformationId}`,
+                content: newContent,
+                sha: sha
+            })
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected like request');
+
+        revalidatePath('/[lang]/anime-to-real', 'page');
+        return { success: true, likes: transformations[index].likes };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Like failed' };
     }
 }

@@ -7,6 +7,11 @@ export interface Transformation {
         en: string;
         es: string;
     };
+    // New filtering fields
+    series?: string; // Anime series name (e.g., "Chainsaw Man", "Jujutsu Kaisen")
+    category?: 'cosplay' | 'fanart' | '2.5d' | 'other'; // Type of transformation
+    tags?: string[]; // Custom tags (e.g., ["protagonist", "villain", "popular"])
+    likes?: number; // Vote count for ranking
 }
 
 // Fallback transformations (in case JSON doesn't exist yet)
@@ -14,12 +19,16 @@ const fallbackTransformations: Transformation[] = [
     {
         id: 'makima-1',
         characterName: 'Makima',
+        series: 'Chainsaw Man',
+        category: 'cosplay',
+        tags: ['protagonist', 'popular'],
         animeImage: '/transformations/makima-anime.jpg',
         realImage: '/transformations/makima-real.png',
         description: {
             en: 'Iconic character recreation with attention to detail',
             es: 'Recreación icónica del personaje con atención al detalle'
-        }
+        },
+        likes: 0
     },
 ];
 

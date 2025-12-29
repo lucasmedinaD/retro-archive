@@ -22,6 +22,9 @@ export default function TransformationsPage() {
     const [characterName, setCharacterName] = useState('');
     const [descriptionEn, setDescriptionEn] = useState('');
     const [descriptionEs, setDescriptionEs] = useState('');
+    const [series, setSeries] = useState('');
+    const [category, setCategory] = useState<'cosplay' | 'fanart' | '2.5d' | 'other'>('cosplay');
+    const [tags, setTags] = useState('');
     const [animeImage, setAnimeImage] = useState<File | null>(null);
     const [realImage, setRealImage] = useState<File | null>(null);
     const [animePreview, setAnimePreview] = useState<string>('');
@@ -87,10 +90,14 @@ export default function TransformationsPage() {
                 characterName,
                 animeImage: animeUpload.path!,
                 realImage: realUpload.path!,
+                series: series || undefined,
+                category,
+                tags: tags ? tags.split(',').map(t => t.trim()).filter(t => t) : undefined,
                 description: descriptionEn || descriptionEs ? {
                     en: descriptionEn,
                     es: descriptionEs
-                } : undefined
+                } : undefined,
+                likes: 0
             };
 
             const result = await createTransformationAction(transformation);
@@ -104,6 +111,9 @@ export default function TransformationsPage() {
             setCharacterName('');
             setDescriptionEn('');
             setDescriptionEs('');
+            setSeries('');
+            setCategory('cosplay');
+            setTags('');
             setAnimeImage(null);
             setRealImage(null);
             setAnimePreview('');
@@ -199,6 +209,55 @@ export default function TransformationsPage() {
                                 placeholder="e.g., Makima, Gojo, Nezuko..."
                                 required
                             />
+                        </div>
+
+                        {/* Metadata Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {/* Series */}
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">
+                                    Anime Series
+                                </label>
+                                <input
+                                    type="text"
+                                    value={series}
+                                    onChange={(e) => setSeries(e.target.value)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                                    placeholder="e.g., Chainsaw Man"
+                                />
+                            </div>
+
+                            {/* Category */}
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">
+                                    Category <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value as any)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors uppercase"
+                                >
+                                    <option value="cosplay">Cosplay</option>
+                                    <option value="fanart">Fanart</option>
+                                    <option value="2.5d">2.5D</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            {/* Tags */}
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">
+                                    Tags
+                                </label>
+                                <input
+                                    type="text"
+                                    value={tags}
+                                    onChange={(e) => setTags(e.target.value)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                                    placeholder="e.g., protagonist, popular"
+                                />
+                                <p className="text-[10px] text-gray-600 mt-1">Separate tags with commas</p>
+                            </div>
                         </div>
 
                         {/* Images */}
