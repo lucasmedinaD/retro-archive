@@ -25,6 +25,10 @@ export default async function Home({ params }: HomeProps) {
   const products = getProducts(lang);
   const featuredProduct = products.find(p => p.featured === true);
 
+  // Get dynamic settings for social media
+  const { getSettings } = await import('@/data/settings');
+  const settings = getSettings();
+
   return (
     <main className="min-h-screen bg-[#f4f4f0] text-black pb-20 selection:bg-black selection:text-white dark:bg-[#111111] dark:text-[#f4f4f0] dark:selection:bg-white dark:selection:text-black transition-colors duration-300">
 
@@ -106,22 +110,26 @@ export default async function Home({ params }: HomeProps) {
           <div className="text-center md:text-left">
             <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
             <div className="flex justify-center md:justify-start gap-4 mb-4">
-              <a
-                href="https://instagram.com/lucasmedinad"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-              >
-                <SocialIcon Icon={Instagram} />
-              </a>
-              <a
-                href="https://twitter.com/lucasmedinad"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-              >
-                <SocialIcon Icon={Twitter} />
-              </a>
+              {settings.socialMedia.instagram && (
+                <a
+                  href={settings.socialMedia.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
+                  <SocialIcon Icon={Instagram} />
+                </a>
+              )}
+              {settings.socialMedia.twitter && (
+                <a
+                  href={settings.socialMedia.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter"
+                >
+                  <SocialIcon Icon={Twitter} />
+                </a>
+              )}
             </div>
             <p className="font-mono text-xs max-w-xs text-gray-500">
               {dict.footer.description}

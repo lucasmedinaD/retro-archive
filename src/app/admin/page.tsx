@@ -2,11 +2,14 @@
 
 import { logoutAction, deleteProductAction } from './actions';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import ProductEditor from './ProductEditor';
+import SettingsEditor from './SettingsEditor';
 import { Product } from '@/data/products';
 
 import productsRaw from '@/data/products.json';
+import settingsRaw from '@/data/settings.json';
 import { useEffect } from 'react';
 import { fetchLatestInventory } from './actions';
 
@@ -16,6 +19,7 @@ export default function AdminDashboard() {
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [isCreating, setIsCreating] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [activeTab, setActiveTab] = useState<'products' | 'settings'>('products');
 
     // Filter products based on search
     const filteredProducts = products.filter(p =>
@@ -69,6 +73,12 @@ export default function AdminDashboard() {
                     >
                         + NEW PRODUCT
                     </button>
+                    <Link
+                        href="/admin/settings"
+                        className="px-4 py-2 bg-black border border-accent text-accent hover:bg-accent hover:text-black transition-colors uppercase text-xs font-bold flex items-center gap-2"
+                    >
+                        ⚙️ SETTINGS
+                    </Link>
                     <form action={logoutAction}>
                         <button className="px-4 py-2 border border-[#333] hover:bg-white hover:text-black hover:border-white transition-colors uppercase text-xs">
                             Terminate Session
