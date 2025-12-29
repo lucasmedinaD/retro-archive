@@ -35,6 +35,12 @@
       "animeImage": "/transformations/anime-1767049933297.jpg",
       "realImage": "/transformations/real-1767049935447.jpg",
       "id": "transform-1767049936359"
+    },
+    {
+      "characterName": "Denj (Chainsaw Man)",
+      "animeImage": "/transformations/anime-1767050354933.jpg",
+      "realImage": "/transformations/real-1767050357938.jpg",
+      "id": "transform-1767050358858"
     }
   ]
 }
