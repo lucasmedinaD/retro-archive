@@ -12,11 +12,12 @@ interface ProductGridProps {
     lang: 'en' | 'es';
     dict: any;
     products: Product[];
+    viewMode?: 'grid' | 'list';
 }
 
 const ITEMS_PER_PAGE = 9;
 
-export default function ProductGrid({ lang, dict, products }: ProductGridProps) {
+export default function ProductGrid({ lang, dict, products, viewMode = 'grid' }: ProductGridProps) {
     const [filter, setFilter] = useState<string>('ALL');
     const [searchTerm, setSearchTerm] = useState('');
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
@@ -112,8 +113,11 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                 ))}
             </div>
 
-            {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Grid/List */}
+            <div className={viewMode === 'grid'
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+                : 'flex flex-col gap-4'
+            }>
                 {visibleProducts.map((product) => (
                     <ProductCard
                         key={product.id}

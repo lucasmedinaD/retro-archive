@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import ProductGrid from '@/components/ProductGrid';
 import { getProducts } from '@/data/products';
@@ -7,6 +9,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import FeaturedProduct from '@/components/FeaturedProduct';
 import { Instagram, Twitter } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -19,10 +22,22 @@ interface HomeProps {
   params: Promise<{ lang: 'en' | 'es' }>;
 }
 
-export default async function Home({ params }: HomeProps) {
-  const { lang } = await params;
-  const dict = await getDictionary(lang);
-  const products = getProducts(lang);
+export default function Home({ params }: HomeProps) {
+  const [lang, setLang] = useState<'en' | 'es'>('en');
+  const [dict, setDict] = useState<any>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  useEffect(() => {
+    params.then(({ lang }) => {
+      setLang(lang);
+      getDictionary(lang).then(setDict);
+      setProducts(getProducts(lang));
+    });
+  }, [params]);
+
+  if (!dict) return null;
+
   const featuredProduct = products.find(p => p.featured === true);
 
   return (
@@ -97,12 +112,30 @@ export default async function Home({ params }: HomeProps) {
             {dict.catalog.collection}
           </h3>
           <div className="flex gap-2">
-            <button className="w-8 h-8 border border-black dark:border-white flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">■</button>
-            <button className="w-8 h-8 border border-black dark:border-white flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">list</button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`w-8 h-8 border flex items-center justify-center transition-colors ${viewMode === 'grid'
+                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                }`}
+              aria-label="Grid view"
+            >
+              ■
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`w-8 h-8 border flex items-center justify-center transition-colors font-mono text-xs ${viewMode === 'list'
+                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                }`}
+              aria-label="List view"
+            >
+              ≡
+            </button>
           </div>
         </div>
 
-        <ProductGrid lang={lang} dict={dict} products={getProducts(lang)} />
+        <ProductGrid lang={lang} dict={dict} products={getProducts(lang)} viewMode={viewMode} />
       </section>
 
       {/* Newsletter Section */}
@@ -127,9 +160,22 @@ export default async function Home({ params }: HomeProps) {
           <div className="text-center md:text-left">
             <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
             <div className="flex justify-center md:justify-start gap-4 mb-4">
-              <SocialIcon Icon={Instagram} />
-              {/* TikTok icon not in lucide defaults often, using Twitter for now or basic */}
-              <SocialIcon Icon={Twitter} />
+              <a
+                href="https://instagram.com/lucasmedinad"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <SocialIcon Icon={Instagram} />
+              </a>
+              <a
+                href="https://twitter.com/lucasmedinad"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+              >
+                <SocialIcon Icon={Twitter} />
+              </a>
             </div>
             <p className="font-mono text-xs max-w-xs text-gray-500">
               {dict.footer.description}
