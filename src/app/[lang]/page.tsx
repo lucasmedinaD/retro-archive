@@ -62,16 +62,16 @@ export default async function Home({ params }: HomeProps) {
           </div>
 
           <div className="flex-1 w-full flex justify-end">
-            <div className="relative w-full max-w-md aspect-[4/5] border border-black dark:border-white p-1.5">
-              <div className="w-full h-full bg-gray-200 dark:bg-gray-800 relative overflow-hidden grayscale contrast-125 dark:contrast-100">
-                {/* Placeholder for Hero Image - utilizing one from products for vibe */}
+            <div className="relative w-full max-w-md aspect-[4/5] border-2 border-black dark:border-white overflow-hidden">
+              <div className="w-full h-full bg-white dark:bg-black relative overflow-hidden">
+                {/* Featured Hero Image - Makima */}
                 <img
-                  src="/mockups/social_skills.png"
-                  alt="Social Skills Loading..."
+                  src="/hero-makima.jpg"
+                  alt="Featured Character - Makima"
                   className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-white dark:bg-black border border-black dark:border-white px-4 py-2 font-mono text-xs rotate-[-5deg]">
+              <div className="absolute -bottom-6 -left-6 bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white px-4 py-2 font-mono text-xs font-bold rotate-[-5deg] shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,1)]">
                 {dict.hero.featured}
               </div>
             </div>

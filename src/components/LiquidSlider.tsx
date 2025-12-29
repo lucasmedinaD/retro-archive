@@ -79,92 +79,94 @@ export default function LiquidSlider({ animeImage, realImage, characterName }: L
             )}
 
             {/* Comparison Container */}
-            <div
-                ref={containerRef}
-                className="relative aspect-[4/5] border-2 border-black dark:border-white overflow-hidden cursor-ew-resize select-none touch-none"
-                onPointerDown={() => setIsDragging(true)}
-                onPointerMove={handlePointerMove}
-                onPointerUp={() => setIsDragging(false)}
-                onPointerLeave={() => setIsDragging(false)}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                {/* Background: Anime Image */}
-                <div className="absolute inset-0">
-                    <img
-                        src={animeImage}
-                        alt={`${characterName} - Anime`}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
-
-                {/* Foreground: Real Image (Clipped) */}
-                <motion.div
-                    className="absolute inset-0"
-                    style={{
-                        clipPath: useTransform(sliderPosition, (v) => `inset(0 ${100 - v}% 0 0)`)
-                    }}
+            <div className="w-full flex items-center justify-center">
+                <div
+                    ref={containerRef}
+                    className="relative w-full max-w-2xl min-h-[400px] max-h-[80vh] border-2 border-black dark:border-white overflow-hidden cursor-ew-resize select-none touch-none"
+                    onPointerDown={() => setIsDragging(true)}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={() => setIsDragging(false)}
+                    onPointerLeave={() => setIsDragging(false)}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
                 >
-                    <img
-                        src={realImage}
-                        alt={`${characterName} - Real`}
-                        className="w-full h-full object-cover"
-                    />
-                </motion.div>
+                    {/* Background: Anime Image */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black">
+                        <img
+                            src={animeImage}
+                            alt={`${characterName} - Anime`}
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
 
-                {/* Labels (visible on hover/drag) */}
-                <motion.div
-                    className="absolute top-4 left-4 bg-white/90 dark:bg-black/90 border border-black dark:border-white px-3 py-1.5 font-mono text-xs font-bold uppercase pointer-events-none"
-                    animate={{ opacity: isHovered || isDragging ? 1 : 0 }}
-                >
-                    <ChevronLeft className="inline-block mr-1" size={14} />
-                    Anime
-                </motion.div>
-
-                <motion.div
-                    className="absolute top-4 right-4 bg-white/90 dark:bg-black/90 border border-black dark:border-white px-3 py-1.5 font-mono text-xs font-bold uppercase pointer-events-none"
-                    animate={{ opacity: isHovered || isDragging ? 1 : 0 }}
-                >
-                    Real
-                    <ChevronRight className="inline-block ml-1" size={14} />
-                </motion.div>
-
-                {/* Separator Line & Handle */}
-                <motion.div
-                    className="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)] z-20 pointer-events-none"
-                    style={{ left: useTransform(sliderPosition, (v) => `${v}%`) }}
-                >
-                    {/* Circular Handle */}
+                    {/* Foreground: Real Image (Clipped) */}
                     <motion.div
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center bg-white dark:bg-white"
-                        animate={{
-                            scale: isDragging ? 1.1 : 1,
-                            opacity: isHovered || isDragging ? 1 : 0.8,
-                            width: isDragging ? 48 : 40,
-                            height: isDragging ? 48 : 40,
-                        }}
+                        className="absolute inset-0 flex items-center justify-center bg-black"
                         style={{
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 4px rgba(255,255,255,0.2)'
+                            clipPath: useTransform(sliderPosition, (v) => `inset(0 ${100 - v}% 0 0)`)
                         }}
                     >
-                        <div className="flex gap-0.5">
-                            <div className="w-[2px] h-4 bg-gray-800 rounded-full" />
-                            <div className="w-[2px] h-4 bg-gray-800 rounded-full" />
-                        </div>
+                        <img
+                            src={realImage}
+                            alt={`${characterName} - Real`}
+                            className="w-full h-full object-contain"
+                        />
                     </motion.div>
-                </motion.div>
 
-                {/* Mobile Tilt Indicator */}
-                {isMobile && permission === 'granted' && !isDragging && (
+                    {/* Labels (visible on hover/drag) */}
                     <motion.div
-                        className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-white dark:bg-white/80 dark:text-black px-4 py-2 font-mono text-xs rounded-full pointer-events-none"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        className="absolute top-4 left-4 bg-white/90 dark:bg-black/90 border border-black dark:border-white px-3 py-1.5 font-mono text-xs font-bold uppercase pointer-events-none"
+                        animate={{ opacity: isHovered || isDragging ? 1 : 0 }}
                     >
-                        <Smartphone className="inline-block mr-2" size={12} />
-                        Inclina el dispositivo
+                        <ChevronLeft className="inline-block mr-1" size={14} />
+                        Anime
                     </motion.div>
-                )}
+
+                    <motion.div
+                        className="absolute top-4 right-4 bg-white/90 dark:bg-black/90 border border-black dark:border-white px-3 py-1.5 font-mono text-xs font-bold uppercase pointer-events-none"
+                        animate={{ opacity: isHovered || isDragging ? 1 : 0 }}
+                    >
+                        Real
+                        <ChevronRight className="inline-block ml-1" size={14} />
+                    </motion.div>
+
+                    {/* Separator Line & Handle */}
+                    <motion.div
+                        className="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)] z-20 pointer-events-none"
+                        style={{ left: useTransform(sliderPosition, (v) => `${v}%`) }}
+                    >
+                        {/* Circular Handle */}
+                        <motion.div
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center bg-white dark:bg-white"
+                            animate={{
+                                scale: isDragging ? 1.1 : 1,
+                                opacity: isHovered || isDragging ? 1 : 0.8,
+                                width: isDragging ? 48 : 40,
+                                height: isDragging ? 48 : 40,
+                            }}
+                            style={{
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.15), 0 0 0 4px rgba(255,255,255,0.2)'
+                            }}
+                        >
+                            <div className="flex gap-0.5">
+                                <div className="w-[2px] h-4 bg-gray-800 rounded-full" />
+                                <div className="w-[2px] h-4 bg-gray-800 rounded-full" />
+                            </div>
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Mobile Tilt Indicator */}
+                    {isMobile && permission === 'granted' && !isDragging && (
+                        <motion.div
+                            className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-white dark:bg-white/80 dark:text-black px-4 py-2 font-mono text-xs rounded-full pointer-events-none"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                        >
+                            <Smartphone className="inline-block mr-2" size={12} />
+                            Inclina el dispositivo
+                        </motion.div>
+                    )}
+                </div>
             </div>
 
             {/* Character Name */}
