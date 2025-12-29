@@ -14,6 +14,22 @@
             ],
             "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
             "featured": true
+        },
+        {
+            "id": "social-skills",
+            "name": "Social Skills Loading...",
+            "price": "$28.00",
+            "image": "/mockups/social_skills.png",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "HUMOR",
+            "description": "Introvert mode activated. A pixel-art tribute to social anxiety and recharging batteries.",
+            "tags": [
+                "anime",
+                "pixel art",
+                "funny"
+            ],
+            "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
+            "featured": false
         }
     ],
     "es": [
@@ -28,6 +44,22 @@
             "tags": [
                 "makima-chainsawman-denji"
             ]
+        },
+        {
+            "id": "social-skills",
+            "name": "Social Skills Loading...",
+            "price": "$28.00",
+            "image": "/mockups/social_skills.png",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "HUMOR",
+            "description": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
+            "tags": [
+                "anime",
+                "pixel art",
+                "gracioso"
+            ],
+            "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
+            "featured": false
         }
     ]
 }

@@ -36,7 +36,7 @@ export default function LoginPage() {
                         INITIALIZE SESSION
                     </button>
                     {/* Fallback error message guidance if defaults fail */}
-                    <p className="text-xs text-center text-gray-600">Password: admin123</p>
+
                 </form>
             </div>
         </main>

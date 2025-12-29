@@ -62,8 +62,8 @@ export default async function Home({ params }: HomeProps) {
               <div className="w-full h-full bg-gray-200 dark:bg-gray-800 relative overflow-hidden grayscale contrast-125 dark:contrast-100">
                 {/* Placeholder for Hero Image - utilizing one from products for vibe */}
                 <img
-                  src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1000&auto=format&fit=crop"
-                  alt="Featured"
+                  src="/mockups/social_skills.png"
+                  alt="Social Skills Loading..."
                   className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
                 />
               </div>
