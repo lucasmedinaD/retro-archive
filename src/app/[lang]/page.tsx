@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import ProductGrid from '@/components/ProductGrid';
 import { getProducts } from '@/data/products';
@@ -9,7 +7,6 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import NewsletterForm from '@/components/NewsletterForm';
 import { Instagram, Twitter } from 'lucide-react';
-import { useState, useEffect } from 'react';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -22,22 +19,10 @@ interface HomeProps {
   params: Promise<{ lang: 'en' | 'es' }>;
 }
 
-export default function Home({ params }: HomeProps) {
-  const [lang, setLang] = useState<'en' | 'es'>('en');
-  const [dict, setDict] = useState<any>(null);
-  const [products, setProducts] = useState<any[]>([]);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
-  useEffect(() => {
-    params.then(({ lang }) => {
-      setLang(lang);
-      getDictionary(lang).then(setDict);
-      setProducts(getProducts(lang));
-    });
-  }, [params]);
-
-  if (!dict) return null;
-
+export default async function Home({ params }: HomeProps) {
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+  const products = getProducts(lang);
   const featuredProduct = products.find(p => p.featured === true);
 
   return (
@@ -104,35 +89,11 @@ export default function Home({ params }: HomeProps) {
 
       {/* Product Grid Section */}
       <section id="catalog" className="max-w-[90rem] mx-auto px-6 py-12">
-        <div className="flex justify-between items-end mb-8">
-          <h3 className="text-4xl font-serif italic text-black dark:text-white">
-            {dict.catalog.collection}
-          </h3>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`w-8 h-8 border flex items-center justify-center transition-colors ${viewMode === 'grid'
-                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                }`}
-              aria-label="Grid view"
-            >
-              ■
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`w-8 h-8 border flex items-center justify-center transition-colors font-mono text-xs ${viewMode === 'list'
-                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                }`}
-              aria-label="List view"
-            >
-              ≡
-            </button>
-          </div>
-        </div>
+        <h3 className="text-4xl font-serif italic text-black dark:text-white mb-8">
+          {dict.catalog.collection}
+        </h3>
 
-        <ProductGrid lang={lang} dict={dict} products={getProducts(lang)} viewMode={viewMode} />
+        <ProductGrid lang={lang} dict={dict} products={getProducts(lang)} />
       </section>
 
       {/* Newsletter Section */}

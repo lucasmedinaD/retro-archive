@@ -12,15 +12,15 @@ interface ProductGridProps {
     lang: 'en' | 'es';
     dict: any;
     products: Product[];
-    viewMode?: 'grid' | 'list';
 }
 
 const ITEMS_PER_PAGE = 9;
 
-export default function ProductGrid({ lang, dict, products, viewMode = 'grid' }: ProductGridProps) {
+export default function ProductGrid({ lang, dict, products }: ProductGridProps) {
     const [filter, setFilter] = useState<string>('ALL');
     const [searchTerm, setSearchTerm] = useState('');
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
     // Get unique categories from products
     const uniqueCategories = Array.from(new Set(products.map(p => p.category.toUpperCase())));
@@ -63,6 +63,32 @@ export default function ProductGrid({ lang, dict, products, viewMode = 'grid' }:
 
     return (
         <div>
+            {/* View Toggle */}
+            <div className="flex justify-end mb-4">
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setViewMode('grid')}
+                        className={`w-8 h-8 border flex items-center justify-center transition-colors ${viewMode === 'grid'
+                                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                            }`}
+                        aria-label="Grid view"
+                    >
+                        ■
+                    </button>
+                    <button
+                        onClick={() => setViewMode('list')}
+                        className={`w-8 h-8 border flex items-center justify-center transition-colors font-mono text-xs ${viewMode === 'list'
+                                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                            }`}
+                        aria-label="List view"
+                    >
+                        ≡
+                    </button>
+                </div>
+            </div>
+
             {/* Search Bar */}
             <div className="mb-8">
                 <div className="relative">
