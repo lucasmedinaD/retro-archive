@@ -29,6 +29,12 @@
       "animeImage": "/transformations/anime-1767049570353.jpg",
       "realImage": "/transformations/real-1767049572416.jpg",
       "id": "transform-1767049573446"
+    },
+    {
+      "characterName": "L - Ryuzaki (Death Note)",
+      "animeImage": "/transformations/anime-1767049933297.jpg",
+      "realImage": "/transformations/real-1767049935447.jpg",
+      "id": "transform-1767049936359"
     }
   ]
 }
