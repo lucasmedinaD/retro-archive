@@ -5,7 +5,7 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { checkRateLimit, recordFailedAttempt, clearAttempts } from '@/lib/rateLimiter';
 
-const PASS = process.env.ADMIN_PASSWORD || 'Gojo2004L.';
+const PASS = process.env.ADMIN_PASSWORD;
 
 export async function loginAction(formData: FormData) {
     const password = formData.get('password');
@@ -19,6 +19,13 @@ export async function loginAction(formData: FormData) {
         const lockedMinutes = Math.ceil((rateLimit.lockedUntil!.getTime() - Date.now()) / 60000);
         return {
             error: `🚫 SECURITY LOCKOUT: Too many failed attempts. Try again in ${lockedMinutes} minutes.`
+        };
+    }
+
+    // Check if password is configured
+    if (!PASS) {
+        return {
+            error: '⚠️ CONFIGURATION ERROR: ADMIN_PASSWORD not set in environment variables. Contact administrator.'
         };
     }
 
