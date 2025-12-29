@@ -41,6 +41,12 @@
       "animeImage": "/transformations/anime-1767050354933.jpg",
       "realImage": "/transformations/real-1767050357938.jpg",
       "id": "transform-1767050358858"
+    },
+    {
+      "characterName": "Masha Kujou",
+      "animeImage": "/transformations/anime-1767050752297.jpg",
+      "realImage": "/transformations/real-1767050754394.jpg",
+      "id": "transform-1767050755602"
     }
   ]
 }
