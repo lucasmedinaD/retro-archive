@@ -126,6 +126,14 @@ export default async function Home({ params }: HomeProps) {
             <p className="font-mono text-xs max-w-xs text-gray-500">
               {dict.footer.description}
             </p>
+            <div className="flex gap-4 mt-3 justify-center md:justify-start font-mono text-xs">
+              <Link href="/legal/privacy" className="hover:underline text-gray-600 dark:text-gray-400">
+                Privacy
+              </Link>
+              <Link href="/legal/terms" className="hover:underline text-gray-600 dark:text-gray-400">
+                Terms
+              </Link>
+            </div>
           </div>
           <div className="font-mono text-xs text-center md:text-right">
             <p>© 2024</p>

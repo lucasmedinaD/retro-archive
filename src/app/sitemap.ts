@@ -1,42 +1,40 @@
-import { getProducts } from '@/data/products';
+import type { MetadataRoute } from 'next'
 
-export default async function sitemap() {
-    const productsEn = getProducts('en');
-    const productsEs = getProducts('es');
+export default function sitemap(): MetadataRoute.Sitemap {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://retro-archive.vercel.app'
 
-    const baseUrl = 'https://retro-archive.vercel.app';
-
-    // Static pages
-    const staticPages = [
+    return [
+        {
+            url: baseUrl,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 1,
+        },
         {
             url: `${baseUrl}/en`,
             lastModified: new Date(),
-            changeFrequency: 'daily' as const,
+            changeFrequency: 'weekly',
             priority: 1,
         },
         {
             url: `${baseUrl}/es`,
             lastModified: new Date(),
-            changeFrequency: 'daily' as const,
+            changeFrequency: 'weekly',
             priority: 1,
         },
-    ];
-
-    // Product pages - English
-    const productPagesEn = productsEn.map(product => ({
-        url: `${baseUrl}/en/product/${product.id}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }));
-
-    // Product pages - Spanish
-    const productPagesEs = productsEs.map(product => ({
-        url: `${baseUrl}/es/product/${product.id}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }));
-
-    return [...staticPages, ...productPagesEn, ...productPagesEs];
+        {
+            url: `${baseUrl}/en/favorites`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.5,
+        },
+        {
+            url: `${baseUrl}/es/favorites`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.5,
+        },
+        // Product pages would be dynamically added here
+        // For now, we'll add a few static ones
+    ]
 }
