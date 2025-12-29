@@ -18,10 +18,10 @@
         {
             "id": "social-skills",
             "name": "Social Skills Loading...",
-            "price": "$28.00",
-            "image": "/mockups/social_skills.png",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "HUMOR",
+            "price": "$16.00",
+            "image": "/mockups/1767009877406-hghj.jpg",
+            "buyUrl": "https://www.teepublic.com/t-shirt/85608659-social-skills-loading-1-komi-anime-introvert-pixel",
+            "category": "Pixel art",
             "description": "Introvert mode activated. A pixel-art tribute to social anxiety and recharging batteries.",
             "tags": [
                 "anime",
@@ -49,15 +49,15 @@
         {
             "id": "social-skills",
             "name": "Social Skills Loading...",
-            "price": "$28.00",
-            "image": "/mockups/social_skills.png",
-            "buyUrl": "https://www.redbubble.com/",
-            "category": "HUMOR",
+            "price": "$16.00",
+            "image": "/mockups/1767009877406-hghj.jpg",
+            "buyUrl": "https://www.teepublic.com/t-shirt/85608659-social-skills-loading-1-komi-anime-introvert-pixel",
+            "category": "Pixel art",
             "description": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
             "tags": [
                 "anime",
                 "pixel art",
-                "gracioso"
+                "funny"
             ],
             "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
             "featured": true
