@@ -85,7 +85,7 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                         <img
                             src={transformation.realImage}
                             alt="Reality"
-                            className="absolute inset-0 w-full h-full object-cover"
+                            className="absolute inset-0 w-full h-full object-contain bg-white dark:bg-black"
                         />
 
                         {/* Foreground: Anime - Clipped */}
@@ -97,7 +97,7 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                             <img
                                 src={transformation.animeImage}
                                 alt="Anime"
-                                className="absolute inset-0 w-full h-full object-cover"
+                                className="absolute inset-0 w-full h-full object-contain bg-white dark:bg-black"
                             />
                             <div className="absolute top-4 left-4 z-20">
                                 <span className="bg-blue-600 text-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full">

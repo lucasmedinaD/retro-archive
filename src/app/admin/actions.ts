@@ -335,3 +335,53 @@ export async function deleteProductAction(productId: string) {
         return { error: error.message || 'Delete failed' };
     }
 }
+
+export async function deleteAllProductsAction() {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current file
+        const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+            },
+            cache: 'no-store'
+        });
+
+        if (!getRes.ok) throw new Error('Failed to fetch current inventory');
+        const fileData = await getRes.json();
+        const sha = fileData.sha;
+
+        // 2. Clear all products
+        const productsJson = { en: [], es: [] };
+
+        // 3. Commit Update
+        const newContent = Buffer.from(JSON.stringify(productsJson, null, 4)).toString('base64');
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: 'Delete all products',
+                content: newContent,
+                sha: sha
+            })
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected delete all request');
+
+        revalidatePath('/');
+        revalidatePath('/admin');
+        return { success: true };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Delete all failed' };
+    }
+}
+

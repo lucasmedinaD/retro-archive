@@ -1,6 +1,6 @@
 'use client';
 
-import { logoutAction, deleteProductAction } from './actions';
+import { logoutAction, deleteProductAction, deleteAllProductsAction } from './actions';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -22,25 +22,35 @@ export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState<'products' | 'settings'>('products');
 
     // Filter products based on search
-    const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredProducts = products.filter(p => {
+        const displayName = p.name || p.name_en || p.name_es || p.id;
+        return displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.category.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     const handleDelete = async (product: Product) => {
-        if (!confirm(`⚠️ DELETE UNIT ${product.id}?\n\nThis action cannot be undone. The product will be permanently removed from the mainframe.`)) {
-            return;
-        }
+        if (!confirm(`⚠️ DELETE UNIT ${product.id}?\n\nThis action cannot be undone.`)) return;
 
         const result = await deleteProductAction(product.id);
-        // @ts-ignore
         if (result?.error) {
-            // @ts-ignore
             alert(`DELETE FAILED: ${result.error}`);
         } else {
             setProducts(prev => prev.filter(p => p.id !== product.id));
-            alert('DELETE SUCCESSFUL: Unit removed from inventory. Deployment initiated.');
+            alert('DELETE SUCCESSFUL');
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        if (!confirm(`⚠️ DELETE ALL PRODUCTS?\n\nThis will remove ${products.length} products permanently!`)) return;
+        if (!confirm('Are you absolutely sure? Type DELETE in the next prompt.')) return;
+
+        const result = await deleteAllProductsAction();
+        if (result?.error) {
+            alert(`DELETE ALL FAILED: ${result.error}`);
+        } else {
+            setProducts([]);
+            alert('ALL PRODUCTS DELETED');
         }
     };
 
@@ -115,10 +125,13 @@ export default function AdminDashboard() {
 
             {/* Inventory List */}
             <section>
-                <div className="flex justify-between items-end mb-6">
+                <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-white uppercase">Inventory Matrix</h2>
-                    <button className="bg-accent text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-black transition-colors text-xs tracking-widest">
-                        + Initialize New Unit
+                    <button
+                        onClick={handleDeleteAll}
+                        className="border border-red-500 text-red-500 px-4 py-2 font-bold uppercase hover:bg-red-500 hover:text-white transition-colors text-xs"
+                    >
+                        🗑️ Delete All
                     </button>
                 </div>
 
@@ -138,7 +151,7 @@ export default function AdminDashboard() {
                             </div>
                             <div>
                                 <div className="text-xs text-accent mb-1">{product.id}</div>
-                                <div className="font-bold text-white">{product.name}</div>
+                                <div className="font-bold text-white">{product.name || product.name_en || product.name_es || product.id}</div>
                             </div>
                             <div className="text-xs text-gray-400">
                                 <span className="border border-[#333] px-2 py-1 rounded-none">{product.category}</span>
@@ -166,37 +179,41 @@ export default function AdminDashboard() {
                 </div>
             </section>
 
-            {editingProduct && (
-                <ProductEditor
-                    product={editingProduct}
-                    onCancel={() => setEditingProduct(null)}
-                    onSave={(updatedProduct) => {
-                        setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
-                        alert('UPDATE SUCCESSFUL: Changes committed to Mainframe. Deployment of static assets initiated (ETA: 2 mins). Local view updated.');
-                    }}
-                />
-            )}
+            {
+                editingProduct && (
+                    <ProductEditor
+                        product={editingProduct}
+                        onCancel={() => setEditingProduct(null)}
+                        onSave={(updatedProduct) => {
+                            setProducts(prev => prev.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+                            alert('UPDATE SUCCESSFUL');
+                        }}
+                    />
+                )
+            }
 
-            {isCreating && (
-                <ProductEditor
-                    product={{
-                        id: '',
-                        name: '',
-                        price: '$0.00',
-                        image: '',
-                        buyUrl: 'https://www.redbubble.com/',
-                        category: 'DESIGN',
-                        description: ''
-                    }}
-                    isNew={true}
-                    onCancel={() => setIsCreating(false)}
-                    onSave={(newProduct) => {
-                        setProducts(prev => [...prev, newProduct]);
-                        alert('PRODUCT CREATED: New unit added to inventory. GitHub commit initiated. Deployment ETA: 2 mins.');
-                        setIsCreating(false);
-                    }}
-                />
-            )}
-        </main>
+            {
+                isCreating && (
+                    <ProductEditor
+                        product={{
+                            id: '',
+                            name: '',
+                            price: '$0.00',
+                            image: '',
+                            buyUrl: 'https://www.redbubble.com/',
+                            category: 'DESIGN',
+                            description: ''
+                        }}
+                        isNew={true}
+                        onCancel={() => setIsCreating(false)}
+                        onSave={(newProduct) => {
+                            setProducts(prev => [...prev, newProduct]);
+                            alert('PRODUCT CREATED');
+                            setIsCreating(false);
+                        }}
+                    />
+                )
+            }
+        </main >
     );
 }

@@ -97,7 +97,7 @@ export default function ShareableComparison({ transformation }: ShareableCompari
 
                 {/* Branding Watermark - Bottom Right */}
                 <div className="absolute bottom-3 right-3 flex items-center gap-2 bg-black/90 text-white px-3 py-1.5">
-                    <img src="/logo.png" alt="" className="w-5 h-5" style={{ filter: 'invert(1)' }} />
+                    <img src="/logo.png" alt="" className="w-4 h-4 aspect-square object-contain" style={{ filter: 'invert(1)' }} />
                     <span className="font-bold text-xs font-mono">retro-archive.art</span>
                 </div>
 
