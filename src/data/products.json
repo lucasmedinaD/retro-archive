@@ -13,23 +13,8 @@
                 "chainsaw man\""
             ],
             "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
-            "featured": false
-        },
-        {
-            "id": "social-skills",
-            "name": "Social Skills Loading...",
-            "price": "$16.00",
-            "image": "/mockups/1767009877406-hghj.jpg",
-            "buyUrl": "https://www.teepublic.com/t-shirt/85608659-social-skills-loading-1-komi-anime-introvert-pixel",
-            "category": "Pixel art",
-            "description": "Introvert mode activated. A pixel-art tribute to social anxiety and recharging batteries.",
-            "tags": [
-                "anime",
-                "pixel art",
-                "funny"
-            ],
-            "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
-            "featured": false
+            "featured": false,
+            "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below."
         },
         {
             "id": "d1",
@@ -42,7 +27,9 @@
             "name_en": "Denji Aesthetic (Chainsaw Man)",
             "tags": [
                 "Denji"
-            ]
+            ],
+            "name_es": "Denji Aesthetic (Chainsaw Man)",
+            "description_en": "Denji Art"
         },
         {
             "id": "d3",
@@ -59,6 +46,22 @@
             ],
             "name_es": "Reze Bomb Girl Calavera Anime",
             "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise."
+        },
+        {
+            "id": "d4",
+            "name": "",
+            "price": "$20",
+            "image": "/mockups/1767130217440-Gemini_Generated_Image_fhf6uffhf6uffhf6.jpg",
+            "buyUrl": "https://www.redbubble.com/es/i/camiseta/Habilidades-sociales-cargando-1-Anime-lindo-e-introvertido-en-pixel-art-de-sosacrash/177149387.WFLAH",
+            "category": "Pixel art",
+            "description": "",
+            "name_es": "Habilidades sociales (cargando 1%) - Anime lindo e introvertido en pixel art ",
+            "description_es": "¿Alguna vez has sentido ganas de decir \"Hola\", pero tu cerebro se queda bloqueado? Este diseño captura a la perfección esa lucha tan común contra la ansiedad social. Con un adorable personaje de anime pixel art de alta calidad y una barra de progreso que dice \"Habilidades sociales: Cargando... 1%\", esta ilustración es el estado de ánimo ideal para introvertidos. Tanto si eres fan del anime de la vida real como si simplemente vives en \"Modo Silencio\", este diseño divertido y estético habla por ti para que no tengas que hacerlo tú. Perfecto para gamers, amantes del manga y cualquiera que espere a que su confianza termine de descargar.",
+            "tags": [
+                "komisan"
+            ],
+            "name_en": "Social Skills Loading 1% - Cute Anime Introvert Pixel Art",
+            "description_en": "Ever feel like you want to say 'Hello' but your brain just starts buffering? This design perfectly captures that relatable struggle of social anxiety. Featuring a cute, high-quality pixel art anime character with a 'Social Skills: Loading... 1%' progress bar, this illustration is the ultimate mood for introverts. Whether you are a fan of slice-of-life anime or just someone who lives life on 'Silent Mode', this funny and aesthetic design speaks for you so you don't have to. Perfect for gamers, manga lovers, and anyone waiting for their confidence to finish downloading."
         }
     ],
     "es": [
@@ -77,22 +80,6 @@
             "featured": false
         },
         {
-            "id": "social-skills",
-            "name": "Social Skills Loading...",
-            "price": "$16.00",
-            "image": "/mockups/1767009877406-hghj.jpg",
-            "buyUrl": "https://www.teepublic.com/t-shirt/85608659-social-skills-loading-1-komi-anime-introvert-pixel",
-            "category": "Pixel art",
-            "description": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
-            "tags": [
-                "anime",
-                "pixel art",
-                "funny"
-            ],
-            "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
-            "featured": false
-        },
-        {
             "id": "d1",
             "name": "",
             "price": "$16",
@@ -120,6 +107,22 @@
             ],
             "name_es": "Reze Bomb Girl Calavera Anime",
             "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise."
+        },
+        {
+            "id": "d4",
+            "name": "",
+            "price": "$20",
+            "image": "/mockups/1767130217440-Gemini_Generated_Image_fhf6uffhf6uffhf6.jpg",
+            "buyUrl": "https://www.redbubble.com/es/i/camiseta/Habilidades-sociales-cargando-1-Anime-lindo-e-introvertido-en-pixel-art-de-sosacrash/177149387.WFLAH",
+            "category": "Pixel art",
+            "description": "",
+            "name_es": "Habilidades sociales (cargando 1%) - Anime lindo e introvertido en pixel art ",
+            "description_es": "¿Alguna vez has sentido ganas de decir \"Hola\", pero tu cerebro se queda bloqueado? Este diseño captura a la perfección esa lucha tan común contra la ansiedad social. Con un adorable personaje de anime pixel art de alta calidad y una barra de progreso que dice \"Habilidades sociales: Cargando... 1%\", esta ilustración es el estado de ánimo ideal para introvertidos. Tanto si eres fan del anime de la vida real como si simplemente vives en \"Modo Silencio\", este diseño divertido y estético habla por ti para que no tengas que hacerlo tú. Perfecto para gamers, amantes del manga y cualquiera que espere a que su confianza termine de descargar.",
+            "tags": [
+                "komisan"
+            ],
+            "name_en": "Social Skills Loading 1% - Cute Anime Introvert Pixel Art",
+            "description_en": "Ever feel like you want to say 'Hello' but your brain just starts buffering? This design perfectly captures that relatable struggle of social anxiety. Featuring a cute, high-quality pixel art anime character with a 'Social Skills: Loading... 1%' progress bar, this illustration is the ultimate mood for introverts. Whether you are a fan of slice-of-life anime or just someone who lives life on 'Silent Mode', this funny and aesthetic design speaks for you so you don't have to. Perfect for gamers, manga lovers, and anyone waiting for their confidence to finish downloading."
         }
     ]
 }
