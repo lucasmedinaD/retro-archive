@@ -30,6 +30,19 @@
             ],
             "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
             "featured": false
+        },
+        {
+            "id": "d1",
+            "name": "",
+            "price": "$16",
+            "image": "/mockups/1767060068058-1000028025.jpg",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "DESIGN",
+            "description": "",
+            "name_en": "Denji Aesthetic (Chainsaw Man)",
+            "tags": [
+                "Denji"
+            ]
         }
     ],
     "es": [
@@ -61,6 +74,19 @@
             ],
             "description_es": "Modo introvertido activado. Un tributo en pixel-art a la ansiedad social y a recargar baterías.",
             "featured": false
+        },
+        {
+            "id": "d1",
+            "name": "",
+            "price": "$16",
+            "image": "/mockups/1767060068058-1000028025.jpg",
+            "buyUrl": "https://www.redbubble.com/",
+            "category": "DESIGN",
+            "description": "",
+            "name_en": "Denji Aesthetic (Chainsaw Man)",
+            "tags": [
+                "Denji"
+            ]
         }
     ]
 }
