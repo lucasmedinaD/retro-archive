@@ -10,6 +10,7 @@ import {
     deleteTransformationAction,
     updateTransformationAction,
     uploadTransformationImageAction,
+    deleteAllTransformationsAction,
     TransformationData
 } from '../actions/transformations';
 import TransformationEditor from '../TransformationEditor';
@@ -151,9 +152,22 @@ export default function TransformationsPage() {
         if (result.error) {
             alert(`❌ UPDATE FAILED: ${result.error}`);
         } else {
-            alert('✅ UPDATE SUCCESSFUL: Changes saved. Deployment initiated (ETA: 2 mins).');
+            alert('✅ UPDATE SUCCESSFUL');
             setEditingTransformation(null);
             loadTransformations();
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        if (!confirm(`⚠️ DELETE ALL TRANSFORMATIONS?\n\nThis will remove ${transformations.length} transformations permanently!`)) return;
+        if (!confirm('Are you absolutely sure? This cannot be undone.')) return;
+
+        const result = await deleteAllTransformationsAction();
+        if (result.error) {
+            alert(`DELETE ALL FAILED: ${result.error}`);
+        } else {
+            setTransformations([]);
+            alert('ALL TRANSFORMATIONS DELETED');
         }
     };
 
@@ -172,6 +186,12 @@ export default function TransformationsPage() {
                         className="px-4 py-2 bg-accent text-black hover:bg-white transition-colors uppercase text-xs font-bold"
                     >
                         {isCreating ? '✕ CANCEL' : '+ NEW TRANSFORMATION'}
+                    </button>
+                    <button
+                        onClick={handleDeleteAll}
+                        className="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors uppercase text-xs font-bold"
+                    >
+                        🗑️ Delete All
                     </button>
                     <Link
                         href="/admin"

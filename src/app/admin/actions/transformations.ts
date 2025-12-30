@@ -330,3 +330,45 @@ export async function updateTransformationAction(transformationId: string, updat
         return { error: error.message || 'Update failed' };
     }
 }
+
+export async function deleteAllTransformationsAction() {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current file to get SHA
+        const existing = await fetchTransformationsAction();
+        const sha = (existing as any).sha;
+
+        // 2. Create empty transformations array
+        const jsonContent = { transformations: [] };
+        const newContent = Buffer.from(JSON.stringify(jsonContent, null, 2)).toString('base64');
+
+        // 3. Commit Update
+        const body: any = {
+            message: 'Delete all transformations',
+            content: newContent
+        };
+        if (sha) body.sha = sha;
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${TRANSFORMATIONS_FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected delete all request');
+
+        revalidatePath('/[lang]/anime-to-real', 'page');
+        revalidatePath('/admin/transformations');
+        return { success: true };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Delete all failed' };
+    }
+}
+
