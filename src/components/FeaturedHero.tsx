@@ -43,14 +43,11 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
             {/* Left: Context & CTA */}
             <div className="relative z-20 flex-1 flex flex-col justify-center p-8 md:p-16 lg:p-24 border-b md:border-b-0 md:border-r border-black/10 dark:border-white/20">
 
-                <div className="flex items-center gap-3 mb-6">
-                    <img src="/logo.png" alt="Retro Archive" className="w-10 h-10 dark:invert" />
-                    <div className="flex items-center gap-2 text-accent">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-xs font-mono uppercase tracking-[0.2em]">
-                            LABORATORY ONLINE
-                        </span>
-                    </div>
+                <div className="flex items-center gap-2 text-accent mb-6">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="text-xs font-mono uppercase tracking-[0.2em]">
+                        LABORATORY ONLINE
+                    </span>
                 </div>
 
                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-6 uppercase">

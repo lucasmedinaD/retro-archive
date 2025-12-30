@@ -21,7 +21,8 @@ export default function Header({ lang, dict }: HeaderProps) {
     return (
         <>
             <header className="px-6 py-6 flex justify-between items-center border-b border-black dark:border-white sticky top-0 bg-[#f4f4f0] dark:bg-[#111111] z-50 transition-colors duration-300">
-                <Link href={`/${lang}`} className="text-3xl font-black tracking-tighter uppercase relative z-50">
+                <Link href={`/${lang}`} className="flex items-center gap-3 text-3xl font-black tracking-tighter uppercase relative z-50">
+                    <img src="/logo.png" alt="" className="w-8 h-8 dark:invert" />
                     RETRO<span className="italic font-serif font-normal text-accent">.ARCHIVE</span>
                 </Link>
 
