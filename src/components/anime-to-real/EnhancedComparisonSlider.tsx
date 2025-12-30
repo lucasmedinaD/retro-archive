@@ -44,9 +44,8 @@ export default function EnhancedComparisonSlider({
         damping: 20
     });
 
-    // Touch state for gesture detection
+    // Touch state ref for gesture detection
     const touchState = useRef({
-        isTracking: false,
         startX: 0,
         startY: 0,
         isDraggingSlider: false,
@@ -59,87 +58,91 @@ export default function EnhancedComparisonSlider({
         const x = clientX - rect.left;
         const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
         setPosition(percentage);
+    }, []);
 
-        // Haptic feedback on mobile (if supported)
-        if ('vibrate' in navigator && isDragging) {
-            navigator.vibrate(1);
-        }
-    }, [isDragging]);
+    const triggerSparkle = useCallback(() => {
+        setShowSparkle(true);
+        setTimeout(() => setShowSparkle(false), 600);
+    }, []);
 
-    // Mouse handlers
+    // NATIVE event handlers with passive: false
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleTouchStart = (e: TouchEvent) => {
+            const touch = e.touches[0];
+            touchState.current = {
+                startX: touch.clientX,
+                startY: touch.clientY,
+                isDraggingSlider: false,
+                hasDecidedDirection: false
+            };
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            const touch = e.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchState.current.startX);
+            const deltaY = Math.abs(touch.clientY - touchState.current.startY);
+
+            // Decide direction after 10px of movement
+            if (!touchState.current.hasDecidedDirection && (deltaX > 10 || deltaY > 10)) {
+                touchState.current.hasDecidedDirection = true;
+                if (deltaX > deltaY) {
+                    touchState.current.isDraggingSlider = true;
+                    setIsDragging(true);
+                    triggerSparkle();
+                }
+            }
+
+            // If horizontal drag, prevent scroll and update position
+            if (touchState.current.isDraggingSlider) {
+                e.preventDefault(); // This works because passive: false
+                updatePosition(touch.clientX);
+            }
+        };
+
+        const handleTouchEnd = () => {
+            setIsDragging(false);
+            touchState.current = {
+                startX: 0,
+                startY: 0,
+                isDraggingSlider: false,
+                hasDecidedDirection: false
+            };
+        };
+
+        // Add with passive: false to allow preventDefault
+        container.addEventListener('touchstart', handleTouchStart, { passive: true });
+        container.addEventListener('touchmove', handleTouchMove, { passive: false });
+        container.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+        return () => {
+            container.removeEventListener('touchstart', handleTouchStart);
+            container.removeEventListener('touchmove', handleTouchMove);
+            container.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, [updatePosition, triggerSparkle]);
+
+    // Mouse handlers (React events are fine for mouse)
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
-        touchState.current.isTracking = true;
-        touchState.current.isDraggingSlider = true;
         updatePosition(e.clientX);
         triggerSparkle();
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
-        if (!touchState.current.isTracking || !touchState.current.isDraggingSlider) return;
+        if (!isDragging) return;
         updatePosition(e.clientX);
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
-        touchState.current.isTracking = false;
-        touchState.current.isDraggingSlider = false;
-    };
-
-    // Touch handlers with gesture detection
-    const handleTouchStart = (e: React.TouchEvent) => {
-        const touch = e.touches[0];
-        touchState.current = {
-            isTracking: true,
-            startX: touch.clientX,
-            startY: touch.clientY,
-            isDraggingSlider: false,
-            hasDecidedDirection: false
-        };
-    };
-
-    const handleTouchMove = (e: React.TouchEvent) => {
-        if (!touchState.current.isTracking) return;
-
-        const touch = e.touches[0];
-        const deltaX = Math.abs(touch.clientX - touchState.current.startX);
-        const deltaY = Math.abs(touch.clientY - touchState.current.startY);
-
-        if (!touchState.current.hasDecidedDirection && (deltaX > 10 || deltaY > 10)) {
-            touchState.current.hasDecidedDirection = true;
-            if (deltaX > deltaY) {
-                touchState.current.isDraggingSlider = true;
-                setIsDragging(true);
-                triggerSparkle();
-            }
-        }
-
-        if (touchState.current.isDraggingSlider) {
-            e.preventDefault();
-            updatePosition(touch.clientX);
-        }
-    };
-
-    const handleTouchEnd = () => {
-        setIsDragging(false);
-        touchState.current = {
-            isTracking: false,
-            startX: 0,
-            startY: 0,
-            isDraggingSlider: false,
-            hasDecidedDirection: false
-        };
-    };
-
-    const triggerSparkle = () => {
-        setShowSparkle(true);
-        setTimeout(() => setShowSparkle(false), 600);
     };
 
     const handleLike = () => {
         setIsLiked(!isLiked);
         onLike?.();
-        // Haptic feedback
         if ('vibrate' in navigator) {
             navigator.vibrate([10, 50, 10]);
         }
@@ -154,7 +157,7 @@ export default function EnhancedComparisonSlider({
         <div className="relative rounded-xl overflow-hidden shadow-2xl">
             {/* Ambient Glow Effect */}
             <motion.div
-                className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 rounded-xl blur-xl opacity-0 z-0"
+                className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 rounded-xl blur-xl z-0"
                 style={{ opacity: glowIntensity }}
             />
 
@@ -166,9 +169,6 @@ export default function EnhancedComparisonSlider({
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
             >
                 {/* Background Image (Real) */}
                 <motion.img
@@ -183,7 +183,7 @@ export default function EnhancedComparisonSlider({
                     transition={{ duration: 0.3 }}
                 />
 
-                {/* Foreground Image (Anime) - Clipped with spring animation */}
+                {/* Foreground Image (Anime) - Clipped */}
                 <motion.div
                     className="absolute inset-0 pointer-events-none"
                     style={{ clipPath: useTransform(springPosition, v => `inset(0 ${100 - v}% 0 0)`) }}
@@ -203,7 +203,7 @@ export default function EnhancedComparisonSlider({
 
                 {/* Dynamic Slider Line */}
                 <motion.div
-                    className="absolute top-0 bottom-0 w,0.5 pointer-events-none z-20"
+                    className="absolute top-0 bottom-0 w-0.5 pointer-events-none z-20"
                     style={{ left: useTransform(springPosition, v => `${v}%`), x: '-50%' }}
                 >
                     {/* Glow Line */}
@@ -216,17 +216,13 @@ export default function EnhancedComparisonSlider({
                         }}
                     />
 
-                    {/* Handle with pulse animation */}
+                    {/* Handle with pulse */}
                     <motion.div
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                         animate={{
                             scale: isDragging ? 1.2 : 1,
-                            rotate: isDragging ? [0, -5, 5, 0] : 0
                         }}
-                        transition={{
-                            scale: { type: 'spring', stiffness: 400 },
-                            rotate: { repeat: isDragging ? Infinity : 0, duration: 0.3 }
-                        }}
+                        transition={{ type: 'spring', stiffness: 400 }}
                     >
                         {/* Outer ring pulse */}
                         <motion.div
@@ -239,7 +235,7 @@ export default function EnhancedComparisonSlider({
                         />
 
                         {/* Main handle */}
-                        <div className="w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center border-4 border-purple-500/50 backdrop-blur-sm">
+                        <div className="w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center border-4 border-purple-500/50">
                             <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -247,7 +243,7 @@ export default function EnhancedComparisonSlider({
                         </div>
                     </motion.div>
 
-                    {/* Sparkle effect on interaction */}
+                    {/* Sparkle effect */}
                     {showSparkle && (
                         <motion.div
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -260,7 +256,7 @@ export default function EnhancedComparisonSlider({
                     )}
                 </motion.div>
 
-                {/* Labels with glass effect */}
+                {/* Labels */}
                 <motion.div
                     className="absolute top-4 left-4 backdrop-blur-md bg-black/60 text-white px-4 py-2 text-xs font-bold uppercase pointer-events-none rounded-lg z-10 border border-white/20"
                     animate={{ x: isDragging ? -5 : 0 }}
@@ -281,7 +277,7 @@ export default function EnhancedComparisonSlider({
                     </span>
                 </motion.div>
 
-                {/* Progress indicator */}
+                {/* Progress bar */}
                 <div className="absolute bottom-4 left-4 right-4 z-10">
                     <div className="h-1 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
                         <motion.div
@@ -302,7 +298,7 @@ export default function EnhancedComparisonSlider({
                 </motion.div>
             </div>
 
-            {/* Action Buttons with gradient */}
+            {/* Action Buttons */}
             <motion.div
                 className="mt-4 flex justify-center gap-4"
                 initial={{ opacity: 0, y: 20 }}
@@ -312,23 +308,18 @@ export default function EnhancedComparisonSlider({
                 {onLike && (
                     <motion.button
                         onClick={handleLike}
-                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700 relative overflow-hidden group"
+                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700 relative overflow-hidden"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/50 to-red-500/0"
-                            animate={{ x: isLiked ? ['100%', '-100%'] : '100%' }}
-                            transition={{ repeat: isLiked ? Infinity : 0, duration: 1.5 }}
-                        />
-                        <Heart size={22} className={`relative z-10 transition-all ${isLiked ? 'fill-red-500 text-red-500 scale-110' : 'text-white'}`} />
+                        <Heart size={22} className={`relative z-10 transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-white'}`} />
                     </motion.button>
                 )}
                 {onShare && (
                     <motion.button
                         onClick={onShare}
                         className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700"
-                        whileHover={{ scale: 1.1, rotate: 15 }}
+                        whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                     >
                         <Share2 size={22} className="text-white" />
@@ -337,8 +328,8 @@ export default function EnhancedComparisonSlider({
                 {onDownload && (
                     <motion.button
                         onClick={onDownload}
-                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border- gray-700"
-                        whileHover={{ scale: 1.1, y: -3 }}
+                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700"
+                        whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                     >
                         <Download size={22} className="text-white" />
