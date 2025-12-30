@@ -1,13 +1,13 @@
 {
   "transformations": [
     {
-      "characterName": "Makima",
-      "animeImage": "/hero-anime.png",
-      "realImage": "/hero-real.png",
+      "characterName": "Komi-San",
+      "animeImage": "/transformations/anime-1767130721323.jpg",
+      "realImage": "/transformations/real-1767130722821.jpg",
       "id": "transform-1767049294239",
       "likes": 1,
       "series": "Chainsaw man ",
-      "category": "cosplay",
+      "category": "2.5d",
       "tags": [
         "makima",
         "chainsaw man",
