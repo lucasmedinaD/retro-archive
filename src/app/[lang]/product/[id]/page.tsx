@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import ShareButtons from '@/components/ShareButtons';
 import ImageZoom from '@/components/ImageZoom';
 import BuyButton from '@/components/BuyButton';
+import { ProductSchema } from '@/components/SchemaScript';
 
 interface ProductPageProps {
     params: Promise<{
@@ -85,6 +86,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black pb-20 dark:bg-[#111111] dark:text-[#f4f4f0] transition-colors duration-300">
+            {/* SEO Schema */}
+            <ProductSchema
+                name={product.name || product.name_en || product.name_es || 'Design'}
+                description={product.description || product.description_en || product.description_es || 'Original anime design'}
+                image={product.image}
+                price={product.price || '$20'}
+                url={product.buyUrl}
+            />
+
             {/* Header */}
             <Header lang={lang} dict={dict} />
 

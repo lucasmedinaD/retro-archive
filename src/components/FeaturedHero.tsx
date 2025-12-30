@@ -90,8 +90,8 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
             </div>
 
             {/* Right: The Loop (Visual Hook) */}
-            <div className="absolute inset-0 md:relative md:inset-auto md:flex-1 h-full w-full overflow-hidden">
-                <div className="relative w-full h-full">
+            <div className="absolute inset-0 md:relative md:inset-auto md:flex-1 h-full w-full overflow-hidden flex items-center justify-center p-4 bg-black/40">
+                <div className="relative h-full max-h-[80vh] w-auto aspect-[4/5] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
                     {/* Background: Real (Simulation) */}
                     <img
                         src={transformation.realImage}

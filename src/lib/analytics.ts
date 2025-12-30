@@ -124,3 +124,33 @@ export function trackArchiveProgress(viewedCount: number, totalCount: number) {
         percentage: Math.round((viewedCount / totalCount) * 100),
     });
 }
+
+// Track custom form interactions
+export function trackCustomFormStart(projectType: string) {
+    trackEvent('start_custom_form', {
+        project_type: projectType,
+    });
+}
+
+export function trackCustomFormSubmit(projectType: string, budgetRange: string) {
+    trackEvent('submit_custom_form', {
+        project_type: projectType,
+        budget_range: budgetRange,
+    });
+}
+
+// Track freebie downloads
+export function trackFreebieDownload(assetName: string) {
+    trackEvent('download_freebie', {
+        asset_name: assetName,
+    });
+}
+
+// Track view design events (for design detail pages)
+export function trackViewDesign(designSlug: string, category: string) {
+    trackEvent('view_design', {
+        design_slug: designSlug,
+        category: category,
+    });
+}
+
