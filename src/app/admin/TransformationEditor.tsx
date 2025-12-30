@@ -20,6 +20,10 @@ export default function TransformationEditor({ transformation, isNew = false, on
     const [tags, setTags] = useState(transformation.tags?.join(', ') || '');
     const [descriptionEn, setDescriptionEn] = useState(transformation.description?.en || '');
     const [descriptionEs, setDescriptionEs] = useState(transformation.description?.es || '');
+    const [artistName, setArtistName] = useState(transformation.artist?.name || '');
+    const [artistInstagram, setArtistInstagram] = useState(transformation.artist?.instagram || '');
+    const [artistTwitter, setArtistTwitter] = useState(transformation.artist?.twitter || '');
+    const [artistWebsite, setArtistWebsite] = useState(transformation.artist?.website || '');
     const [animeImage, setAnimeImage] = useState<File | null>(null);
     const [realImage, setRealImage] = useState<File | null>(null);
     const [animePreview, setAnimePreview] = useState(transformation.animeImage);
@@ -77,6 +81,12 @@ export default function TransformationEditor({ transformation, isNew = false, on
                 series: series || undefined,
                 category,
                 tags: tags ? tags.split(',').map((t: string) => t.trim()).filter((t: string) => t) : undefined,
+                artist: artistName ? {
+                    name: artistName,
+                    instagram: artistInstagram || undefined,
+                    twitter: artistTwitter || undefined,
+                    website: artistWebsite || undefined
+                } : undefined,
                 animeImage: finalAnimeImage,
                 realImage: finalRealImage,
                 description: descriptionEn || descriptionEs ? {
@@ -158,6 +168,53 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
                                 placeholder="e.g., protagonist, popular"
                             />
+                        </div>
+                    </div>
+
+                    {/* Artist Information */}
+                    <div className="border-2 border-[#333] p-4">
+                        <h3 className="text-sm font-bold uppercase mb-4 text-gray-400">Artist / Cosplayer Credits</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">Artist Name</label>
+                                <input
+                                    type="text"
+                                    value={artistName}
+                                    onChange={(e) => setArtistName(e.target.value)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                                    placeholder="e.g., CosplayQueen"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">Instagram (username only)</label>
+                                <input
+                                    type="text"
+                                    value={artistInstagram}
+                                    onChange={(e) => setArtistInstagram(e.target.value)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                                    placeholder="e.g., cosplayqueen_official"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">Twitter (username only)</label>
+                                <input
+                                    type="text"
+                                    value={artistTwitter}
+                                    onChange={(e) => setArtistTwitter(e.target.value)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                                    placeholder="e.g., CQCosplay"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-gray-400">Website URL</label>
+                                <input
+                                    type="url"
+                                    value={artistWebsite}
+                                    onChange={(e) => setArtistWebsite(e.target.value)}
+                                    className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                                    placeholder="https://example.com"
+                                />
+                            </div>
                         </div>
                     </div>
 

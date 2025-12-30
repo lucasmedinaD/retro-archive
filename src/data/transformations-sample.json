@@ -1,0 +1,214 @@
+{
+    "transformations": [
+        {
+            "id": "makima-cosplay-001",
+            "characterName": "Makima",
+            "series": "Chainsaw Man",
+            "category": "cosplay",
+            "tags": [
+                "protagonist",
+                "popular",
+                "anime-con"
+            ],
+            "animeImage": "/transformations/makima-anime.jpg",
+            "realImage": "/transformations/makima-real.png",
+            "description": {
+                "en": "Iconic Control Devil recreation with meticulous attention to detail. Professional cosplay featuring signature white shirt, black tie, and commanding presence.",
+                "es": "Recreación icónica del Diablo del Control con meticulosa atención al detalle. Cosplay profesional con camisa blanca característica, corbata negra y presencia imponente."
+            },
+            "likes": 147,
+            "artist": {
+                "name": "CosplayQueen",
+                "instagram": "cosplayqueen_official",
+                "twitter": "CQCosplay"
+            },
+            "outfit": [
+                {
+                    "id": "prod-shirt-001",
+                    "name": "White Button Down Shirt",
+                    "brand": "Uniqlo",
+                    "price": 29.99,
+                    "currency": "USD",
+                    "image": "/products/white-shirt.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/white-shirt?tag=retroarchive",
+                    "category": "tops",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-tie-001",
+                    "name": "Black Slim Tie",
+                    "brand": "H&M",
+                    "price": 12.99,
+                    "currency": "USD",
+                    "image": "/products/black-tie.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/black-tie?tag=retroarchive",
+                    "category": "accessories",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-pants-001",
+                    "name": "Black Dress Pants",
+                    "brand": "Zara",
+                    "price": 49.99,
+                    "currency": "USD",
+                    "image": "/products/black-pants.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/black-pants?tag=retroarchive",
+                    "category": "bottoms",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-wig-001",
+                    "name": "Long Red Wig",
+                    "brand": "Arda Wigs",
+                    "price": 65.00,
+                    "currency": "USD",
+                    "image": "/products/red-wig.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/red-wig?tag=retroarchive",
+                    "category": "accessories",
+                    "inStock": true
+                }
+            ],
+            "metadata": {
+                "featured": true,
+                "difficulty": "medium",
+                "completionTime": "4-6 hours"
+            }
+        },
+        {
+            "id": "gojo-casual-002",
+            "characterName": "Satoru Gojo",
+            "series": "Jujutsu Kaisen",
+            "category": "cosplay",
+            "tags": [
+                "sensei",
+                "popular",
+                "minimal"
+            ],
+            "animeImage": "/transformations/gojo-anime.jpg",
+            "realImage": "/transformations/gojo-real.jpg",
+            "description": {
+                "en": "Casual everyday Gojo look featuring his signature blindfold and modern streetwear aesthetic. Perfect for conventions or casual wear.",
+                "es": "Look casual diario de Gojo con su característica venda y estética streetwear moderna. Perfecto para convenciones o uso casual."
+            },
+            "likes": 203,
+            "artist": {
+                "name": "AnimeFashion",
+                "instagram": "anime_fashion_daily"
+            },
+            "outfit": [
+                {
+                    "id": "prod-blindfold-001",
+                    "name": "White Blindfold",
+                    "brand": "CosplayLab",
+                    "price": 15.99,
+                    "currency": "USD",
+                    "image": "/products/blindfold.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/blindfold?tag=retroarchive",
+                    "category": "accessories",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-jacket-001",
+                    "name": "Black Bomber Jacket",
+                    "brand": "Urban Outfitters",
+                    "price": 89.99,
+                    "currency": "USD",
+                    "image": "/products/bomber-jacket.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/bomber?tag=retroarchive",
+                    "category": "tops",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-jeans-001",
+                    "name": "Dark Blue Skinny Jeans",
+                    "brand": "Levi's",
+                    "price": 79.99,
+                    "currency": "USD",
+                    "image": "/products/jeans.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/jeans?tag=retroarchive",
+                    "category": "bottoms",
+                    "inStock": true
+                }
+            ],
+            "metadata": {
+                "featured": false,
+                "difficulty": "easy",
+                "completionTime": "1-2 hours"
+            }
+        },
+        {
+            "id": "nezuko-kimono-003",
+            "characterName": "Nezuko Kamado",
+            "series": "Demon Slayer",
+            "category": "cosplay",
+            "tags": [
+                "demon",
+                "kimono",
+                "detailed"
+            ],
+            "animeImage": "/transformations/nezuko-anime.jpg",
+            "realImage": "/transformations/nezuko-real.jpg",
+            "description": {
+                "en": "Traditional kimono cosplay with bamboo muzzle accessory. Intricate pattern work and authentic Japanese garment construction.",
+                "es": "Cosplay de kimono tradicional con accesorio de bozal de bambú. Trabajo de patrones intrincado y construcción auténtica de prendas japonesas."
+            },
+            "likes": 189,
+            "artist": {
+                "name": "KimonoCosplay",
+                "instagram": "kimono_cos",
+                "website": "https://kimonocosplay.com"
+            },
+            "outfit": [
+                {
+                    "id": "prod-kimono-001",
+                    "name": "Pink Checkered Kimono",
+                    "brand": "Japan Holic",
+                    "price": 120.00,
+                    "currency": "USD",
+                    "image": "/products/kimono.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/kimono?tag=retroarchive",
+                    "category": "tops",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-obi-001",
+                    "name": "Black Obi Belt",
+                    "brand": "Kyoto Kimono",
+                    "price": 35.00,
+                    "currency": "USD",
+                    "image": "/products/obi.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/obi?tag=retroarchive",
+                    "category": "accessories",
+                    "inStock": true
+                },
+                {
+                    "id": "prod-bamboo-001",
+                    "name": "Bamboo Muzzle Prop",
+                    "brand": "PropMaster",
+                    "price": 22.00,
+                    "currency": "USD",
+                    "image": "/products/bamboo.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/bamboo?tag=retroarchive",
+                    "category": "accessories",
+                    "inStock": false
+                },
+                {
+                    "id": "prod-wig-002",
+                    "name": "Black to Orange Gradient Wig",
+                    "brand": "Epic Cosplay",
+                    "price": 75.00,
+                    "currency": "USD",
+                    "image": "/products/nezuko-wig.jpg",
+                    "affiliateUrl": "https://example.com/affiliate/nezuko-wig?tag=retroarchive",
+                    "category": "accessories",
+                    "inStock": true
+                }
+            ],
+            "metadata": {
+                "featured": false,
+                "difficulty": "hard",
+                "completionTime": "2 weeks"
+            }
+        }
+    ]
+}
