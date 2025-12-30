@@ -15,11 +15,30 @@ export interface TransformationData {
         en: string;
         es: string;
     };
-    // New filtering fields
+    // Filtering and categorization
     series?: string; // Anime series name (e.g., "Chainsaw Man", "Jujutsu Kaisen")
     category?: 'cosplay' | 'fanart' | '2.5d' | 'other'; // Type of transformation
     tags?: string[]; // Custom tags (e.g., ["protagonist", "villain", "popular"])
     likes?: number; // Vote count for ranking
+
+    // Attribution
+    artist?: {
+        name: string;
+        instagram?: string;
+        twitter?: string;
+        website?: string;
+    };
+
+    // Affiliate integration (products will be managed separately for now)
+    outfit?: any[]; // Product references - can be extended later
+
+    // Extra metadata
+    metadata?: {
+        featured?: boolean;
+        difficulty?: 'easy' | 'medium' | 'hard';
+        completionTime?: string;
+        originalSource?: string;
+    };
 }
 
 export async function fetchTransformationsAction() {
