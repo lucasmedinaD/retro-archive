@@ -1,7 +1,7 @@
 import { getDictionary } from '@/get-dictionary';
 import { getTransformations } from '@/data/transformations';
 import Header from '@/components/Header';
-import AnimeToRealGallery from '@/components/AnimeToRealGallery';
+import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
 import { Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
 
@@ -55,7 +55,11 @@ export default async function AnimeToRealPage({ params }: PageProps) {
 
             {/* Gallery Section */}
             <section className="max-w-[90rem] mx-auto px-6 py-12">
-                <AnimeToRealGallery transformations={transformations} dict={dict} lang={lang} />
+                <InspirationFeed
+                    transformations={transformations}
+                    hasMore={false}
+                    isLoading={false}
+                />
             </section>
 
             {/* Footer */}
