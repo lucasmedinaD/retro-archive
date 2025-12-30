@@ -4,12 +4,11 @@ import { Heart, Share2, ExternalLink } from 'lucide-react';
 import { TransformationExtended } from '@/types/transformations';
 import EnhancedComparisonSlider from './EnhancedComparisonSlider';
 import ShareableComparison from './ShareableComparison';
-import OutfitBreakdown from './OutfitBreakdown';
 import SocialProof from '@/components/SocialProof';
 import ScarcityLabel from '@/components/ScarcityLabel';
 import { useState, useEffect } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
-import { trackTransformationView, trackRelatedProductClick } from '@/lib/analytics';
+import { trackTransformationView } from '@/lib/analytics';
 import BridgeWidget from './BridgeWidget';
 
 interface TransformationDetailProps {
@@ -43,12 +42,10 @@ export default function TransformationDetail({
     };
 
     const handleShare = () => {
-        // Just open the share modal which has all the working functionality
         setShowShareModal(true);
     };
 
     const handleDownload = () => {
-        // Just open the share modal which has the download button
         setShowShareModal(true);
     };
 
@@ -74,9 +71,8 @@ export default function TransformationDetail({
 
                 {/* Metadata Sidebar (1/3 width on desktop) */}
                 <div className="space-y-6">
-                    {/* Character Info - Technical Nomenclature */}
+                    {/* Character Info */}
                     <div>
-                        {/* Entry Code */}
                         <p className="font-mono text-xs text-accent mb-1 tracking-widest">
                             ENTRY-{transformation.id.slice(-3).toUpperCase().padStart(3, '0')}
                         </p>
@@ -85,7 +81,6 @@ export default function TransformationDetail({
                             {transformation.characterName}
                         </h1>
 
-                        {/* Classification */}
                         <p className="font-mono text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                             {transformation.category || '2.5D'} // ARCHIVAL GRADE A+
                         </p>
@@ -199,46 +194,13 @@ export default function TransformationDetail({
                         </div>
                     )}
 
-                    {/* Difficulty Badge */}
-                    {transformation.metadata?.difficulty && (
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs font-mono uppercase text-gray-600 dark:text-gray-400">
-                                Difficulty:
-                            </span>
-                            <span className={`px-3 py-1 font-bold text-xs uppercase ${transformation.metadata.difficulty === 'easy'
-                                ? 'bg-green-500 text-white'
-                                : transformation.metadata.difficulty === 'medium'
-                                    ? 'bg-yellow-500 text-black'
-                                    : 'bg-red-500 text-white'
-                                }`}>
-                                {transformation.metadata.difficulty}
-                            </span>
-                        </div>
-                    )}
+                    {/* Bridge Widget - CTA for products */}
+                    <BridgeWidget
+                        transformation={transformation}
+                        dict={dict}
+                    />
                 </div>
             </div>
-
-            {/* Related Products - Replaced by BridgeWidget logic, but kept as fallback/seo if needed or just remove if we want pure focus */}
-            {/* We will replace the standard grid with just the BridgeWidget logic above, 
-                BUT the user might want a "more products" section if there are multiple.
-                For now, let's keep the BridgeWidget as the PRIMARY conversion tool and maybe hide this or move it down.
-                Actually, the instruction was: "Remove generic 'Related Products' grid in favor of focused 'Source Material' CTA".
-                So I will remove the old grid section.
-            */}
-
-            {/* Bridge Widget Section */}
-            <BridgeWidget
-                transformation={transformation}
-                dict={dict}
-            />
-
-            {/* Outfit Breakdown */}
-            {transformation.outfit && transformation.outfit.length > 0 && (
-                <OutfitBreakdown
-                    products={transformation.outfit}
-                    characterName={transformation.characterName}
-                />
-            )}
 
             {/* Share Modal */}
             {showShareModal && (
@@ -267,3 +229,4 @@ export default function TransformationDetail({
         </div>
     );
 }
+
