@@ -22,8 +22,8 @@ const fallbackTransformations: Transformation[] = [
         series: 'Chainsaw Man',
         category: 'cosplay',
         tags: ['protagonist', 'popular'],
-        animeImage: '/transformations/makima-anime.jpg',
-        realImage: '/transformations/makima-real.png',
+        animeImage: '/hero-anime.png',
+        realImage: '/hero-real.png',
         description: {
             en: 'Iconic character recreation with attention to detail',
             es: 'Recreación icónica del personaje con atención al detalle'

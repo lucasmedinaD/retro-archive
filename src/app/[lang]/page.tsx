@@ -7,6 +7,8 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import NewsletterForm from '@/components/NewsletterForm';
 import { Instagram, Twitter } from 'lucide-react';
+import { getTransformations } from '@/data/transformations';
+import FeaturedHero from '@/components/FeaturedHero';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -23,7 +25,11 @@ export default async function Home({ params }: HomeProps) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
   const products = getProducts(lang);
-  const featuredProduct = products.find(p => p.featured === true);
+
+  // Get featured transformation for the hero
+  const transformations = getTransformations();
+  // Try to find one marked as "featured" in metadata, or default to Makima (hardcoded ID makima-1) or just the first one
+  const featuredTransformation = transformations.find(t => t.id === 'makima-1') || transformations[0];
 
   // Get dynamic settings for social media
   const { getSettings } = await import('@/data/settings');
@@ -41,44 +47,19 @@ export default async function Home({ params }: HomeProps) {
 
       <Header lang={lang} dict={dict} />
 
-      {/* Hero Section */}
-      <section className="border-b border-black dark:border-white">
-        <div className="max-w-[90rem] mx-auto px-6 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between gap-10">
-
-          <div className="flex-1">
-            <h1 className="text-7xl md:text-9xl font-black leading-[0.85] tracking-tighter mb-6">
-              {dict.hero.title_less} <br />
-              <span className="font-serif italic font-normal text-6xl md:text-8xl text-accent">{dict.hero.title_is_more}</span>
-            </h1>
-            <p className="font-mono text-sm md:text-base max-w-md  mb-6 leading-relaxed border-l-2 border-black dark:border-white pl-4 text-gray-600 dark:text-gray-400">
-              {dict.hero.description}
-            </p>
-            <Link
-              href="#catalog"
-              className="inline-block bg-black text-white dark:bg-white dark:text-black px-8 py-4 font-bold text-sm uppercase tracking-widest hover:bg-transparent hover:text-black dark:hover:text-white border border-black dark:border-white transition-colors"
-            >
-              {dict.hero.cta}
-            </Link>
-          </div>
-
-          <div className="flex-1 w-full flex justify-end">
-            <div className="relative w-full max-w-md aspect-[4/5] border-2 border-black dark:border-white">
-              <div className="w-full h-full bg-white dark:bg-black relative overflow-hidden">
-                {/* Featured Hero Image - Makima */}
-                <img
-                  src="/hero-makima.jpg"
-                  alt="Featured Character - Makima"
-                  className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white px-4 py-2 font-mono text-xs font-bold rotate-[-5deg] shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,1)] z-10">
-                {dict.hero.featured}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      {/* Dynamic Featured Hero */}
+      {featuredTransformation ? (
+        <FeaturedHero
+          transformation={featuredTransformation}
+          dict={dict}
+          lang={lang}
+        />
+      ) : (
+        // Fallback if no transformations exist (shouldn't happen)
+        <section className="border-b border-black dark:border-white py-24 text-center">
+          <h1 className="text-4xl font-bold">SYSTEM OFFLINE</h1>
+        </section>
+      )}
 
 
 

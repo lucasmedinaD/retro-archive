@@ -2,8 +2,8 @@
   "transformations": [
     {
       "characterName": "Makima",
-      "animeImage": "/transformations/anime-1767049290455.jpg",
-      "realImage": "/transformations/real-1767049292587.jpg",
+      "animeImage": "/hero-anime.png",
+      "realImage": "/hero-real.png",
       "id": "transform-1767049294239",
       "likes": 1,
       "series": "Chainsaw man ",

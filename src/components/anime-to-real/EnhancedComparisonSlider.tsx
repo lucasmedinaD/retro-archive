@@ -306,7 +306,7 @@ export default function EnhancedComparisonSlider({
                 >
                     <span className="flex items-center gap-2">
                         <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                        ANIME
+                        {dict?.transformation?.from || 'SOURCE MATERIAL'}
                     </span>
                 </motion.div>
 
@@ -316,7 +316,7 @@ export default function EnhancedComparisonSlider({
                 >
                     <span className="flex items-center gap-2">
                         <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        REAL
+                        {dict?.anime_to_real?.title || 'SIMULATION RENDER'}
                     </span>
                 </motion.div>
 
@@ -397,6 +397,14 @@ export default function EnhancedComparisonSlider({
                         </motion.button>
                     )}
                 </motion.div>
+
+                {/* Tech Overlays */}
+                <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[8px] font-mono text-white/50 bg-black/20 px-2 py-0.5 rounded-full pointer-events-none border border-white/5">
+                    <span>AR-X ENHANCED</span>
+                    <span>•</span>
+                    <span>v2.5.0</span>
+                </div>
             </div>
         </div>
     );

@@ -1,117 +1,117 @@
 {
     "nav": {
-        "index": "Índice",
-        "apparel": "Ropa",
-        "about": "Nosotros",
-        "cart": "CARRITO",
-        "favorites": "FAVORITOS",
-        "search": "Buscar productos...",
-        "anime_to_real": "ANIME A REAL"
+        "index": "Acceso",
+        "apparel": "Suministros",
+        "about": "Misión",
+        "cart": "REQ. EQUIPO",
+        "favorites": "MARCADORES",
+        "search": "Buscar archivos...",
+        "anime_to_real": "SIMULACIONES"
     },
     "hero": {
         "title_less": "MENOS",
         "title_is_more": "ES MÁS",
-        "description": "Colección curada de estética anime minimalista. Reducida a lo esencial. Materiales crudos. Gráficos audaces.",
-        "cta": "Explorar",
-        "featured": "DESTACADO // VOL. 01"
+        "description": "Laboratorio de estética avanzada. Materiales crudos para la realidad física.",
+        "cta": "Iniciar Protocolo",
+        "featured": "ESTUDIO // VOL. 01"
     },
     "catalog": {
-        "marquee": "CATÁLOGO // OTOÑO // INVIERNO // PRIMAVERA // VERANO // CATÁLOGO // OTOÑO //",
-        "collection": "La Colección",
-        "get_it": "VER DETALLES",
+        "marquee": "ARCHIVO // OTOÑO // INVIERNO // PRIMAVERA // VERANO // ARCHIVO // OTOÑO //",
+        "collection": "El Archivo",
+        "get_it": "ANALIZAR",
         "filters": {
             "all": "Todos",
-            "designs": "DISEÑOS",
-            "art": "ARTE",
-            "digital": "DIGITAL"
+            "designs": "SCHEMATICS",
+            "art": "VISUAL",
+            "digital": "DATA"
         }
     },
     "product_detail": {
-        "buy_redbubble": "VER PRECIO",
-        "related": "RELACIONADOS",
-        "back": "VOLVER AL CATÁLOGO",
-        "customize": "PERSONALIZAR"
+        "buy_redbubble": "PERSONALIZAR EQUIPO",
+        "related": "VÍNCULOS",
+        "back": "VOLVER AL ARCHIVO",
+        "customize": "MODIFICAR"
     },
     "newsletter": {
-        "title": "ÚNETE AL ARCHIVO",
-        "placeholder": "INGRESA_TU_EMAIL",
-        "button": "SUSCRIBIRSE"
+        "title": "ACCESO CLASIFICADO",
+        "placeholder": "ID_CORREO",
+        "button": "SOLICITAR ACCESO"
     },
     "footer": {
-        "description": "Un experimento de tienda digital. Diseñado sin permiso.",
-        "rights": "TODOS LOS DERECHOS RESERVADOS"
+        "description": "Laboratorio experimental de diseño. Operando sin supervisión.",
+        "rights": "DATOS PROTEGIDOS"
     },
     "favorites": {
-        "title": "TUS FAVORITOS",
-        "empty_title": "Aún no tienes favoritos",
-        "empty_description": "Comienza a agregar productos a tus favoritos haciendo clic en el ícono de corazón en cualquier producto.",
-        "browse_catalog": "VER CATÁLOGO",
-        "product_count_singular": "producto",
-        "product_count_plural": "productos",
-        "copy_link": "Copiar Link",
-        "link_copied": "¡Link copiado!"
+        "title": "TUS MARCADORES",
+        "empty_title": "Sin datos guardados",
+        "empty_description": "Marca artefactos para análisis posterior haciendo clic en el corazón.",
+        "browse_catalog": "EXPLORAR ARCHIVO",
+        "product_count_singular": "artefacto",
+        "product_count_plural": "artefactos",
+        "copy_link": "Copiar Enlace Seguro",
+        "link_copied": "¡Enlace copiado!"
     },
     "search": {
-        "placeholder": "Buscar productos...",
-        "no_results": "No se encontraron productos",
-        "no_results_desc": "Prueba con otras palabras clave o explora todos los productos",
-        "results_count_singular": "resultado",
-        "results_count_plural": "resultados"
+        "placeholder": "Buscar en la base de datos...",
+        "no_results": "Sin coincidencias en el sistema",
+        "no_results_desc": "Intenta con otros parámetros de búsqueda",
+        "results_count_singular": "registro",
+        "results_count_plural": "registros"
     },
     "anime_to_real": {
-        "title": "ANIME A REAL",
-        "subtitle": "Transformaciones 2.5D",
-        "description": "Compara personajes de anime con sus recreaciones en la vida real. Arrastra el control deslizante o inclina tu dispositivo móvil para revelar la transformación.",
-        "cta": "VER COMPARACIÓN",
-        "empty_title": "Próximamente",
-        "empty_description": "Las transformaciones están en camino. Vuelve pronto.",
-        "close": "CERRAR",
-        "click_to_compare": "Clic para comparar",
+        "title": "SIMULACIONES",
+        "subtitle": "Estudios de Realidad 2.5D",
+        "description": "Compara el material fuente (Anime) con las simulaciones de realidad aumentada generadas por Nano Banana Pro.",
+        "cta": "INICIAR ANÁLISIS",
+        "empty_title": "Procesando",
+        "empty_description": "Nuevas simulaciones en cola de renderizado.",
+        "close": "TERMINAR",
+        "click_to_compare": "Clic para escanear",
         "drag_to_reveal": "Arrastra para revelar",
-        "tilt_to_reveal": "Inclina para revelar"
+        "tilt_to_reveal": "Inclina para analizar"
     },
     "archive": {
-        "progress_title": "PROGRESO DEL ARCHIVO",
-        "first_discovered": "PRIMER ARCHIVO DESCUBIERTO. CONTINÚA EXPLORANDO.",
-        "remaining": "ARCHIVOS RESTANTES POR DESCUBRIR",
-        "complete": "★ ARCHIVO COMPLETO. COLECCIONISTA CERTIFICADO. ★",
-        "viewed": "VISTO",
-        "more_transformations": "Más Transformaciones",
-        "discover_more": "Descubre más comparaciones de anime a real"
+        "progress_title": "NIVEL DE ACCESO",
+        "first_discovered": "PRIMER REGISTRO DESBLOQUEADO. CONTINÚA.",
+        "remaining": "REGISTROS ENCRIPTADOS",
+        "complete": "★ ACCESO TOTAL CONCEDIDO. AGENTE NIVEL S. ★",
+        "viewed": "ANALIZADO",
+        "more_transformations": "Otros Registros",
+        "discover_more": "Explora más simulaciones en la base de datos"
     },
     "social_proof": {
-        "viewing_now": "personas analizando este archivo ahora",
-        "added_favorites": "Añadido a favoritos",
+        "viewing_now": "agentes analizando este archivo",
+        "added_favorites": "Marcado para seguimiento",
         "times": "veces",
-        "trending": "TENDENCIA"
+        "trending": "VIRAL"
     },
     "scarcity": {
-        "limited_stock": "STOCK LIMITADO",
+        "limited_stock": "ARCHIVO POPULAR",
         "rotation": "DISEÑO EN ROTACIÓN",
-        "last_units": "ÚLTIMAS UNIDADES",
+        "last_units": "ALTA DEMANDA",
         "temporal": "ARCHIVO TEMPORAL",
-        "featured": "DESTACADO"
+        "featured": "PRIORIDAD ALTA"
     },
     "email_capture": {
-        "exclusive_access": "ACCESO EXCLUSIVO",
-        "title": "Nuevos Archivos Antes que Nadie",
-        "description": "Únete a",
-        "collectors": "+500 coleccionistas",
-        "description_end": "que reciben nuevas transformaciones y diseños exclusivos antes del lanzamiento público.",
-        "placeholder": "tu@email.com",
-        "cta": "QUIERO ACCESO EXCLUSIVO",
-        "processing": "PROCESANDO...",
-        "no_spam": "Sin spam. Solo contenido exclusivo. Cancela cuando quieras.",
-        "success_title": "¡BIENVENIDO AL ARCHIVO!",
-        "success_message": "Recibirás acceso anticipado a nuevos contenidos."
+        "exclusive_access": "ACCESO CLASIFICADO",
+        "title": "Inteligencia Antes que Nadie",
+        "description": "Únete a la red de",
+        "collectors": "+500 operativos",
+        "description_end": "que reciben reportes de nuevas simulaciones antes de su desclasificación pública.",
+        "placeholder": "agente@email.com",
+        "cta": "SOLICITAR CREDENCIALES",
+        "processing": "ENCRIPTANDO...",
+        "no_spam": "Canal seguro. Sin ruido. Cancela cuando quieras.",
+        "success_title": "¡CREDENCIALES ACTIVAS!",
+        "success_message": "Bienvenido a la red. Espera instrucciones."
     },
     "transformation": {
         "entry": "ENTRY",
         "archival_grade": "ARCHIVAL GRADE A+",
-        "from": "de",
-        "related_products": "Productos Relacionados",
-        "view_product": "Ver Producto",
-        "slide": "Desliza",
+        "from": "origen",
+        "related_products": "Diseño Fuente Detectado",
+        "view_product": "LO QUIERO EN MI ROPA",
+        "slide": "Escanear",
         "hidden_fact": "DATO OCULTO DESBLOQUEADO",
         "tap_to_close": "TAP PARA CERRAR"
     }

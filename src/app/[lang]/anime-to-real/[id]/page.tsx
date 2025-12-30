@@ -158,20 +158,22 @@ export async function generateMetadata({ params }: PageProps) {
     }
 
     const description = transformation.description?.[lang] ||
-        `${transformation.characterName} transformation from ${transformation.series || 'anime'} to real life cosplay`;
+        `Realistic ${transformation.characterName} AI interpretation from ${transformation.series || 'anime'}. Nano Banana Pro generated visualization. Archival Entry: ${transformation.id}.`;
+
+    const titlePrefix = lang === 'es' ? 'Simulación Realista' : 'Realistic Simulation';
 
     return {
-        title: `${transformation.characterName} - Anime to Real | Retro Archive`,
+        title: `${titlePrefix}: ${transformation.characterName} | Retro Archive Lab`,
         description,
         openGraph: {
-            title: `${transformation.characterName} Transformation`,
+            title: `${transformation.characterName} - AI Reality Study`,
             description,
             images: [transformation.realImage],
             type: 'article'
         },
         twitter: {
             card: 'summary_large_image',
-            title: `${transformation.characterName} - Anime to Real`,
+            title: `${transformation.characterName} - AI Reality Study`,
             description,
             images: [transformation.realImage]
         }

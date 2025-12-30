@@ -10,6 +10,7 @@ import ScarcityLabel from '@/components/ScarcityLabel';
 import { useState, useEffect } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 import { trackTransformationView, trackRelatedProductClick } from '@/lib/analytics';
+import BridgeWidget from './BridgeWidget';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -217,49 +218,19 @@ export default function TransformationDetail({
                 </div>
             </div>
 
-            {/* Related Products */}
-            {transformation.outfit && transformation.outfit.length > 0 && (
-                <section className="max-w-7xl mx-auto px-4 py-12 border-t-2 border-black dark:border-white">
-                    <h2 className="text-3xl md:text-4xl font-black uppercase mb-8">
-                        {dict?.transformation?.related_products || 'Related Products'}
-                    </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {transformation.outfit.map((product: any) => (
-                            <a
-                                key={product.id}
-                                href={product.buyUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() => trackRelatedProductClick(product.id, product.name, transformation.id)}
-                                className="group border-2 border-black dark:border-white bg-white dark:bg-black hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-1 hover:-translate-x-1"
-                            >
-                                {/* Product Image */}
-                                <div className="relative aspect-square border-b-2 border-black dark:border-white overflow-hidden">
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
-                                    />
-                                </div>
+            {/* Related Products - Replaced by BridgeWidget logic, but kept as fallback/seo if needed or just remove if we want pure focus */}
+            {/* We will replace the standard grid with just the BridgeWidget logic above, 
+                BUT the user might want a "more products" section if there are multiple.
+                For now, let's keep the BridgeWidget as the PRIMARY conversion tool and maybe hide this or move it down.
+                Actually, the instruction was: "Remove generic 'Related Products' grid in favor of focused 'Source Material' CTA".
+                So I will remove the old grid section.
+            */}
 
-                                {/* Product Info */}
-                                <div className="p-3">
-                                    <h3 className="text-sm font-bold uppercase mb-1 line-clamp-2 min-h-[2.5rem]">
-                                        {product.name}
-                                    </h3>
-                                    <p className="text-xs font-mono text-gray-600 dark:text-gray-400 mb-2">
-                                        {product.price}
-                                    </p>
-                                    <div className="flex items-center gap-1 text-xs font-bold uppercase text-accent">
-                                        {dict?.transformation?.view_product || 'View Product'}
-                                        <ExternalLink size={12} />
-                                    </div>
-                                </div>
-                            </a>
-                        ))}
-                    </div>
-                </section>
-            )}
+            {/* Bridge Widget Section */}
+            <BridgeWidget
+                transformation={transformation}
+                dict={dict}
+            />
 
             {/* Outfit Breakdown */}
             {transformation.outfit && transformation.outfit.length > 0 && (
