@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://retro-archive.vercel.app'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://retro-archive.art'
 
     return [
         {
@@ -23,6 +23,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 1,
         },
         {
+            url: `${baseUrl}/en/anime-to-real`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
+            url: `${baseUrl}/es/anime-to-real`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
+        },
+        {
             url: `${baseUrl}/en/favorites`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
@@ -34,7 +46,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly',
             priority: 0.5,
         },
-        // Product pages would be dynamically added here
-        // For now, we'll add a few static ones
+        // Product and transformation pages are dynamically generated
     ]
 }

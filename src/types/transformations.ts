@@ -22,6 +22,7 @@ export interface TransformationMetadata {
     featured?: boolean;
     difficulty?: 'easy' | 'medium' | 'hard';
     completionTime?: string; // e.g., "2 hours", "1 week"
+    funFact?: string; // Hidden fact revealed on slider edge
 }
 
 export interface TransformationExtended {

@@ -9,6 +9,7 @@ import SocialProof from '@/components/SocialProof';
 import ScarcityLabel from '@/components/ScarcityLabel';
 import { useState, useEffect } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
+import { trackTransformationView, trackRelatedProductClick } from '@/lib/analytics';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -25,12 +26,13 @@ export default function TransformationDetail({
     const [isLiked, setIsLiked] = useState(initialLiked);
     const { markAsViewed, isLoaded } = useArchiveProgress();
 
-    // Mark transformation as viewed when component mounts
+    // Mark transformation as viewed and track
     useEffect(() => {
         if (isLoaded && transformation.id) {
             markAsViewed(transformation.id);
+            trackTransformationView(transformation.id, transformation.characterName, transformation.series);
         }
-    }, [isLoaded, transformation.id, markAsViewed]);
+    }, [isLoaded, transformation.id, transformation.characterName, transformation.series, markAsViewed]);
 
     const handleLike = () => {
         setIsLiked(!isLiked);
@@ -61,6 +63,8 @@ export default function TransformationDetail({
                         onShare={handleShare}
                         onDownload={handleDownload}
                         isLiked={isLiked}
+                        funFact={transformation.metadata?.funFact}
+                        transformationId={transformation.id}
                     />
                 </div>
 
@@ -221,6 +225,7 @@ export default function TransformationDetail({
                                 href={product.buyUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => trackRelatedProductClick(product.id, product.name, transformation.id)}
                                 className="group border-2 border-black dark:border-white bg-white dark:bg-black hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-1 hover:-translate-x-1"
                             >
                                 {/* Product Image */}

@@ -38,6 +38,7 @@ export interface TransformationData {
         difficulty?: 'easy' | 'medium' | 'hard';
         completionTime?: string;
         originalSource?: string;
+        funFact?: string; // Hidden fact revealed on slider edge
     };
 }
 

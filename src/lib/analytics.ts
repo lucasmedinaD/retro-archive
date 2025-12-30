@@ -80,3 +80,47 @@ export function trackAffiliateClick(productId: string, productName: string, plat
         platform: platform,
     });
 }
+
+// Track transformation views
+export function trackTransformationView(transformationId: string, characterName: string, series?: string) {
+    trackEvent('transformation_view', {
+        transformation_id: transformationId,
+        character_name: characterName,
+        series: series || 'unknown',
+    });
+}
+
+// Track related product clicks from transformations
+export function trackRelatedProductClick(productId: string, productName: string, transformationId: string) {
+    trackEvent('related_product_click', {
+        product_id: productId,
+        product_name: productName,
+        transformation_id: transformationId,
+        interaction_type: 'transformation_related',
+    });
+}
+
+// Track slider completion (reached 0% or 100%)
+export function trackSliderCompletion(transformationId: string, position: 'start' | 'end') {
+    trackEvent('slider_complete', {
+        transformation_id: transformationId,
+        position: position,
+    });
+}
+
+// Track email capture
+export function trackEmailCapture(success: boolean, source: string) {
+    trackEvent('email_capture', {
+        success: success,
+        source: source,
+    });
+}
+
+// Track archive progress
+export function trackArchiveProgress(viewedCount: number, totalCount: number) {
+    trackEvent('archive_progress', {
+        viewed_count: viewedCount,
+        total_count: totalCount,
+        percentage: Math.round((viewedCount / totalCount) * 100),
+    });
+}

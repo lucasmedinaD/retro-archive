@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { Heart } from 'lucide-react';
+import { Heart, ChevronDown } from 'lucide-react';
 import { TransformationExtended } from '@/types/transformations';
+import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 
 interface InspirationFeedProps {
     transformations: TransformationExtended[];
@@ -117,14 +118,28 @@ function TransformationCard({
 }) {
     const [isHovered, setIsHovered] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
+    const cardRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(cardRef, { once: true, margin: "-50px" });
+    const { isViewed } = useArchiveProgress();
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05, duration: 0.3 }}
-            className="mb-4 break-inside-avoid"
+            ref={cardRef}
+            initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+            animate={isInView ? {
+                opacity: 1,
+                y: 0,
+                filter: 'blur(0px)',
+                transition: { delay: index * 0.05, duration: 0.4 }
+            } : {}}
+            className="mb-4 break-inside-avoid relative"
         >
+            {/* Viewed Badge */}
+            {isViewed(transformation.id) && (
+                <div className="absolute -top-1 -right-1 z-20 bg-accent text-black text-[8px] font-bold px-1.5 py-0.5 uppercase">
+                    VISTO
+                </div>
+            )}
             <Link href={`/${lang}/anime-to-real/${transformation.id}`}>
                 <div
                     className="group relative border-2 border-black dark:border-white overflow-hidden hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:-translate-y-1 cursor-pointer bg-white dark:bg-black"
