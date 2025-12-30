@@ -14,6 +14,7 @@ interface InspirationFeedProps {
     hasMore?: boolean;
     isLoading?: boolean;
     lang?: 'en' | 'es';
+    dict?: any;
 }
 
 export default function InspirationFeed({
@@ -22,7 +23,8 @@ export default function InspirationFeed({
     onLoadMore,
     hasMore = false,
     isLoading = false,
-    lang = 'en'
+    lang = 'en',
+    dict
 }: InspirationFeedProps) {
     const [visibleItems, setVisibleItems] = useState<TransformationExtended[]>([]);
     const observerRef = useRef<IntersectionObserver | null>(null);
@@ -66,10 +68,10 @@ export default function InspirationFeed({
             {/* Header */}
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-black uppercase mb-2">
-                    More Transformations
+                    {dict?.archive?.more_transformations || 'More Transformations'}
                 </h2>
                 <p className="font-mono text-sm text-gray-600 dark:text-gray-400">
-                    Discover more anime to real comparisons
+                    {dict?.archive?.discover_more || 'Discover more anime to real comparisons'}
                 </p>
             </div>
 
@@ -81,6 +83,7 @@ export default function InspirationFeed({
                         transformation={transformation}
                         index={idx}
                         lang={lang}
+                        viewedText={dict?.archive?.viewed || 'VIEWED'}
                     />
                 ))}
             </div>
@@ -110,11 +113,13 @@ export default function InspirationFeed({
 function TransformationCard({
     transformation,
     index,
-    lang
+    lang,
+    viewedText = 'VIEWED'
 }: {
     transformation: TransformationExtended;
     index: number;
     lang: 'en' | 'es';
+    viewedText?: string;
 }) {
     const [isHovered, setIsHovered] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
@@ -137,7 +142,7 @@ function TransformationCard({
             {/* Viewed Badge */}
             {isViewed(transformation.id) && (
                 <div className="absolute -top-1 -right-1 z-20 bg-accent text-black text-[8px] font-bold px-1.5 py-0.5 uppercase">
-                    VISTO
+                    {viewedText}
                 </div>
             )}
             <Link href={`/${lang}/anime-to-real/${transformation.id}`}>

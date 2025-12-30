@@ -13,8 +13,9 @@ interface EnhancedComparisonSliderProps {
     onDownload?: () => void;
     initialPosition?: number;
     isLiked?: boolean;
-    funFact?: string; // Hidden fun fact revealed at edges
-    transformationId?: string; // For progress tracking
+    funFact?: string;
+    transformationId?: string;
+    dict?: any;
 }
 
 export default function EnhancedComparisonSlider({
@@ -27,7 +28,8 @@ export default function EnhancedComparisonSlider({
     initialPosition = 50,
     isLiked: externalIsLiked = false,
     funFact,
-    transformationId
+    transformationId,
+    dict
 }: EnhancedComparisonSliderProps) {
     const [position, setPosition] = useState(initialPosition);
     const [isLiked, setIsLiked] = useState(externalIsLiked);
@@ -335,7 +337,7 @@ export default function EnhancedComparisonSlider({
                     animate={{ opacity: 0, scale: 0.9 }}
                     transition={{ delay: 2.5, duration: 0.5 }}
                 >
-                    ↔ Desliza
+                    ↔ {dict?.transformation?.slide || 'Slide'}
                 </motion.div>
 
                 {/* Fun Fact Reveal */}
@@ -349,10 +351,10 @@ export default function EnhancedComparisonSlider({
                         <div className="backdrop-blur-xl bg-black/90 text-white p-4 border-2 border-accent shadow-2xl">
                             <p className="text-[10px] font-mono uppercase text-accent mb-2 flex items-center gap-2">
                                 <Sparkles size={12} />
-                                DATO OCULTO DESBLOQUEADO
+                                {dict?.transformation?.hidden_fact || 'HIDDEN FACT UNLOCKED'}
                             </p>
                             <p className="text-sm font-medium leading-relaxed">{funFact}</p>
-                            <p className="text-[10px] font-mono text-gray-400 mt-3 text-center">TAP PARA CERRAR</p>
+                            <p className="text-[10px] font-mono text-gray-400 mt-3 text-center">{dict?.transformation?.tap_to_close || 'TAP TO CLOSE'}</p>
                         </div>
                     </motion.div>
                 )}

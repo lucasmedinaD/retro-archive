@@ -10,9 +10,10 @@ import { Transformation } from '@/data/transformations';
 interface ArchiveGalleryWrapperProps {
     transformations: Transformation[];
     lang: 'en' | 'es';
+    dict: any;
 }
 
-export default function ArchiveGalleryWrapper({ transformations, lang }: ArchiveGalleryWrapperProps) {
+export default function ArchiveGalleryWrapper({ transformations, lang, dict }: ArchiveGalleryWrapperProps) {
     return (
         <>
             <InspirationFeed
@@ -20,10 +21,12 @@ export default function ArchiveGalleryWrapper({ transformations, lang }: Archive
                 lang={lang}
                 hasMore={false}
                 isLoading={false}
+                dict={dict}
             />
 
-            <ArchiveProgressBar totalCount={transformations.length} />
-            <EmailCapturePopup delay={20000} showOnExitIntent={true} />
+            <ArchiveProgressBar totalCount={transformations.length} dict={dict} />
+            <EmailCapturePopup delay={20000} showOnExitIntent={true} dict={dict} />
         </>
     );
 }
+

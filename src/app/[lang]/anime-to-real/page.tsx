@@ -58,6 +58,7 @@ export default async function AnimeToRealPage({ params }: PageProps) {
                 <ArchiveGalleryWrapper
                     transformations={transformations}
                     lang={lang}
+                    dict={dict}
                 />
             </section>
 

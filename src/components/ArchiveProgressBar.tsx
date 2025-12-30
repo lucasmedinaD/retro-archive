@@ -6,9 +6,17 @@ import { Archive, Eye } from 'lucide-react';
 
 interface ArchiveProgressBarProps {
     totalCount: number;
+    dict: {
+        archive: {
+            progress_title: string;
+            first_discovered: string;
+            remaining: string;
+            complete: string;
+        };
+    };
 }
 
-export default function ArchiveProgressBar({ totalCount }: ArchiveProgressBarProps) {
+export default function ArchiveProgressBar({ totalCount, dict }: ArchiveProgressBarProps) {
     const { getViewedCount, isLoaded } = useArchiveProgress();
     const viewedCount = getViewedCount();
     const percentage = totalCount > 0 ? (viewedCount / totalCount) * 100 : 0;
@@ -29,7 +37,7 @@ export default function ArchiveProgressBar({ totalCount }: ArchiveProgressBarPro
                         {/* Icon */}
                         <div className="flex items-center gap-2 text-xs font-mono uppercase text-gray-600 dark:text-gray-400">
                             <Archive size={14} />
-                            <span className="hidden sm:inline">PROGRESO DEL ARCHIVO</span>
+                            <span className="hidden sm:inline">{dict.archive.progress_title}</span>
                         </div>
 
                         {/* Progress Bar */}
@@ -59,8 +67,8 @@ export default function ArchiveProgressBar({ totalCount }: ArchiveProgressBarPro
                             className="text-[10px] font-mono text-gray-500 dark:text-gray-400 mt-1 text-center"
                         >
                             {viewedCount === 1
-                                ? "PRIMER ARCHIVO DESCUBIERTO. CONTINÚA EXPLORANDO."
-                                : `${totalCount - viewedCount} ARCHIVOS RESTANTES POR DESCUBRIR`
+                                ? dict.archive.first_discovered
+                                : `${totalCount - viewedCount} ${dict.archive.remaining}`
                             }
                         </motion.p>
                     )}
@@ -71,7 +79,7 @@ export default function ArchiveProgressBar({ totalCount }: ArchiveProgressBarPro
                             animate={{ opacity: 1, scale: 1 }}
                             className="text-[10px] font-mono text-accent mt-1 text-center font-bold"
                         >
-                            ★ ARCHIVO COMPLETO. COLECCIONISTA CERTIFICADO. ★
+                            {dict.archive.complete}
                         </motion.p>
                     )}
                 </div>
@@ -79,3 +87,4 @@ export default function ArchiveProgressBar({ totalCount }: ArchiveProgressBarPro
         </AnimatePresence>
     );
 }
+

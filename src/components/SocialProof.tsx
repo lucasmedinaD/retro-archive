@@ -9,20 +9,28 @@ interface SocialProofProps {
     productId?: string;
     variant?: 'minimal' | 'full';
     className?: string;
+    dict: {
+        social_proof: {
+            viewing_now: string;
+            added_favorites: string;
+            times: string;
+            trending: string;
+        };
+    };
 }
 
-// Generate realistic "viewing now" count (changes periodically)
 function generateViewingNow(productId: string): number {
     const baseValue = productId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const timeVariation = Math.floor(Date.now() / 30000) % 10; // Changes every 30s
-    return 3 + (baseValue % 15) + timeVariation; // Range: 3-27
+    const timeVariation = Math.floor(Date.now() / 30000) % 10;
+    return 3 + (baseValue % 15) + timeVariation;
 }
 
 export default function SocialProof({
     likes,
     productId = 'default',
     variant = 'full',
-    className = ''
+    className = '',
+    dict
 }: SocialProofProps) {
     const [viewingNow, setViewingNow] = useState(0);
     const [isClient, setIsClient] = useState(false);
@@ -31,7 +39,6 @@ export default function SocialProof({
         setIsClient(true);
         setViewingNow(generateViewingNow(productId));
 
-        // Update viewing count every 30 seconds
         const interval = setInterval(() => {
             setViewingNow(generateViewingNow(productId));
         }, 30000);
@@ -56,7 +63,6 @@ export default function SocialProof({
                             {viewingNow}
                         </motion.span>
                     </AnimatePresence>
-                    <span className="hidden sm:inline"> viendo</span>
                 </span>
                 {likes > 0 && (
                     <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
@@ -70,7 +76,6 @@ export default function SocialProof({
 
     return (
         <div className={`space-y-2 ${className}`}>
-            {/* Viewing Now */}
             <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -93,12 +98,11 @@ export default function SocialProof({
                         </motion.span>
                     </AnimatePresence>
                     <span className="text-gray-600 dark:text-gray-400 font-mono text-xs uppercase">
-                        personas analizando este archivo
+                        {dict.social_proof.viewing_now}
                     </span>
                 </div>
             </motion.div>
 
-            {/* Favorites Count */}
             {likes > 0 && (
                 <motion.div
                     initial={{ opacity: 0, x: -10 }}
@@ -108,12 +112,11 @@ export default function SocialProof({
                 >
                     <Heart size={14} className="text-red-500 fill-red-500" />
                     <span className="font-mono text-xs">
-                        Añadido a favoritos <span className="font-bold">{likes}</span> veces
+                        {dict.social_proof.added_favorites} <span className="font-bold">{likes}</span> {dict.social_proof.times}
                     </span>
                 </motion.div>
             )}
 
-            {/* Trending Indicator */}
             {(likes > 10 || viewingNow > 10) && (
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -122,9 +125,10 @@ export default function SocialProof({
                     className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold uppercase px-2 py-1"
                 >
                     <TrendingUp size={10} />
-                    TRENDING
+                    {dict.social_proof.trending}
                 </motion.div>
             )}
         </div>
     );
 }
+

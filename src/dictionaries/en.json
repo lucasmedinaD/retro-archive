@@ -69,5 +69,50 @@
         "click_to_compare": "Click to compare",
         "drag_to_reveal": "Drag to reveal",
         "tilt_to_reveal": "Tilt to reveal"
+    },
+    "archive": {
+        "progress_title": "ARCHIVE PROGRESS",
+        "first_discovered": "FIRST ARCHIVE DISCOVERED. CONTINUE EXPLORING.",
+        "remaining": "ARCHIVES REMAINING TO DISCOVER",
+        "complete": "★ ARCHIVE COMPLETE. CERTIFIED COLLECTOR. ★",
+        "viewed": "VIEWED",
+        "more_transformations": "More Transformations",
+        "discover_more": "Discover more anime to real comparisons"
+    },
+    "social_proof": {
+        "viewing_now": "people analyzing this archive now",
+        "added_favorites": "Added to favorites",
+        "times": "times",
+        "trending": "TRENDING"
+    },
+    "scarcity": {
+        "limited_stock": "LIMITED STOCK",
+        "rotation": "DESIGN IN ROTATION",
+        "last_units": "LAST UNITS",
+        "temporal": "TEMPORAL ARCHIVE",
+        "featured": "FEATURED"
+    },
+    "email_capture": {
+        "exclusive_access": "EXCLUSIVE ACCESS",
+        "title": "New Archives Before Everyone",
+        "description": "Join",
+        "collectors": "+500 collectors",
+        "description_end": "who receive new transformations and exclusive designs before public launch.",
+        "placeholder": "your@email.com",
+        "cta": "I WANT EXCLUSIVE ACCESS",
+        "processing": "PROCESSING...",
+        "no_spam": "No spam. Only exclusive content. Cancel anytime.",
+        "success_title": "WELCOME TO THE ARCHIVE!",
+        "success_message": "You'll receive early access to new content."
+    },
+    "transformation": {
+        "entry": "ENTRY",
+        "archival_grade": "ARCHIVAL GRADE A+",
+        "from": "from",
+        "related_products": "Related Products",
+        "view_product": "View Product",
+        "slide": "Slide",
+        "hidden_fact": "HIDDEN FACT UNLOCKED",
+        "tap_to_close": "TAP TO CLOSE"
     }
 }

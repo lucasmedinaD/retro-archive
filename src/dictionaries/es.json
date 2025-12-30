@@ -69,5 +69,50 @@
         "click_to_compare": "Clic para comparar",
         "drag_to_reveal": "Arrastra para revelar",
         "tilt_to_reveal": "Inclina para revelar"
+    },
+    "archive": {
+        "progress_title": "PROGRESO DEL ARCHIVO",
+        "first_discovered": "PRIMER ARCHIVO DESCUBIERTO. CONTINÚA EXPLORANDO.",
+        "remaining": "ARCHIVOS RESTANTES POR DESCUBRIR",
+        "complete": "★ ARCHIVO COMPLETO. COLECCIONISTA CERTIFICADO. ★",
+        "viewed": "VISTO",
+        "more_transformations": "Más Transformaciones",
+        "discover_more": "Descubre más comparaciones de anime a real"
+    },
+    "social_proof": {
+        "viewing_now": "personas analizando este archivo ahora",
+        "added_favorites": "Añadido a favoritos",
+        "times": "veces",
+        "trending": "TENDENCIA"
+    },
+    "scarcity": {
+        "limited_stock": "STOCK LIMITADO",
+        "rotation": "DISEÑO EN ROTACIÓN",
+        "last_units": "ÚLTIMAS UNIDADES",
+        "temporal": "ARCHIVO TEMPORAL",
+        "featured": "DESTACADO"
+    },
+    "email_capture": {
+        "exclusive_access": "ACCESO EXCLUSIVO",
+        "title": "Nuevos Archivos Antes que Nadie",
+        "description": "Únete a",
+        "collectors": "+500 coleccionistas",
+        "description_end": "que reciben nuevas transformaciones y diseños exclusivos antes del lanzamiento público.",
+        "placeholder": "tu@email.com",
+        "cta": "QUIERO ACCESO EXCLUSIVO",
+        "processing": "PROCESANDO...",
+        "no_spam": "Sin spam. Solo contenido exclusivo. Cancela cuando quieras.",
+        "success_title": "¡BIENVENIDO AL ARCHIVO!",
+        "success_message": "Recibirás acceso anticipado a nuevos contenidos."
+    },
+    "transformation": {
+        "entry": "ENTRY",
+        "archival_grade": "ARCHIVAL GRADE A+",
+        "from": "de",
+        "related_products": "Productos Relacionados",
+        "view_product": "Ver Producto",
+        "slide": "Desliza",
+        "hidden_fact": "DATO OCULTO DESBLOQUEADO",
+        "tap_to_close": "TAP PARA CERRAR"
     }
 }

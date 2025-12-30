@@ -15,12 +15,14 @@ interface TransformationDetailProps {
     transformation: TransformationExtended;
     onLike?: () => void;
     initialLiked?: boolean;
+    dict?: any;
 }
 
 export default function TransformationDetail({
     transformation,
     onLike,
-    initialLiked = false
+    initialLiked = false,
+    dict
 }: TransformationDetailProps) {
     const [showShareModal, setShowShareModal] = useState(false);
     const [isLiked, setIsLiked] = useState(initialLiked);
@@ -65,6 +67,7 @@ export default function TransformationDetail({
                         isLiked={isLiked}
                         funFact={transformation.metadata?.funFact}
                         transformationId={transformation.id}
+                        dict={dict}
                     />
                 </div>
 
@@ -118,6 +121,7 @@ export default function TransformationDetail({
                             <SocialProof
                                 likes={transformation.likes || 0}
                                 productId={transformation.id}
+                                dict={dict}
                             />
                         </div>
 
@@ -126,6 +130,7 @@ export default function TransformationDetail({
                             productId={transformation.id}
                             showProbability={0.4}
                             className="mt-3"
+                            dict={dict}
                         />
                     </div>
 
@@ -216,7 +221,7 @@ export default function TransformationDetail({
             {transformation.outfit && transformation.outfit.length > 0 && (
                 <section className="max-w-7xl mx-auto px-4 py-12 border-t-2 border-black dark:border-white">
                     <h2 className="text-3xl md:text-4xl font-black uppercase mb-8">
-                        Productos Relacionados
+                        {dict?.transformation?.related_products || 'Related Products'}
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {transformation.outfit.map((product: any) => (
@@ -246,7 +251,7 @@ export default function TransformationDetail({
                                         {product.price}
                                     </p>
                                     <div className="flex items-center gap-1 text-xs font-bold uppercase text-accent">
-                                        Ver Producto
+                                        {dict?.transformation?.view_product || 'View Product'}
                                         <ExternalLink size={12} />
                                     </div>
                                 </div>

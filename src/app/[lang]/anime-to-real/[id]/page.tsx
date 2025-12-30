@@ -63,6 +63,7 @@ export default async function TransformationDetailPage({ params }: PageProps) {
             {/* Detail Section */}
             <TransformationDetail
                 transformation={transformation}
+                dict={dict}
             />
 
             {/* Related Transformations */}
@@ -73,6 +74,7 @@ export default async function TransformationDetailPage({ params }: PageProps) {
                     hasMore={false}
                     isLoading={false}
                     lang={lang}
+                    dict={dict}
                 />
             </section>
 

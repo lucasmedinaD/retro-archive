@@ -8,13 +8,29 @@ const STORAGE_KEY = 'retro-archive-email-captured';
 const DISMISS_KEY = 'retro-archive-popup-dismissed';
 
 interface EmailCapturePopupProps {
-    delay?: number; // ms before showing (if not exit-intent)
+    delay?: number;
     showOnExitIntent?: boolean;
+    dict: {
+        email_capture: {
+            exclusive_access: string;
+            title: string;
+            description: string;
+            collectors: string;
+            description_end: string;
+            placeholder: string;
+            cta: string;
+            processing: string;
+            no_spam: string;
+            success_title: string;
+            success_message: string;
+        };
+    };
 }
 
 export default function EmailCapturePopup({
     delay = 15000,
-    showOnExitIntent = true
+    showOnExitIntent = true,
+    dict
 }: EmailCapturePopupProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [email, setEmail] = useState('');
@@ -22,7 +38,6 @@ export default function EmailCapturePopup({
     const [isSuccess, setIsSuccess] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
 
-    // Check if already captured or dismissed
     useEffect(() => {
         const alreadyCaptured = localStorage.getItem(STORAGE_KEY);
         const dismissed = localStorage.getItem(DISMISS_KEY);
@@ -34,7 +49,6 @@ export default function EmailCapturePopup({
         }
     }, []);
 
-    // Exit intent detection (desktop only)
     useEffect(() => {
         if (!showOnExitIntent || hasInteracted) return;
 
@@ -48,7 +62,6 @@ export default function EmailCapturePopup({
         return () => document.removeEventListener('mouseleave', handleMouseLeave);
     }, [showOnExitIntent, hasInteracted, isVisible]);
 
-    // Timer-based show (mobile/fallback)
     useEffect(() => {
         if (hasInteracted) return;
 
@@ -67,7 +80,6 @@ export default function EmailCapturePopup({
 
         setIsSubmitting(true);
 
-        // Store email in localStorage (in production, send to API)
         try {
             const emails = JSON.parse(localStorage.getItem('retro-archive-emails') || '[]');
             emails.push({ email, timestamp: Date.now() });
@@ -108,7 +120,6 @@ export default function EmailCapturePopup({
                         onClick={e => e.stopPropagation()}
                         className="relative w-full max-w-md bg-[#0a0a0a] border-2 border-accent overflow-hidden"
                     >
-                        {/* Close Button */}
                         <button
                             onClick={handleDismiss}
                             className="absolute top-4 right-4 text-gray-400 hover:text-white z-10"
@@ -116,20 +127,18 @@ export default function EmailCapturePopup({
                             <X size={20} />
                         </button>
 
-                        {/* Header */}
                         <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 p-6 border-b border-accent/30">
                             <div className="flex items-center gap-3 mb-2">
                                 <Gift className="text-accent" size={24} />
                                 <span className="text-[10px] font-mono text-accent uppercase tracking-widest">
-                                    ACCESO EXCLUSIVO
+                                    {dict.email_capture.exclusive_access}
                                 </span>
                             </div>
                             <h2 className="text-2xl font-black uppercase text-white">
-                                Nuevos Archivos Antes que Nadie
+                                {dict.email_capture.title}
                             </h2>
                         </div>
 
-                        {/* Content */}
                         <div className="p-6">
                             {isSuccess ? (
                                 <motion.div
@@ -138,16 +147,15 @@ export default function EmailCapturePopup({
                                     className="text-center py-8"
                                 >
                                     <Sparkles className="mx-auto text-accent mb-4" size={48} />
-                                    <p className="text-xl font-bold text-white mb-2">¡BIENVENIDO AL ARCHIVO!</p>
+                                    <p className="text-xl font-bold text-white mb-2">{dict.email_capture.success_title}</p>
                                     <p className="text-sm text-gray-400 font-mono">
-                                        Recibirás acceso anticipado a nuevos contenidos.
+                                        {dict.email_capture.success_message}
                                     </p>
                                 </motion.div>
                             ) : (
                                 <>
                                     <p className="text-sm text-gray-300 mb-6 leading-relaxed">
-                                        Únete a <span className="font-bold text-white">+500 coleccionistas</span> que reciben
-                                        nuevas transformaciones y diseños exclusivos antes del lanzamiento público.
+                                        {dict.email_capture.description} <span className="font-bold text-white">{dict.email_capture.collectors}</span> {dict.email_capture.description_end}
                                     </p>
 
                                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -157,7 +165,7 @@ export default function EmailCapturePopup({
                                                 type="email"
                                                 value={email}
                                                 onChange={e => setEmail(e.target.value)}
-                                                placeholder="tu@email.com"
+                                                placeholder={dict.email_capture.placeholder}
                                                 required
                                                 className="w-full bg-black border-2 border-gray-700 focus:border-accent pl-10 pr-4 py-3 text-white outline-none transition-colors font-mono"
                                             />
@@ -168,12 +176,12 @@ export default function EmailCapturePopup({
                                             disabled={isSubmitting}
                                             className="w-full bg-accent text-black font-bold uppercase py-3 hover:bg-white transition-colors disabled:opacity-50"
                                         >
-                                            {isSubmitting ? 'PROCESANDO...' : 'QUIERO ACCESO EXCLUSIVO'}
+                                            {isSubmitting ? dict.email_capture.processing : dict.email_capture.cta}
                                         </button>
                                     </form>
 
                                     <p className="text-[10px] text-gray-500 text-center mt-4 font-mono">
-                                        Sin spam. Solo contenido exclusivo. Cancela cuando quieras.
+                                        {dict.email_capture.no_spam}
                                     </p>
                                 </>
                             )}
@@ -184,3 +192,4 @@ export default function EmailCapturePopup({
         </AnimatePresence>
     );
 }
+
