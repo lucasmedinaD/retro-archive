@@ -15,19 +15,20 @@
       ],
       "outfit": [
         {
-          "id": "d2",
-          "name": "Makima Original Anime Art",
-          "price": "23",
-          "image": "/mockups/1766931305734-Gemini_Generated_Image_ygrbg4ygrbg4ygrb.jpg",
-          "buyUrl": "https://www.redbubble.com/es/i/camiseta/El-Demonio-del-Control-Makima-CSM-Est%C3%A9tica-de-sosacrash/177148047.WFLAH",
-          "category": "DESIGN",
-          "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "id": "d4",
+          "name": "",
+          "price": "$20",
+          "image": "/mockups/1767130217440-Gemini_Generated_Image_fhf6uffhf6uffhf6.jpg",
+          "buyUrl": "https://www.redbubble.com/es/i/camiseta/Habilidades-sociales-cargando-1-Anime-lindo-e-introvertido-en-pixel-art-de-sosacrash/177149387.WFLAH",
+          "category": "Pixel art",
+          "description": "",
+          "name_es": "Habilidades sociales (cargando 1%) - Anime lindo e introvertido en pixel art ",
+          "description_es": "¿Alguna vez has sentido ganas de decir \"Hola\", pero tu cerebro se queda bloqueado? Este diseño captura a la perfección esa lucha tan común contra la ansiedad social. Con un adorable personaje de anime pixel art de alta calidad y una barra de progreso que dice \"Habilidades sociales: Cargando... 1%\", esta ilustración es el estado de ánimo ideal para introvertidos. Tanto si eres fan del anime de la vida real como si simplemente vives en \"Modo Silencio\", este diseño divertido y estético habla por ti para que no tengas que hacerlo tú. Perfecto para gamers, amantes del manga y cualquiera que espere a que su confianza termine de descargar.",
           "tags": [
-            "\"makima",
-            "chainsaw man\""
+            "komisan"
           ],
-          "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
-          "featured": false
+          "name_en": "Social Skills Loading 1% - Cute Anime Introvert Pixel Art",
+          "description_en": "Ever feel like you want to say 'Hello' but your brain just starts buffering? This design perfectly captures that relatable struggle of social anxiety. Featuring a cute, high-quality pixel art anime character with a 'Social Skills: Loading... 1%' progress bar, this illustration is the ultimate mood for introverts. Whether you are a fan of slice-of-life anime or just someone who lives life on 'Silent Mode', this funny and aesthetic design speaks for you so you don't have to. Perfect for gamers, manga lovers, and anyone waiting for their confidence to finish downloading."
         }
       ]
     },
