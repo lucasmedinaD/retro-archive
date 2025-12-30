@@ -7,6 +7,7 @@ import { Heart } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useState } from 'react';
 import { trackFavorite, trackProductClick } from '@/lib/analytics';
+import ScarcityLabel from '@/components/ScarcityLabel';
 
 interface ProductCardProps {
     product: Product;
@@ -43,10 +44,11 @@ export default function ProductCard({ product, lang, label }: ProductCardProps) 
             className="group relative border border-black dark:border-white bg-white dark:bg-[#111111] flex flex-col h-full transition-all duration-300 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_#f4f4f0] hover:-translate-y-1 hover:-translate-x-1 block"
         >
             {/* Category Tag */}
-            <div className="absolute top-2 left-2 z-10">
+            <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
                 <span className="bg-black dark:bg-white text-white dark:text-black text-[10px] font-mono px-2 py-1 uppercase tracking-tighter">
                     {product.category}
                 </span>
+                <ScarcityLabel productId={product.id} showProbability={0.3} />
             </div>
 
             {/* Favorite Button */}

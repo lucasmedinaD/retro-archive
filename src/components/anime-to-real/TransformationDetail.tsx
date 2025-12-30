@@ -5,7 +5,10 @@ import { TransformationExtended } from '@/types/transformations';
 import EnhancedComparisonSlider from './EnhancedComparisonSlider';
 import ShareableComparison from './ShareableComparison';
 import OutfitBreakdown from './OutfitBreakdown';
-import { useState } from 'react';
+import SocialProof from '@/components/SocialProof';
+import ScarcityLabel from '@/components/ScarcityLabel';
+import { useState, useEffect } from 'react';
+import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -20,6 +23,14 @@ export default function TransformationDetail({
 }: TransformationDetailProps) {
     const [showShareModal, setShowShareModal] = useState(false);
     const [isLiked, setIsLiked] = useState(initialLiked);
+    const { markAsViewed, isLoaded } = useArchiveProgress();
+
+    // Mark transformation as viewed when component mounts
+    useEffect(() => {
+        if (isLoaded && transformation.id) {
+            markAsViewed(transformation.id);
+        }
+    }, [isLoaded, transformation.id, markAsViewed]);
 
     const handleLike = () => {
         setIsLiked(!isLiked);
@@ -55,14 +66,24 @@ export default function TransformationDetail({
 
                 {/* Metadata Sidebar (1/3 width on desktop) */}
                 <div className="space-y-6">
-                    {/* Character Info */}
+                    {/* Character Info - Technical Nomenclature */}
                     <div>
-                        <h1 className="text-4xl font-black uppercase mb-2">
+                        {/* Entry Code */}
+                        <p className="font-mono text-xs text-accent mb-1 tracking-widest">
+                            ENTRY-{transformation.id.slice(-3).toUpperCase().padStart(3, '0')}
+                        </p>
+
+                        <h1 className="text-4xl font-black uppercase mb-2 leading-none">
                             {transformation.characterName}
                         </h1>
 
+                        {/* Classification */}
+                        <p className="font-mono text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                            {transformation.category || '2.5D'} // ARCHIVAL GRADE A+
+                        </p>
+
                         {transformation.series && (
-                            <p className="font-mono text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            <p className="font-mono text-sm text-gray-600 dark:text-gray-400 mb-4 border-l-2 border-accent pl-3">
                                 from <span className="font-bold">{transformation.series}</span>
                             </p>
                         )}
@@ -87,6 +108,21 @@ export default function TransformationDetail({
                                 {transformation.description.en}
                             </p>
                         )}
+
+                        {/* Social Proof */}
+                        <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
+                            <SocialProof
+                                likes={transformation.likes || 0}
+                                productId={transformation.id}
+                            />
+                        </div>
+
+                        {/* Scarcity Label */}
+                        <ScarcityLabel
+                            productId={transformation.id}
+                            showProbability={0.4}
+                            className="mt-3"
+                        />
                     </div>
 
                     {/* Stats */}

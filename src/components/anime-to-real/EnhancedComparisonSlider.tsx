@@ -13,6 +13,8 @@ interface EnhancedComparisonSliderProps {
     onDownload?: () => void;
     initialPosition?: number;
     isLiked?: boolean;
+    funFact?: string; // Hidden fun fact revealed at edges
+    transformationId?: string; // For progress tracking
 }
 
 export default function EnhancedComparisonSlider({
@@ -23,13 +25,18 @@ export default function EnhancedComparisonSlider({
     onShare,
     onDownload,
     initialPosition = 50,
-    isLiked: externalIsLiked = false
+    isLiked: externalIsLiked = false,
+    funFact,
+    transformationId
 }: EnhancedComparisonSliderProps) {
     const [position, setPosition] = useState(initialPosition);
     const [isLiked, setIsLiked] = useState(externalIsLiked);
     const [isDragging, setIsDragging] = useState(false);
     const [showSparkle, setShowSparkle] = useState(false);
+    const [showFunFact, setShowFunFact] = useState(false);
+    const [hasReachedEdge, setHasReachedEdge] = useState({ left: false, right: false });
     const containerRef = useRef<HTMLDivElement>(null);
+    const lastHapticPosition = useRef<number | null>(null);
 
     // Spring animation for smooth movement
     const springPosition = useSpring(position, {
@@ -64,6 +71,40 @@ export default function EnhancedComparisonSlider({
         setShowSparkle(true);
         setTimeout(() => setShowSparkle(false), 600);
     }, []);
+
+    // Haptic feedback at key positions (0%, 50%, 100%)
+    const triggerHaptic = useCallback((intensity: number[] = [10]) => {
+        if ('vibrate' in navigator) {
+            navigator.vibrate(intensity);
+        }
+    }, []);
+
+    // Check for edge positions and trigger haptic/fun fact
+    useEffect(() => {
+        const checkEdges = () => {
+            // Left edge (0-5%)
+            if (position <= 5 && !hasReachedEdge.left) {
+                setHasReachedEdge(prev => ({ ...prev, left: true }));
+                triggerHaptic([15, 30, 15]);
+                if (funFact) setShowFunFact(true);
+            }
+            // Right edge (95-100%)
+            if (position >= 95 && !hasReachedEdge.right) {
+                setHasReachedEdge(prev => ({ ...prev, right: true }));
+                triggerHaptic([15, 30, 15]);
+                if (funFact) setShowFunFact(true);
+            }
+            // Center (45-55%) - subtle feedback
+            if (position >= 45 && position <= 55 && lastHapticPosition.current !== 50) {
+                lastHapticPosition.current = 50;
+                triggerHaptic([5]);
+            } else if (position < 45 || position > 55) {
+                lastHapticPosition.current = null;
+            }
+        };
+
+        if (isDragging) checkEdges();
+    }, [position, isDragging, hasReachedEdge, triggerHaptic, funFact]);
 
     // NATIVE event handlers with passive: false
     useEffect(() => {
@@ -296,6 +337,25 @@ export default function EnhancedComparisonSlider({
                 >
                     ↔ Desliza
                 </motion.div>
+
+                {/* Fun Fact Reveal */}
+                {showFunFact && funFact && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 max-w-xs"
+                        onClick={() => setShowFunFact(false)}
+                    >
+                        <div className="backdrop-blur-xl bg-black/90 text-white p-4 border-2 border-accent shadow-2xl">
+                            <p className="text-[10px] font-mono uppercase text-accent mb-2 flex items-center gap-2">
+                                <Sparkles size={12} />
+                                DATO OCULTO DESBLOQUEADO
+                            </p>
+                            <p className="text-sm font-medium leading-relaxed">{funFact}</p>
+                            <p className="text-[10px] font-mono text-gray-400 mt-3 text-center">TAP PARA CERRAR</p>
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Action Buttons */}
                 <motion.div
