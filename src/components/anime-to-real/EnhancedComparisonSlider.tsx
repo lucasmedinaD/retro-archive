@@ -33,6 +33,7 @@ export default function EnhancedComparisonSlider({
     const handlePointerDown = (e: React.PointerEvent) => {
         setIsDragging(true);
         e.currentTarget.setPointerCapture(e.pointerId);
+        e.preventDefault(); // Prevent scrolling on mobile
     };
 
     const handlePointerMove = (e: React.PointerEvent) => {
@@ -46,7 +47,9 @@ export default function EnhancedComparisonSlider({
 
     const handlePointerUp = (e: React.PointerEvent) => {
         setIsDragging(false);
-        e.currentTarget.releasePointerCapture(e.pointerId);
+        if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+        }
     };
 
     const handleLike = () => {
@@ -59,6 +62,7 @@ export default function EnhancedComparisonSlider({
             className="relative rounded-lg overflow-hidden"
             onMouseEnter={() => setShowActions(true)}
             onMouseLeave={() => setShowActions(false)}
+            onTouchStart={() => setShowActions(true)}
         >
             {/* Slider Container */}
             <div
@@ -66,10 +70,13 @@ export default function EnhancedComparisonSlider({
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
                 onPointerLeave={(e) => {
                     if (isDragging) {
                         setIsDragging(false);
-                        e.currentTarget.releasePointerCapture(e.pointerId);
+                        if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+                            e.currentTarget.releasePointerCapture(e.pointerId);
+                        }
                     }
                 }}
                 style={{ willChange: 'transform' }}
@@ -105,9 +112,9 @@ export default function EnhancedComparisonSlider({
                     className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)] z-10 pointer-events-none"
                     style={{ left: `${position}%` }}
                 >
-                    {/* Slider Handle */}
+                    {/* Slider Handle - BIGGER on mobile */}
                     <motion.div
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white dark:bg-white rounded-full shadow-lg flex items-center justify-center"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 sm:w-12 sm:h-12 bg-white dark:bg-white rounded-full shadow-lg flex items-center justify-center touch-manipulation"
                         animate={{
                             scale: isDragging ? 1.15 : 1,
                             boxShadow: isDragging
@@ -168,7 +175,7 @@ export default function EnhancedComparisonSlider({
                 {onLike && (
                     <motion.button
                         onClick={handleLike}
-                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-transparent hover:border-red-500"
+                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-transparent hover:border-red-500 touch-manipulation"
                         whileTap={{ scale: 0.9 }}
                         aria-label={isLiked ? "Unlike" : "Like"}
                     >
@@ -182,7 +189,7 @@ export default function EnhancedComparisonSlider({
                 {onShare && (
                     <motion.button
                         onClick={onShare}
-                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-transparent hover:border-blue-500"
+                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-transparent hover:border-blue-500 touch-manipulation"
                         whileTap={{ scale: 0.9 }}
                         aria-label="Share"
                     >
@@ -193,7 +200,7 @@ export default function EnhancedComparisonSlider({
                 {onDownload && (
                     <motion.button
                         onClick={onDownload}
-                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-transparent hover:border-green-500"
+                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-transparent hover:border-green-500 touch-manipulation"
                         whileTap={{ scale: 0.9 }}
                         aria-label="Download"
                     >
