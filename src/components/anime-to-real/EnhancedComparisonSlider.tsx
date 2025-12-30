@@ -164,7 +164,7 @@ export default function EnhancedComparisonSlider({
             {/* Slider Container */}
             <div
                 ref={containerRef}
-                className="relative aspect-[3/4] md:aspect-[4/3] select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10"
+                className="relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
@@ -174,7 +174,7 @@ export default function EnhancedComparisonSlider({
                 <motion.img
                     src={realImage}
                     alt={`${characterName} - Real`}
-                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                    className="relative block w-full h-auto object-cover pointer-events-none"
                     draggable={false}
                     animate={{
                         scale: isDragging ? 1.02 : 1,
@@ -296,46 +296,46 @@ export default function EnhancedComparisonSlider({
                 >
                     ↔ Desliza
                 </motion.div>
-            </div>
 
-            {/* Action Buttons */}
-            <motion.div
-                className="mt-4 flex justify-center gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-            >
-                {onLike && (
-                    <motion.button
-                        onClick={handleLike}
-                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700 relative overflow-hidden"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <Heart size={22} className={`relative z-10 transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-white'}`} />
-                    </motion.button>
-                )}
-                {onShare && (
-                    <motion.button
-                        onClick={onShare}
-                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <Share2 size={22} className="text-white" />
-                    </motion.button>
-                )}
-                {onDownload && (
-                    <motion.button
-                        onClick={onDownload}
-                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <Download size={22} className="text-white" />
-                    </motion.button>
-                )}
-            </motion.div>
+                {/* Action Buttons */}
+                <motion.div
+                    className="absolute bottom-0 left-0 right-0 flex justify-center gap-3 p-4 bg-gradient-to-t from-black/80 via-black/60 to-transparent backdrop-blur-sm z-20"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                >
+                    {onLike && (
+                        <motion.button
+                            onClick={handleLike}
+                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg border-2 border-white/50 backdrop-blur-md"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Heart size={20} className={`transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-800 dark:text-white'}`} />
+                        </motion.button>
+                    )}
+                    {onShare && (
+                        <motion.button
+                            onClick={onShare}
+                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg border-2 border-white/50 backdrop-blur-md"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Share2 size={20} className="text-gray-800 dark:text-white" />
+                        </motion.button>
+                    )}
+                    {onDownload && (
+                        <motion.button
+                            onClick={onDownload}
+                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg border-2 border-white/50 backdrop-blur-md"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Download size={20} className="text-gray-800 dark:text-white" />
+                        </motion.button>
+                    )}
+                </motion.div>
+            </div>
         </div>
     );
 }

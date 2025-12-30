@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { X, Upload } from 'lucide-react';
+import { X, Upload, ExternalLink } from 'lucide-react';
 import { TransformationData } from './actions/transformations';
 import { uploadTransformationImageAction } from './actions/transformations';
+import { getProducts, Product } from '@/data/products';
 
 interface TransformationEditorProps {
     transformation: TransformationData;
@@ -29,6 +30,12 @@ export default function TransformationEditor({ transformation, isNew = false, on
     const [animePreview, setAnimePreview] = useState(transformation.animeImage);
     const [realPreview, setRealPreview] = useState(transformation.realImage);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [selectedProductIds, setSelectedProductIds] = useState<string[]>(
+        transformation.outfit?.map((p: any) => p.id) || []
+    );
+
+    // Get all available products
+    const allProducts = getProducts('en'); // Use 'en' as default for admin
 
     const handleAnimeImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -75,6 +82,11 @@ export default function TransformationEditor({ transformation, isNew = false, on
                 finalRealImage = upload.path!;
             }
 
+            // Get full product objects for selected IDs
+            const selectedProducts = selectedProductIds
+                .map(id => allProducts.find(p => p.id === id))
+                .filter(Boolean) as Product[];
+
             const updatedTransformation: TransformationData = {
                 ...transformation,
                 characterName,
@@ -93,6 +105,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
                     en: descriptionEn,
                     es: descriptionEs
                 } : undefined,
+                outfit: selectedProducts.length > 0 ? selectedProducts : undefined,
             };
 
             onSave(updatedTransformation);
@@ -270,6 +283,78 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 </label>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Related Products */}
+                    <div className="border-2 border-[#333] p-4 mt-6">
+                        <h3 className="text-sm font-bold uppercase mb-4 text-gray-400">Related Products (Affiliate Links)</h3>
+
+                        {/* Product Selector */}
+                        <div className="mb-4">
+                            <label className="block text-xs uppercase mb-2 text-gray-400">Add Products</label>
+                            <select
+                                onChange={(e) => {
+                                    const productId = e.target.value;
+                                    if (productId && !selectedProductIds.includes(productId)) {
+                                        setSelectedProductIds([...selectedProductIds, productId]);
+                                    }
+                                    e.target.value = ''; // Reset select
+                                }}
+                                className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                            >
+                                <option value="">-- Select a product to add --</option>
+                                {allProducts
+                                    .filter(p => !selectedProductIds.includes(p.id))
+                                    .map(product => (
+                                        <option key={product.id} value={product.id}>
+                                            {product.name} - {product.category}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+
+                        {/* Selected Products Preview */}
+                        {selectedProductIds.length > 0 && (
+                            <div className="space-y-2">
+                                <p className="text-xs text-gray-500 mb-2">
+                                    {selectedProductIds.length} product{selectedProductIds.length !== 1 ? 's' : ''} selected
+                                </p>
+                                {selectedProductIds.map(productId => {
+                                    const product = allProducts.find(p => p.id === productId);
+                                    if (!product) return null;
+
+                                    return (
+                                        <div key={productId} className="flex items-center gap-3 bg-black border border-[#333] p-3">
+                                            {/* Product Image */}
+                                            <div className="relative w-16 h-16 flex-shrink-0">
+                                                <Image
+                                                    src={product.image}
+                                                    alt={product.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
+
+                                            {/* Product Info */}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-bold truncate">{product.name}</p>
+                                                <p className="text-xs text-gray-500">{product.category} • {product.price}</p>
+                                            </div>
+
+                                            {/* Remove Button */}
+                                            <button
+                                                onClick={() => setSelectedProductIds(selectedProductIds.filter(id => id !== productId))}
+                                                className="p-2 text-red-500 hover:bg-red-500/10 transition-colors"
+                                                title="Remove product"
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Descriptions */}

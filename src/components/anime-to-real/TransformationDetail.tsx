@@ -26,89 +26,14 @@ export default function TransformationDetail({
         onLike?.();
     };
 
-    const handleShare = async () => {
-        // Try Web Share API first (mobile native share)
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: `${transformation.characterName} - Anime to Real`,
-                    text: `Check out this ${transformation.characterName} transformation! 🎨`,
-                    url: window.location.href
-                });
-            } catch (err) {
-                // User cancelled or error, fallback to modal
-                setShowShareModal(true);
-            }
-        } else {
-            // Desktop: show share modal
-            setShowShareModal(true);
-        }
+    const handleShare = () => {
+        // Just open the share modal which has all the working functionality
+        setShowShareModal(true);
     };
 
-    const handleDownload = async () => {
-        try {
-            // Create a canvas with both images side by side
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
-
-            // Load both images
-            const [animeImg, realImg] = await Promise.all([
-                loadImage(transformation.animeImage),
-                loadImage(transformation.realImage)
-            ]);
-
-            // Set canvas size (both images side by side)
-            const width = 800;
-            const height = 600;
-            canvas.width = width * 2;
-            canvas.height = height;
-
-            // Draw images
-            ctx.drawImage(animeImg, 0, 0, width, height);
-            ctx.drawImage(realImg, width, 0, width, height);
-
-            // Add watermark
-            ctx.fillStyle = 'rgba(0,0,0,0.7)';
-            ctx.fillRect(width * 2 - 200, height - 40, 190, 30);
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 14px monospace';
-            ctx.fillText('RETRO.ARCHIVE', width * 2 - 190, height - 18);
-
-            // Add labels
-            ctx.fillStyle = 'rgba(255,255,255,0.9)';
-            ctx.fillRect(10, 10, 80, 30);
-            ctx.fillRect(width + 10, 10, 80, 30);
-            ctx.fillStyle = 'black';
-            ctx.font = 'bold 14px sans-serif';
-            ctx.fillText('ANIME', 20, 30);
-            ctx.fillText('REAL', width + 20, 30);
-
-            // Download
-            const link = document.createElement('a');
-            link.download = `${transformation.characterName.toLowerCase().replace(/\s+/g, '-')}-comparison.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-
-            // Haptic feedback
-            if ('vibrate' in navigator) {
-                navigator.vibrate([50, 50, 50]);
-            }
-        } catch (err) {
-            console.error('Download failed:', err);
-            // Fallback: open share modal
-            setShowShareModal(true);
-        }
-    };
-
-    const loadImage = (src: string): Promise<HTMLImageElement> => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = src;
-        });
+    const handleDownload = () => {
+        // Just open the share modal which has the download button
+        setShowShareModal(true);
     };
 
     return (
@@ -246,6 +171,49 @@ export default function TransformationDetail({
                     )}
                 </div>
             </div>
+
+            {/* Related Products */}
+            {transformation.outfit && transformation.outfit.length > 0 && (
+                <section className="max-w-7xl mx-auto px-4 py-12 border-t-2 border-black dark:border-white">
+                    <h2 className="text-3xl md:text-4xl font-black uppercase mb-8">
+                        Productos Relacionados
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {transformation.outfit.map((product: any) => (
+                            <a
+                                key={product.id}
+                                href={product.buyUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group border-2 border-black dark:border-white bg-white dark:bg-black hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-1 hover:-translate-x-1"
+                            >
+                                {/* Product Image */}
+                                <div className="relative aspect-square border-b-2 border-black dark:border-white overflow-hidden">
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
+                                    />
+                                </div>
+
+                                {/* Product Info */}
+                                <div className="p-3">
+                                    <h3 className="text-sm font-bold uppercase mb-1 line-clamp-2 min-h-[2.5rem]">
+                                        {product.name}
+                                    </h3>
+                                    <p className="text-xs font-mono text-gray-600 dark:text-gray-400 mb-2">
+                                        {product.price}
+                                    </p>
+                                    <div className="flex items-center gap-1 text-xs font-bold uppercase text-accent">
+                                        Ver Producto
+                                        <ExternalLink size={12} />
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* Outfit Breakdown */}
             {transformation.outfit && transformation.outfit.length > 0 && (
