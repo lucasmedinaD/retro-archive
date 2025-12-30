@@ -1,12 +1,12 @@
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { subscribeToNewsletter } from '@/app/actions/newsletter';
 
 const initialState = { error: '', success: false };
 
 export default function NewsletterForm({ dict }: { dict: any }) {
-    const [state, formAction] = useFormState(subscribeToNewsletter, initialState);
+    const [state, formAction] = useActionState(subscribeToNewsletter, initialState);
 
     return (
         <div className="max-w-2xl mx-auto text-center">
