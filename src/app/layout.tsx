@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Lucas Medina', url: 'https://instagram.com/lucasmedinad' }],
   creator: 'Lucas Medina',
   publisher: 'Retro Archive',
+  other: {
+    'p:domain_verify': 'fee3cd4a1ee32820a8c118a739242f00',
+  },
   formatDetection: {
     email: false,
     address: false,
