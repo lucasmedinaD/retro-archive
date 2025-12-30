@@ -164,7 +164,7 @@ export default function EnhancedComparisonSlider({
             {/* Slider Container */}
             <div
                 ref={containerRef}
-                className="relative aspect-[4/5] select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10"
+                className="relative aspect-[3/4] md:aspect-[4/3] select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}

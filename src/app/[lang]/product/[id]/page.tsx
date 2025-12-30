@@ -108,13 +108,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {/* Info */}
                 <div className="flex-1 flex flex-col justify-center">
                     <div className="mb-2">
-                        <span className="bg-black dark:bg-white text-white dark:text-black font-mono text-xs px-2 py-1 uppercase">{product.category}</span>
+                        <span className="bg-black dark:bg-white text-white dark:text-black font-mono text-xs px-2 py-1 uppercase">{product.category || 'PRODUCT'}</span>
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">{product.name}</h1>
+                    <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">{product.name || product.name_en || product.name_es || 'Untitled Product'}</h1>
 
 
                     <p className="font-mono text-gray-600 dark:text-gray-400 mb-6 leading-relaxed max-w-md">
-                        {product.description}
+                        {product.description || product.description_en || product.description_es || 'No description available.'}
                     </p>
 
                     <ShareButtons
