@@ -298,18 +298,21 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                     if (productId && !selectedProductIds.includes(productId)) {
                                         setSelectedProductIds([...selectedProductIds, productId]);
                                     }
-                                    e.target.value = ''; // Reset select
+                                    e.target.value = '';
                                 }}
                                 className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
                             >
                                 <option value="">-- Select a product to add --</option>
                                 {allProducts
                                     .filter(p => !selectedProductIds.includes(p.id))
-                                    .map(product => (
-                                        <option key={product.id} value={product.id}>
-                                            {product.name} - {product.category}
-                                        </option>
-                                    ))
+                                    .map(product => {
+                                        const displayName = product.name || product.name_en || product.name_es || product.id;
+                                        return (
+                                            <option key={product.id} value={product.id}>
+                                                {displayName} - ${product.price}
+                                            </option>
+                                        );
+                                    })
                                 }
                             </select>
                         </div>
@@ -323,14 +326,15 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 {selectedProductIds.map(productId => {
                                     const product = allProducts.find(p => p.id === productId);
                                     if (!product) return null;
+                                    const displayName = product.name || product.name_en || product.name_es || product.id;
 
                                     return (
                                         <div key={productId} className="flex items-center gap-3 bg-black border border-[#333] p-3">
                                             {/* Product Image */}
-                                            <div className="relative w-16 h-16 flex-shrink-0">
+                                            <div className="relative w-12 h-12 flex-shrink-0">
                                                 <Image
                                                     src={product.image}
-                                                    alt={product.name}
+                                                    alt={displayName}
                                                     fill
                                                     className="object-cover"
                                                 />
@@ -338,8 +342,8 @@ export default function TransformationEditor({ transformation, isNew = false, on
 
                                             {/* Product Info */}
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-bold truncate">{product.name}</p>
-                                                <p className="text-xs text-gray-500">{product.category} • {product.price}</p>
+                                                <p className="text-sm font-bold truncate">{displayName}</p>
+                                                <p className="text-xs text-gray-500">${product.price}</p>
                                             </div>
 
                                             {/* Remove Button */}
