@@ -301,22 +301,22 @@ export default function EnhancedComparisonSlider({
 
                 {/* Labels */}
                 <motion.div
-                    className="absolute top-4 left-4 backdrop-blur-md bg-black/60 text-white px-4 py-2 text-xs font-bold uppercase pointer-events-none rounded-lg z-10 border border-white/20"
+                    className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 text-xs font-bold uppercase pointer-events-none z-10"
                     animate={{ x: isDragging ? -5 : 0 }}
                 >
                     <span className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                        {dict?.transformation?.from || 'SOURCE MATERIAL'}
+                        <span className="w-2 h-2 bg-blue-400 rounded-full" />
+                        ANIME
                     </span>
                 </motion.div>
 
                 <motion.div
-                    className="absolute top-4 right-4 backdrop-blur-md bg-black/60 text-white px-4 py-2 text-xs font-bold uppercase pointer-events-none rounded-lg z-10 border border-white/20"
+                    className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1.5 text-xs font-bold uppercase pointer-events-none z-10"
                     animate={{ x: isDragging ? 5 : 0 }}
                 >
                     <span className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        {dict?.anime_to_real?.title || 'SIMULATION RENDER'}
+                        <span className="w-2 h-2 bg-green-400 rounded-full" />
+                        REAL
                     </span>
                 </motion.div>
 
@@ -332,7 +332,7 @@ export default function EnhancedComparisonSlider({
 
                 {/* Mobile Hint */}
                 <motion.div
-                    className="absolute bottom-12 left-1/2 -translate-x-1/2 backdrop-blur-md bg-black/70 text-white px-6 py-3 rounded-full text-sm font-bold uppercase pointer-events-none md:hidden z-10 border border-white/20"
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-black/80 text-white px-4 py-2 text-xs font-bold uppercase pointer-events-none md:hidden z-10"
                     initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 0, scale: 0.9 }}
                     transition={{ delay: 2.5, duration: 0.5 }}
@@ -361,7 +361,7 @@ export default function EnhancedComparisonSlider({
 
                 {/* Action Buttons */}
                 <motion.div
-                    className="absolute bottom-0 left-0 right-0 flex justify-center gap-3 p-4 bg-gradient-to-t from-black/80 via-black/60 to-transparent backdrop-blur-sm z-20"
+                    className="absolute bottom-0 left-0 right-0 flex justify-center gap-3 p-4 bg-gradient-to-t from-black/60 to-transparent z-20"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -369,7 +369,7 @@ export default function EnhancedComparisonSlider({
                     {onLike && (
                         <motion.button
                             onClick={handleLike}
-                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg border-2 border-white/50 backdrop-blur-md"
+                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -379,7 +379,7 @@ export default function EnhancedComparisonSlider({
                     {onShare && (
                         <motion.button
                             onClick={onShare}
-                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg border-2 border-white/50 backdrop-blur-md"
+                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -389,7 +389,7 @@ export default function EnhancedComparisonSlider({
                     {onDownload && (
                         <motion.button
                             onClick={onDownload}
-                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg border-2 border-white/50 backdrop-blur-md"
+                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                         >

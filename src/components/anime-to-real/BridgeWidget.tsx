@@ -22,7 +22,7 @@ export default function BridgeWidget({ transformation, dict }: BridgeWidgetProps
                 {transformation.outfit.map((product, index) => (
                     <a
                         key={index}
-                        href={product.affiliateUrl}
+                        href={product.buyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block border border-black/10 dark:border-white/10 hover:border-accent transition-colors group"
@@ -40,7 +40,7 @@ export default function BridgeWidget({ transformation, dict }: BridgeWidgetProps
                         <div className="p-3 bg-[#f4f4f0] dark:bg-[#111111]">
                             <p className="font-bold text-sm truncate">{product.name}</p>
                             <div className="flex items-center justify-between mt-1">
-                                <span className="text-accent font-mono text-sm">{product.price}</span>
+                                <span className="text-accent font-mono text-sm">${product.price}</span>
                                 <ExternalLink size={14} className="text-gray-400" />
                             </div>
                         </div>

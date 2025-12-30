@@ -1,12 +1,13 @@
 export interface Product {
     id: string;
     name: string;
-    brand: string;
-    price: number;
-    currency: string;
+    brand?: string;
+    price: number | string;
+    currency?: string;
     image: string;
-    affiliateUrl: string;
-    category: 'tops' | 'bottoms' | 'shoes' | 'accessories' | 'other';
+    affiliateUrl?: string;
+    buyUrl?: string;
+    category: 'tops' | 'bottoms' | 'shoes' | 'accessories' | 'other' | 'DESIGN';
     inStock?: boolean;
 }
 
