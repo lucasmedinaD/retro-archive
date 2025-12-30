@@ -30,7 +30,9 @@ export default function Header({ lang, dict }: HeaderProps) {
                     <Link href={`/${lang}`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.index}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
                     <Link href={`/${lang}/anime-to-real`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.anime_to_real}</Link>
+                    {/* Custom Orders - Hidden for future implementation
                     <Link href={`/${lang}/custom`} className="hover:underline decoration-2 underline-offset-4 text-red-500 dark:text-red-400">{dict.nav.custom || 'Custom'}</Link>
+                    */}
                     <Link href={`/${lang}/favorites`} className="hover:underline decoration-2 underline-offset-4 relative">
                         {dict.nav.favorites}
                         {favorites.length > 0 && (
@@ -61,7 +63,9 @@ export default function Header({ lang, dict }: HeaderProps) {
                         <Link href={`/${lang}`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.index}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
                         <Link href={`/${lang}/anime-to-real`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.anime_to_real}</Link>
+                        {/* Custom Orders - Hidden for future implementation
                         <Link href={`/${lang}/custom`} onClick={toggleMenu} className="hover:text-accent text-red-500 dark:text-red-400">{dict.nav.custom || 'Custom'}</Link>
+                        */}
                         <Link href={`/${lang}/favorites`} onClick={toggleMenu} className="hover:text-accent relative">
                             {dict.nav.favorites}
                             {favorites.length > 0 && (

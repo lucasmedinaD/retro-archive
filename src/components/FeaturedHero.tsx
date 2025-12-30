@@ -39,15 +39,18 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
     }, []);
 
     return (
-        <section className="relative border-b border-black dark:border-white overflow-hidden bg-black text-white h-[85vh] md:h-[80vh] flex flex-col md:flex-row">
+        <section className="relative border-b border-black dark:border-white overflow-hidden bg-[#f4f4f0] dark:bg-[#111111] text-black dark:text-white h-[85vh] md:h-[80vh] flex flex-col md:flex-row">
             {/* Left: Context & CTA */}
-            <div className="relative z-20 flex-1 flex flex-col justify-center p-8 md:p-16 lg:p-24 border-b md:border-b-0 md:border-r border-white/20 bg-black/80 backdrop-blur-sm">
+            <div className="relative z-20 flex-1 flex flex-col justify-center p-8 md:p-16 lg:p-24 border-b md:border-b-0 md:border-r border-black/10 dark:border-white/20">
 
-                <div className="flex items-center gap-2 text-accent mb-6">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs font-mono uppercase tracking-[0.2em]">
-                        LABORATORY ONLINE
-                    </span>
+                <div className="flex items-center gap-3 mb-6">
+                    <img src="/logo.png" alt="Retro Archive" className="w-10 h-10 dark:invert" />
+                    <div className="flex items-center gap-2 text-accent">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <span className="text-xs font-mono uppercase tracking-[0.2em]">
+                            LABORATORY ONLINE
+                        </span>
+                    </div>
                 </div>
 
                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-6 uppercase">
@@ -57,25 +60,21 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                     </span>
                 </h1>
 
-                <p className="font-mono text-sm text-gray-400 max-w-md mb-8 leading-relaxed border-l-2 border-accent pl-4">
+                <p className="font-mono text-sm text-gray-600 dark:text-gray-400 max-w-md mb-8 leading-relaxed border-l-2 border-accent pl-4">
                     {dict?.hero?.description || 'Laboratory of advanced aesthetics. Raw materials for physical reality.'}
-                    <br />
-                    <span className="block mt-2 text-white font-bold opacity-80">
-                        {dict?.catalog?.get_it || 'ANALYZE'}
-                    </span>
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-start gap-4">
                     <Link
-                        href={`/${lang}/anime-to-real/${transformation.id}`}
-                        className="group relative inline-flex items-center gap-3 bg-white text-black px-8 py-4 font-black text-sm uppercase tracking-widest hover:bg-accent transition-colors"
+                        href={`/${lang}#catalog`}
+                        className="group relative inline-flex items-center gap-3 bg-black dark:bg-white text-white dark:text-black px-8 py-4 font-black text-sm uppercase tracking-widest hover:bg-accent dark:hover:bg-accent hover:text-white transition-colors"
                     >
-                        <span>{dict?.anime_to_real?.cta || 'INITIATE PROTOCOL'}</span>
+                        <span>{dict?.hero?.cta_secondary || 'Browse Designs'}</span>
                         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
 
                         {/* Tech corners */}
-                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-black" />
-                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-black" />
+                        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white dark:border-black" />
+                        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white dark:border-black" />
                     </Link>
 
                     <div className="hidden md:flex flex-col gap-1 text-[10px] font-mono text-gray-500 uppercase mt-2">
@@ -90,7 +89,7 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
             </div>
 
             {/* Right: The Loop (Visual Hook) */}
-            <div className="absolute inset-0 md:relative md:inset-auto md:flex-1 h-full w-full overflow-hidden flex items-center justify-center p-4 bg-black/40">
+            <div className="absolute inset-0 md:relative md:inset-auto md:flex-1 h-full w-full overflow-hidden flex items-center justify-center p-4 bg-white/50 dark:bg-black/40">
                 <div className="relative h-full max-h-[80vh] w-auto aspect-[4/5] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
                     {/* Background: Real (Simulation) */}
                     <img
