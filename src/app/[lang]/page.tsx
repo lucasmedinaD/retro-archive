@@ -62,7 +62,7 @@ export default async function Home({ params }: HomeProps) {
           </div>
 
           <div className="flex-1 w-full flex justify-end">
-            <div className="relative w-full max-w-md aspect-[4/5] border-2 border-black dark:border-white overflow-hidden">
+            <div className="relative w-full max-w-md aspect-[4/5] border-2 border-black dark:border-white">
               <div className="w-full h-full bg-white dark:bg-black relative overflow-hidden">
                 {/* Featured Hero Image - Makima */}
                 <img
@@ -71,7 +71,7 @@ export default async function Home({ params }: HomeProps) {
                   className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white px-4 py-2 font-mono text-xs font-bold rotate-[-5deg] shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,1)]">
+              <div className="absolute -bottom-6 -left-6 bg-black text-white dark:bg-white dark:text-black border-2 border-black dark:border-white px-4 py-2 font-mono text-xs font-bold rotate-[-5deg] shadow-[4px_4px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_rgba(255,255,255,1)] z-10">
                 {dict.hero.featured}
               </div>
             </div>

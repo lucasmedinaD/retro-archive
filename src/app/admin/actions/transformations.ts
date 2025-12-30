@@ -255,3 +255,58 @@ export async function likeTransformationAction(transformationId: string) {
         return { error: error.message || 'Like failed' };
     }
 }
+
+export async function updateTransformationAction(transformationId: string, updates: Partial<TransformationData>) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
+
+    try {
+        // 1. Get current transformations
+        const existing = await fetchTransformationsAction();
+        if (!existing.success || !existing.data) {
+            throw new Error('Failed to fetch current transformations');
+        }
+
+        const transformations = existing.data as TransformationData[];
+        const sha = (existing as any).sha;
+
+        // 2. Find and update
+        const index = transformations.findIndex(t => t.id === transformationId);
+        if (index === -1) {
+            return { error: 'Transformation not found' };
+        }
+
+        transformations[index] = {
+            ...transformations[index],
+            ...updates,
+            id: transformationId // Ensure ID doesn't change
+        };
+
+        // 3. Commit Update
+        const jsonContent = { transformations };
+        const newContent = Buffer.from(JSON.stringify(jsonContent, null, 2)).toString('base64');
+
+        const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${TRANSFORMATIONS_FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: `Update transformation: ${transformationId}`,
+                content: newContent,
+                sha: sha
+            })
+        });
+
+        if (!putRes.ok) throw new Error('GitHub API rejected update request');
+
+        revalidatePath('/[lang]/anime-to-real', 'page');
+        revalidatePath('/admin/transformations');
+        return { success: true, transformation: transformations[index] };
+    } catch (error: any) {
+        console.error(error);
+        return { error: error.message || 'Update failed' };
+    }
+}

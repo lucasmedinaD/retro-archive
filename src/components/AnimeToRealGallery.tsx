@@ -181,11 +181,12 @@ export default function AnimeToRealGallery({ transformations, dict, lang }: Anim
                     return (
                         <motion.div
                             key={item.id}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="group relative border-2 border-black dark:border-white overflow-hidden cursor-pointer hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] dark:hover:shadow-[8px_8px_0px_rgba(255,255,255,1)] transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1"
+                            transition={{ delay: idx * 0.05, duration: 0.3 }}
+                            className="group relative border-2 border-black dark:border-white overflow-hidden cursor-pointer hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] dark:hover:shadow-[8px_8px_0px_rgba(255,255,255,1)] transition-shadow duration-200 hover:-translate-y-1 hover:-translate-x-1"
                             onClick={() => setSelectedItem(item)}
+                            style={{ willChange: 'transform' }}
                         >
                             {/* Anime Image Preview */}
                             <div className="relative aspect-[4/5] overflow-hidden">
@@ -259,15 +260,19 @@ export default function AnimeToRealGallery({ transformations, dict, lang }: Anim
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm px-4"
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 px-4"
                         onClick={() => setSelectedItem(null)}
+                        style={{ willChange: 'opacity' }}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
+                            initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
                             className="relative w-full max-w-4xl"
                             onClick={(e) => e.stopPropagation()}
+                            style={{ willChange: 'transform, opacity' }}
                         >
                             {/* Close Button */}
                             <button

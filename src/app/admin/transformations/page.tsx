@@ -3,19 +3,22 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, Upload, Trash2 } from 'lucide-react';
+import { X, Upload, Trash2, Edit } from 'lucide-react';
 import {
     fetchTransformationsAction,
     createTransformationAction,
     deleteTransformationAction,
+    updateTransformationAction,
     uploadTransformationImageAction,
     TransformationData
 } from '../actions/transformations';
+import TransformationEditor from '../TransformationEditor';
 
 export default function TransformationsPage() {
     const [transformations, setTransformations] = useState<TransformationData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isCreating, setIsCreating] = useState(false);
+    const [editingTransformation, setEditingTransformation] = useState<TransformationData | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     // Form state
@@ -139,6 +142,17 @@ export default function TransformationsPage() {
             alert(`DELETE FAILED: ${result.error}`);
         } else {
             alert('DELETE SUCCESSFUL: Transformation removed. Deployment initiated.');
+            loadTransformations();
+        }
+    };
+
+    const handleUpdate = async (updatedTransformation: TransformationData) => {
+        const result = await updateTransformationAction(updatedTransformation.id, updatedTransformation);
+        if (result.error) {
+            alert(`❌ UPDATE FAILED: ${result.error}`);
+        } else {
+            alert('✅ UPDATE SUCCESSFUL: Changes saved. Deployment initiated (ETA: 2 mins).');
+            setEditingTransformation(null);
             loadTransformations();
         }
     };
@@ -434,19 +448,37 @@ export default function TransformationsPage() {
                                         </p>
                                     )}
 
-                                    <button
-                                        onClick={() => handleDelete(transformation)}
-                                        className="w-full px-4 py-2 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white transition-colors uppercase text-xs flex items-center justify-center gap-2"
-                                    >
-                                        <Trash2 size={14} />
-                                        Delete
-                                    </button>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => setEditingTransformation(transformation)}
+                                            className="px-4 py-2 border border-accent/30 text-accent hover:bg-accent hover:text-black transition-colors uppercase text-xs flex items-center justify-center gap-2"
+                                        >
+                                            <Edit size={14} />
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(transformation)}
+                                            className="px-4 py-2 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white transition-colors uppercase text-xs flex items-center justify-center gap-2"
+                                        >
+                                            <Trash2 size={14} />
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
             </section>
+
+            {/* Transformation Editor Modal */}
+            {editingTransformation && (
+                <TransformationEditor
+                    transformation={editingTransformation}
+                    onCancel={() => setEditingTransformation(null)}
+                    onSave={handleUpdate}
+                />
+            )}
         </main>
     );
 }
