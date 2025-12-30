@@ -54,7 +54,7 @@ export function trackAffiliateClick(productId: string, productName: string, affi
 /**
  * Check if URL is a valid affiliate link
  */
-export function is ValidAffiliateUrl(url: string): boolean {
+export function isValidAffiliateUrl(url: string): boolean {
     try {
         const urlObj = new URL(url);
 
