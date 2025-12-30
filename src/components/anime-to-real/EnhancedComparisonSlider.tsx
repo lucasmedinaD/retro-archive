@@ -1,8 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState, useRef, useCallback } from 'react';
-import { Download, Share2, Heart } from 'lucide-react';
+import { motion, useSpring, useTransform } from 'framer-motion';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Download, Share2, Heart, Sparkles } from 'lucide-react';
 
 interface EnhancedComparisonSliderProps {
     animeImage: string;
@@ -27,9 +27,24 @@ export default function EnhancedComparisonSlider({
 }: EnhancedComparisonSliderProps) {
     const [position, setPosition] = useState(initialPosition);
     const [isLiked, setIsLiked] = useState(externalIsLiked);
+    const [isDragging, setIsDragging] = useState(false);
+    const [showSparkle, setShowSparkle] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Track touch state
+    // Spring animation for smooth movement
+    const springPosition = useSpring(position, {
+        stiffness: 300,
+        damping: 30,
+        mass: 0.5
+    });
+
+    // Glow intensity based on drag state
+    const glowIntensity = useSpring(isDragging ? 1 : 0, {
+        stiffness: 200,
+        damping: 20
+    });
+
+    // Touch state for gesture detection
     const touchState = useRef({
         isTracking: false,
         startX: 0,
@@ -44,13 +59,20 @@ export default function EnhancedComparisonSlider({
         const x = clientX - rect.left;
         const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
         setPosition(percentage);
-    }, []);
 
-    // Mouse handlers (desktop)
+        // Haptic feedback on mobile (if supported)
+        if ('vibrate' in navigator && isDragging) {
+            navigator.vibrate(1);
+        }
+    }, [isDragging]);
+
+    // Mouse handlers
     const handleMouseDown = (e: React.MouseEvent) => {
+        setIsDragging(true);
         touchState.current.isTracking = true;
         touchState.current.isDraggingSlider = true;
         updatePosition(e.clientX);
+        triggerSparkle();
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -59,11 +81,12 @@ export default function EnhancedComparisonSlider({
     };
 
     const handleMouseUp = () => {
+        setIsDragging(false);
         touchState.current.isTracking = false;
         touchState.current.isDraggingSlider = false;
     };
 
-    // Touch handlers (mobile) - THE KEY FIX
+    // Touch handlers with gesture detection
     const handleTouchStart = (e: React.TouchEvent) => {
         const touch = e.touches[0];
         touchState.current = {
@@ -73,7 +96,6 @@ export default function EnhancedComparisonSlider({
             isDraggingSlider: false,
             hasDecidedDirection: false
         };
-        // Don't prevent default yet - let browser decide
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
@@ -83,25 +105,23 @@ export default function EnhancedComparisonSlider({
         const deltaX = Math.abs(touch.clientX - touchState.current.startX);
         const deltaY = Math.abs(touch.clientY - touchState.current.startY);
 
-        // Decide direction if we haven't yet (after 10px of movement)
         if (!touchState.current.hasDecidedDirection && (deltaX > 10 || deltaY > 10)) {
             touchState.current.hasDecidedDirection = true;
-
-            // If horizontal movement is greater, this is a slider drag
             if (deltaX > deltaY) {
                 touchState.current.isDraggingSlider = true;
+                setIsDragging(true);
+                triggerSparkle();
             }
         }
 
-        // If user is dragging the slider horizontally
         if (touchState.current.isDraggingSlider) {
-            e.preventDefault(); // NOW prevent scroll
+            e.preventDefault();
             updatePosition(touch.clientX);
         }
-        // If vertical, do nothing - browser handles scroll
     };
 
     const handleTouchEnd = () => {
+        setIsDragging(false);
         touchState.current = {
             isTracking: false,
             startX: 0,
@@ -111,17 +131,37 @@ export default function EnhancedComparisonSlider({
         };
     };
 
+    const triggerSparkle = () => {
+        setShowSparkle(true);
+        setTimeout(() => setShowSparkle(false), 600);
+    };
+
     const handleLike = () => {
         setIsLiked(!isLiked);
         onLike?.();
+        // Haptic feedback
+        if ('vibrate' in navigator) {
+            navigator.vibrate([10, 50, 10]);
+        }
     };
 
+    // Update spring when position changes
+    useEffect(() => {
+        springPosition.set(position);
+    }, [position, springPosition]);
+
     return (
-        <div className="relative rounded-lg overflow-hidden">
+        <div className="relative rounded-xl overflow-hidden shadow-2xl">
+            {/* Ambient Glow Effect */}
+            <motion.div
+                className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 rounded-xl blur-xl opacity-0 z-0"
+                style={{ opacity: glowIntensity }}
+            />
+
             {/* Slider Container */}
             <div
                 ref={containerRef}
-                className="relative aspect-[4/5] select-none bg-gray-100 dark:bg-gray-900 cursor-ew-resize"
+                className="relative aspect-[4/5] select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
@@ -131,83 +171,178 @@ export default function EnhancedComparisonSlider({
                 onTouchEnd={handleTouchEnd}
             >
                 {/* Background Image (Real) */}
-                <img
+                <motion.img
                     src={realImage}
                     alt={`${characterName} - Real`}
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     draggable={false}
+                    animate={{
+                        scale: isDragging ? 1.02 : 1,
+                        filter: isDragging ? 'saturate(1.2)' : 'saturate(1)'
+                    }}
+                    transition={{ duration: 0.3 }}
                 />
 
-                {/* Foreground Image (Anime) - Clipped */}
-                <div
+                {/* Foreground Image (Anime) - Clipped with spring animation */}
+                <motion.div
                     className="absolute inset-0 pointer-events-none"
-                    style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+                    style={{ clipPath: useTransform(springPosition, v => `inset(0 ${100 - v}% 0 0)`) }}
                 >
-                    <img
+                    <motion.img
                         src={animeImage}
                         alt={`${characterName} - Anime`}
                         className="w-full h-full object-cover"
                         draggable={false}
+                        animate={{
+                            scale: isDragging ? 1.02 : 1,
+                            filter: isDragging ? 'saturate(1.2)' : 'saturate(1)'
+                        }}
+                        transition={{ duration: 0.3 }}
                     />
-                </div>
+                </motion.div>
 
-                {/* Slider Line & Visual Handle */}
-                <div
-                    className="absolute top-0 bottom-0 w-1 bg-white shadow-lg pointer-events-none z-10"
-                    style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
+                {/* Dynamic Slider Line */}
+                <motion.div
+                    className="absolute top-0 bottom-0 w,0.5 pointer-events-none z-20"
+                    style={{ left: useTransform(springPosition, v => `${v}%`), x: '-50%' }}
                 >
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-12 md:h-12 bg-white rounded-full shadow-xl flex items-center justify-center border-4 border-gray-100">
-                        <svg className="w-7 h-7 md:w-6 md:h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </div>
+                    {/* Glow Line */}
+                    <motion.div
+                        className="absolute inset-y-0 w-1 bg-white"
+                        style={{
+                            boxShadow: useTransform(glowIntensity, v =>
+                                `0 0 ${20 * v}px ${8 * v}px rgba(255,255,255,${0.5 * v}), 0 0 ${40 * v}px ${16 * v}px rgba(168,85,247,${0.3 * v})`
+                            )
+                        }}
+                    />
 
-                {/* Labels */}
-                <div className="absolute top-3 left-3 bg-black/90 text-white px-3 py-1.5 text-[10px] font-bold uppercase pointer-events-none rounded z-10">
-                    ANIME
-                </div>
-                <div className="absolute top-3 right-3 bg-black/90 text-white px-3 py-1.5 text-[10px] font-bold uppercase pointer-events-none rounded z-10">
-                    REAL
+                    {/* Handle with pulse animation */}
+                    <motion.div
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        animate={{
+                            scale: isDragging ? 1.2 : 1,
+                            rotate: isDragging ? [0, -5, 5, 0] : 0
+                        }}
+                        transition={{
+                            scale: { type: 'spring', stiffness: 400 },
+                            rotate: { repeat: isDragging ? Infinity : 0, duration: 0.3 }
+                        }}
+                    >
+                        {/* Outer ring pulse */}
+                        <motion.div
+                            className="absolute inset-0 w-16 h-16 -m-2 rounded-full bg-white/20"
+                            animate={{
+                                scale: isDragging ? [1, 1.5, 1] : 1,
+                                opacity: isDragging ? [0.5, 0, 0.5] : 0
+                            }}
+                            transition={{ repeat: Infinity, duration: 1 }}
+                        />
+
+                        {/* Main handle */}
+                        <div className="w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center border-4 border-purple-500/50 backdrop-blur-sm">
+                            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </motion.div>
+
+                    {/* Sparkle effect on interaction */}
+                    {showSparkle && (
+                        <motion.div
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                            initial={{ scale: 0, opacity: 1 }}
+                            animate={{ scale: 2, opacity: 0 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <Sparkles className="w-8 h-8 text-yellow-400" />
+                        </motion.div>
+                    )}
+                </motion.div>
+
+                {/* Labels with glass effect */}
+                <motion.div
+                    className="absolute top-4 left-4 backdrop-blur-md bg-black/60 text-white px-4 py-2 text-xs font-bold uppercase pointer-events-none rounded-lg z-10 border border-white/20"
+                    animate={{ x: isDragging ? -5 : 0 }}
+                >
+                    <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+                        ANIME
+                    </span>
+                </motion.div>
+
+                <motion.div
+                    className="absolute top-4 right-4 backdrop-blur-md bg-black/60 text-white px-4 py-2 text-xs font-bold uppercase pointer-events-none rounded-lg z-10 border border-white/20"
+                    animate={{ x: isDragging ? 5 : 0 }}
+                >
+                    <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                        REAL
+                    </span>
+                </motion.div>
+
+                {/* Progress indicator */}
+                <div className="absolute bottom-4 left-4 right-4 z-10">
+                    <div className="h-1 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
+                        <motion.div
+                            className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"
+                            style={{ width: useTransform(springPosition, v => `${v}%`) }}
+                        />
+                    </div>
                 </div>
 
                 {/* Mobile Hint */}
                 <motion.div
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/90 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase pointer-events-none md:hidden z-10"
-                    initial={{ opacity: 1 }}
-                    animate={{ opacity: 0 }}
-                    transition={{ delay: 3, duration: 0.5 }}
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 backdrop-blur-md bg-black/70 text-white px-6 py-3 rounded-full text-sm font-bold uppercase pointer-events-none md:hidden z-10 border border-white/20"
+                    initial={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: 0, scale: 0.9 }}
+                    transition={{ delay: 2.5, duration: 0.5 }}
                 >
-                    ↔ Desliza horizontal
+                    ↔ Desliza
                 </motion.div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons with gradient */}
             <motion.div
-                className="mt-4 flex justify-center gap-3"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                className="mt-4 flex justify-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
             >
                 {onLike && (
-                    <button
+                    <motion.button
                         onClick={handleLike}
-                        className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-gray-200 dark:border-gray-700"
-                        aria-label={isLiked ? "Unlike" : "Like"}
+                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700 relative overflow-hidden group"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
                     >
-                        <Heart size={20} className={`transition-colors ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-700 dark:text-gray-300'}`} />
-                    </button>
+                        <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/50 to-red-500/0"
+                            animate={{ x: isLiked ? ['100%', '-100%'] : '100%' }}
+                            transition={{ repeat: isLiked ? Infinity : 0, duration: 1.5 }}
+                        />
+                        <Heart size={22} className={`relative z-10 transition-all ${isLiked ? 'fill-red-500 text-red-500 scale-110' : 'text-white'}`} />
+                    </motion.button>
                 )}
                 {onShare && (
-                    <button onClick={onShare} className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-gray-200 dark:border-gray-700">
-                        <Share2 size={20} className="text-gray-700 dark:text-gray-300" />
-                    </button>
+                    <motion.button
+                        onClick={onShare}
+                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border-gray-700"
+                        whileHover={{ scale: 1.1, rotate: 15 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <Share2 size={22} className="text-white" />
+                    </motion.button>
                 )}
                 {onDownload && (
-                    <button onClick={onDownload} className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform border-2 border-gray-200 dark:border-gray-700">
-                        <Download size={20} className="text-gray-700 dark:text-gray-300" />
-                    </button>
+                    <motion.button
+                        onClick={onDownload}
+                        className="p-4 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg border border- gray-700"
+                        whileHover={{ scale: 1.1, y: -3 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <Download size={22} className="text-white" />
+                    </motion.button>
                 )}
             </motion.div>
         </div>
