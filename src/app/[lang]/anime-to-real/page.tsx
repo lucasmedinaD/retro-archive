@@ -57,6 +57,7 @@ export default async function AnimeToRealPage({ params }: PageProps) {
             <section className="max-w-[90rem] mx-auto px-6 py-12">
                 <InspirationFeed
                     transformations={transformations}
+                    lang={lang}
                     hasMore={false}
                     isLoading={false}
                 />

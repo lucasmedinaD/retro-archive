@@ -72,6 +72,7 @@ export default async function TransformationDetailPage({ params }: PageProps) {
                     currentTransformationId={id}
                     hasMore={false}
                     isLoading={false}
+                    lang={lang}
                 />
             </section>
 

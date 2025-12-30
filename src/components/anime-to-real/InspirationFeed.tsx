@@ -12,6 +12,7 @@ interface InspirationFeedProps {
     onLoadMore?: () => void;
     hasMore?: boolean;
     isLoading?: boolean;
+    lang?: 'en' | 'es';
 }
 
 export default function InspirationFeed({
@@ -19,7 +20,8 @@ export default function InspirationFeed({
     currentTransformationId,
     onLoadMore,
     hasMore = false,
-    isLoading = false
+    isLoading = false,
+    lang = 'en'
 }: InspirationFeedProps) {
     const [visibleItems, setVisibleItems] = useState<TransformationExtended[]>([]);
     const observerRef = useRef<IntersectionObserver | null>(null);
@@ -77,6 +79,7 @@ export default function InspirationFeed({
                         key={transformation.id}
                         transformation={transformation}
                         index={idx}
+                        lang={lang}
                     />
                 ))}
             </div>
@@ -105,10 +108,12 @@ export default function InspirationFeed({
 
 function TransformationCard({
     transformation,
-    index
+    index,
+    lang
 }: {
     transformation: TransformationExtended;
     index: number;
+    lang: 'en' | 'es';
 }) {
     const [isHovered, setIsHovered] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
@@ -120,7 +125,7 @@ function TransformationCard({
             transition={{ delay: index * 0.05, duration: 0.3 }}
             className="mb-4 break-inside-avoid"
         >
-            <Link href={`/anime-to-real/${transformation.id}`}>
+            <Link href={`/${lang}/anime-to-real/${transformation.id}`}>
                 <div
                     className="group relative border-2 border-black dark:border-white overflow-hidden hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:-translate-y-1 cursor-pointer bg-white dark:bg-black"
                     onMouseEnter={() => setIsHovered(true)}
