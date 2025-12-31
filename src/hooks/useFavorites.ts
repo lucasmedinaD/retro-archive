@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useWishlist } from '@/contexts/WishlistContext';
 
 /**
@@ -7,19 +8,16 @@ import { useWishlist } from '@/contexts/WishlistContext';
  * Now uses the WishlistContext under the hood.
  */
 export function useFavorites() {
-    const { items, toggleItem, isInWishlist } = useWishlist();
+    const { items, isLoaded, toggleItem, isInWishlist } = useWishlist();
 
-    // Get only the IDs for backwards compatibility
-    const favorites = items.map(item => item.id);
+    // Memoize favorites array to prevent unnecessary re-renders
+    const favorites = useMemo(() => items.map(item => item.id), [items]);
 
     const toggleFavorite = (productId: string) => {
         toggleItem(productId, 'product');
     };
 
     const isFavorite = (productId: string) => isInWishlist(productId);
-
-    // Context is always "loaded" once mounted
-    const isLoaded = true;
 
     return { favorites, toggleFavorite, isFavorite, isLoaded };
 }
