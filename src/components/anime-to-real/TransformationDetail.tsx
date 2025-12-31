@@ -149,10 +149,6 @@ export default function TransformationDetail({
                                 </div>
                             </div>
                         </div>
-                        {/* Share to Stories Button */}
-                        <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
-                            <ShareToStories transformation={transformation} dict={dict} />
-                        </div>
                     </div>
 
                     {/* Artist Credit */}
