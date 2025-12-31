@@ -12,6 +12,7 @@ import { trackTransformationView } from '@/lib/analytics';
 import BridgeWidget from './BridgeWidget';
 import ShareToStories from '@/components/ShareToStories';
 import PinItButton from '@/components/PinItButton';
+import { likeTransformationAction } from '@/app/admin/actions/transformations';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -28,7 +29,17 @@ export default function TransformationDetail({
 }: TransformationDetailProps) {
     const [showShareModal, setShowShareModal] = useState(false);
     const [isLiked, setIsLiked] = useState(initialLiked);
+    const [likeCount, setLikeCount] = useState(transformation.likes || 0);
+    const [isLiking, setIsLiking] = useState(false);
     const { markAsViewed, isLoaded } = useArchiveProgress();
+
+    // Check if already liked from localStorage
+    useEffect(() => {
+        const likedItems = JSON.parse(localStorage.getItem('likedTransformations') || '[]');
+        if (likedItems.includes(transformation.id)) {
+            setIsLiked(true);
+        }
+    }, [transformation.id]);
 
     // Mark transformation as viewed and track
     useEffect(() => {
@@ -38,8 +49,31 @@ export default function TransformationDetail({
         }
     }, [isLoaded, transformation.id, transformation.characterName, transformation.series, markAsViewed]);
 
-    const handleLike = () => {
-        setIsLiked(!isLiked);
+    const handleLike = async () => {
+        if (isLiked || isLiking) return; // Prevent double-liking
+
+        setIsLiking(true);
+        setIsLiked(true);
+        setLikeCount(prev => prev + 1);
+
+        try {
+            const result = await likeTransformationAction(transformation.id);
+            if (result.success && result.likes !== undefined) {
+                setLikeCount(result.likes);
+                // Save to localStorage to prevent re-liking
+                const likedItems = JSON.parse(localStorage.getItem('likedTransformations') || '[]');
+                likedItems.push(transformation.id);
+                localStorage.setItem('likedTransformations', JSON.stringify(likedItems));
+            }
+        } catch (error) {
+            // Revert on error
+            setIsLiked(false);
+            setLikeCount(prev => prev - 1);
+            console.error('Like failed:', error);
+        } finally {
+            setIsLiking(false);
+        }
+
         onLike?.();
     };
 
@@ -117,7 +151,7 @@ export default function TransformationDetail({
                         {/* Social Proof */}
                         <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
                             <SocialProof
-                                likes={transformation.likes || 0}
+                                likes={likeCount}
                                 productId={transformation.id}
                                 dict={dict}
                             />
@@ -136,7 +170,7 @@ export default function TransformationDetail({
                     <div className="border-2 border-black dark:border-white p-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <div className="text-2xl font-black">{transformation.likes || 0}</div>
+                                <div className="text-2xl font-black">{likeCount}</div>
                                 <div className="text-xs font-mono uppercase text-gray-600 dark:text-gray-400">
                                     Likes
                                 </div>
