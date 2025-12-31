@@ -107,7 +107,8 @@ export default function RootLayout({
         <WebSiteSchema />
         <WishlistProvider>
           {children}
-          <ExitIntentPopup />
+          {/* ExitIntentPopup temporarily disabled */}
+          {/* <ExitIntentPopup /> */}
         </WishlistProvider>
       </body>
     </html>

@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 import { trackTransformationView } from '@/lib/analytics';
 import BridgeWidget from './BridgeWidget';
+import ShareToStories from '@/components/ShareToStories';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -147,6 +148,10 @@ export default function TransformationDetail({
                                     Category
                                 </div>
                             </div>
+                        </div>
+                        {/* Share to Stories Button */}
+                        <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
+                            <ShareToStories transformation={transformation} dict={dict} />
                         </div>
                     </div>
 
