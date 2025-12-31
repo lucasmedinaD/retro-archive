@@ -11,6 +11,14 @@ export interface Product {
     inStock?: boolean;
 }
 
+export interface AmazonProduct {
+    title: string;
+    image: string;
+    affiliateUrl: string;
+    price?: string;
+    category: 'figure' | 'manga' | 'cosplay' | 'accessory' | 'other';
+}
+
 export interface Artist {
     name: string;
     instagram?: string;
@@ -44,5 +52,7 @@ export interface TransformationExtended {
     // New fields for enhanced experience
     artist?: Artist;
     outfit?: Product[];
+    amazonProducts?: AmazonProduct[]; // Amazon affiliate products
     metadata?: TransformationMetadata;
 }
+

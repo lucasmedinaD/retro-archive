@@ -13,6 +13,7 @@ import BridgeWidget from './BridgeWidget';
 import ShareToStories from '@/components/ShareToStories';
 import PinItButton from '@/components/PinItButton';
 import { likeTransformationAction } from '@/app/admin/actions/transformations';
+import AmazonAffiliateWidget from '@/components/AmazonAffiliateWidget';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -240,11 +241,20 @@ export default function TransformationDetail({
                         </div>
                     )}
 
-                    {/* Bridge Widget - CTA for products */}
+                    {/* Bridge Widget - Redbubble products */}
                     <BridgeWidget
                         transformation={transformation}
                         dict={dict}
                     />
+
+                    {/* Amazon Affiliate Products */}
+                    {transformation.amazonProducts && transformation.amazonProducts.length > 0 && (
+                        <AmazonAffiliateWidget
+                            products={transformation.amazonProducts}
+                            characterName={transformation.characterName}
+                            dict={dict}
+                        />
+                    )}
                 </div>
             </div>
 
