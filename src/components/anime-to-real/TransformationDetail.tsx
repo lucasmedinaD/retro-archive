@@ -154,7 +154,7 @@ export default function TransformationDetail({
                         <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
                             <PinItButton
                                 imageUrl={transformation.realImage}
-                                pageUrl={`/anime-to-real/${transformation.id}`}
+                                pageUrl={`/es/anime-to-real/${transformation.id}`}
                                 description={`${transformation.characterName}${transformation.series ? ` de ${transformation.series}` : ''} - Anime to Real transformation | retro-archive.art`}
                                 size="medium"
                                 className="w-full"
