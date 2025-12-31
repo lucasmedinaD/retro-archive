@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AnalyticsScripts from "@/components/AnalyticsScripts";
 import { OrganizationSchema, WebSiteSchema } from "@/components/SchemaScript";
+import { WishlistProvider } from "@/contexts/WishlistContext";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -103,8 +105,12 @@ export default function RootLayout({
         <AnalyticsScripts />
         <OrganizationSchema />
         <WebSiteSchema />
-        {children}
+        <WishlistProvider>
+          {children}
+          <ExitIntentPopup />
+        </WishlistProvider>
       </body>
     </html>
   );
 }
+

@@ -1,36 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useWishlist } from '@/contexts/WishlistContext';
 
+/**
+ * Legacy hook for backwards compatibility with existing code.
+ * Now uses the WishlistContext under the hood.
+ */
 export function useFavorites() {
-    const [favorites, setFavorites] = useState<string[]>([]);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const { items, toggleItem, isInWishlist } = useWishlist();
 
-    useEffect(() => {
-        // Load favorites from localStorage on mount
-        const stored = localStorage.getItem('favorites');
-        if (stored) {
-            try {
-                setFavorites(JSON.parse(stored));
-            } catch (e) {
-                console.error('Failed to parse favorites', e);
-            }
-        }
-        setIsLoaded(true);
-    }, []);
+    // Get only the IDs for backwards compatibility
+    const favorites = items.map(item => item.id);
 
     const toggleFavorite = (productId: string) => {
-        setFavorites(prev => {
-            const newFavorites = prev.includes(productId)
-                ? prev.filter(id => id !== productId)
-                : [...prev, productId];
-
-            localStorage.setItem('favorites', JSON.stringify(newFavorites));
-            return newFavorites;
-        });
+        toggleItem(productId, 'product');
     };
 
-    const isFavorite = (productId: string) => favorites.includes(productId);
+    const isFavorite = (productId: string) => isInWishlist(productId);
+
+    // Context is always "loaded" once mounted
+    const isLoaded = true;
 
     return { favorites, toggleFavorite, isFavorite, isLoaded };
 }
