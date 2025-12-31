@@ -40,6 +40,15 @@ export interface TransformationData {
         originalSource?: string;
         funFact?: string; // Hidden fact revealed on slider edge
     };
+
+    // Amazon affiliate products
+    amazonProducts?: {
+        title: string;
+        image: string;
+        affiliateUrl: string;
+        price?: string;
+        category: 'figure' | 'manga' | 'cosplay' | 'accessory' | 'other';
+    }[];
 }
 
 export async function fetchTransformationsAction() {

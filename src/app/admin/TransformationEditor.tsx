@@ -6,6 +6,7 @@ import { X, Upload, ExternalLink } from 'lucide-react';
 import { TransformationData } from './actions/transformations';
 import { uploadTransformationImageAction } from './actions/transformations';
 import { getProducts, Product } from '@/data/products';
+import { AmazonProduct } from '@/types/transformations';
 
 interface TransformationEditorProps {
     transformation: TransformationData;
@@ -33,6 +34,16 @@ export default function TransformationEditor({ transformation, isNew = false, on
     const [selectedProductIds, setSelectedProductIds] = useState<string[]>(
         transformation.outfit?.map((p: any) => p.id) || []
     );
+    const [amazonProducts, setAmazonProducts] = useState<AmazonProduct[]>(
+        transformation.amazonProducts || []
+    );
+    const [newAmazonProduct, setNewAmazonProduct] = useState<Partial<AmazonProduct>>({
+        title: '',
+        image: '',
+        affiliateUrl: '',
+        price: '',
+        category: 'figure'
+    });
 
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
@@ -106,6 +117,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
                     es: descriptionEs
                 } : undefined,
                 outfit: selectedProducts.length > 0 ? selectedProducts : undefined,
+                amazonProducts: amazonProducts.length > 0 ? amazonProducts : undefined,
             };
 
             onSave(updatedTransformation);
@@ -357,6 +369,106 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                         </div>
                                     );
                                 })}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Amazon Affiliate Products */}
+                    <div className="border-2 border-[#FF9900] p-4 mt-6">
+                        <h3 className="text-sm font-bold uppercase mb-4 text-[#FF9900]">
+                            🛒 Amazon Affiliate Products
+                        </h3>
+
+                        {/* Add New Amazon Product Form */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                            <input
+                                type="text"
+                                placeholder="Product Title"
+                                value={newAmazonProduct.title || ''}
+                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, title: e.target.value })}
+                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Image URL"
+                                value={newAmazonProduct.image || ''}
+                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, image: e.target.value })}
+                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Amazon Affiliate URL (with your tag)"
+                                value={newAmazonProduct.affiliateUrl || ''}
+                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, affiliateUrl: e.target.value })}
+                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900] md:col-span-2"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Price (e.g. $29.99)"
+                                value={newAmazonProduct.price || ''}
+                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, price: e.target.value })}
+                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
+                            />
+                            <select
+                                value={newAmazonProduct.category || 'figure'}
+                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, category: e.target.value as AmazonProduct['category'] })}
+                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
+                            >
+                                <option value="figure">🗿 Figure</option>
+                                <option value="manga">📚 Manga</option>
+                                <option value="cosplay">👘 Cosplay</option>
+                                <option value="accessory">💍 Accessory</option>
+                                <option value="other">🎁 Other</option>
+                            </select>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (newAmazonProduct.title && newAmazonProduct.image && newAmazonProduct.affiliateUrl) {
+                                    setAmazonProducts([...amazonProducts, newAmazonProduct as AmazonProduct]);
+                                    setNewAmazonProduct({ title: '', image: '', affiliateUrl: '', price: '', category: 'figure' });
+                                } else {
+                                    alert('Title, Image URL, and Affiliate URL are required');
+                                }
+                            }}
+                            className="px-4 py-2 bg-[#FF9900] text-black font-bold text-xs uppercase hover:bg-[#cc7a00] transition-colors"
+                        >
+                            + Add Amazon Product
+                        </button>
+
+                        {/* Added Amazon Products List */}
+                        {amazonProducts.length > 0 && (
+                            <div className="mt-4 space-y-2">
+                                <p className="text-xs text-gray-500">
+                                    {amazonProducts.length} Amazon product{amazonProducts.length !== 1 ? 's' : ''} added
+                                </p>
+                                {amazonProducts.map((product, index) => (
+                                    <div key={index} className="flex items-center gap-3 bg-black border border-[#333] p-3">
+                                        {/* Product Image */}
+                                        <div className="relative w-12 h-12 flex-shrink-0 bg-white">
+                                            <img
+                                                src={product.image}
+                                                alt={product.title}
+                                                className="w-full h-full object-contain"
+                                            />
+                                        </div>
+
+                                        {/* Product Info */}
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-bold truncate">{product.title}</p>
+                                            <p className="text-xs text-[#FF9900]">{product.price || 'No price'} • {product.category}</p>
+                                        </div>
+
+                                        {/* Remove Button */}
+                                        <button
+                                            onClick={() => setAmazonProducts(amazonProducts.filter((_, i) => i !== index))}
+                                            className="p-2 text-red-500 hover:bg-red-500/10 transition-colors"
+                                            title="Remove product"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                         )}
                     </div>
