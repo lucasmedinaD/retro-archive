@@ -5,7 +5,7 @@
       "animeImage": "/transformations/anime-1767130721323.jpg",
       "realImage": "/transformations/real-1767130722821.jpg",
       "id": "transform-1767049294239",
-      "likes": 2,
+      "likes": 3,
       "series": "Komi can't communicate",
       "category": "2.5d",
       "tags": [
@@ -40,7 +40,7 @@
       "id": "transform-1767049409789"
     },
     {
-      "characterName": "Reze (Chainsaw Man)",
+      "characterName": "Reze",
       "animeImage": "/transformations/anime-1767049452958.jpg",
       "realImage": "/transformations/real-1767279437126.jpg",
       "id": "transform-1767049455822",
@@ -54,17 +54,21 @@
           "id": "d3",
           "name": "",
           "price": "$21",
-          "image": "/mockups/1767098923932-1000028055.jpg",
+          "image": "/mockups/1767281312646-skull-reze.jpg",
           "buyUrl": "https://www.redbubble.com/es/i/camiseta/Reze-Bomb-Girl-Skull-Anime-Manga-Est%C3%A9tica-angustiada-de-sosacrash/177212471.IJ6L0",
           "category": "DESIGN",
           "description": "",
           "name_en": "Reze Bomb Girl Skull Anime",
           "description_es": "Diseñé esta calavera para capturar la esencia cruda y minimalista del estilo de Reze (Chica Bomba), ya que me pareció el diseño visualmente más impactante del arco. Quería algo que no fuera solo merchandising, sino una pieza de diseño gráfico genial y versátil. Características principales: Este diseño de calavera de anime es ideal para fans del manga oscuro, los cazadores de demonios y la estética grunge. Optimizado para impresión de alta calidad en camisetas negras y pegatinas con borde blanco.",
           "tags": [
-            "Chainsawman"
+            "reze",
+            "chainsaw man",
+            "the bomb girl",
+            "chica bomba"
           ],
           "name_es": "Reze Bomb Girl Calavera Anime",
-          "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise."
+          "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise.",
+          "tagsInput": "reze, chainsaw man, the bomb girl, chica bomba"
         }
       ],
       "likes": 2,
@@ -97,7 +101,8 @@
           "price": "Check Price",
           "category": "cosplay"
         }
-      ]
+      ],
+      "series": "Chainsaw Man"
     },
     {
       "characterName": "Makima (Chainsaw Man)",
@@ -157,10 +162,16 @@
       ]
     },
     {
-      "characterName": "L - Ryuzaki (Death Note)",
+      "characterName": "L - Ryuzaki",
       "animeImage": "/transformations/anime-1767049933297.jpg",
       "realImage": "/transformations/real-1767049935447.jpg",
-      "id": "transform-1767049936359"
+      "id": "transform-1767049936359",
+      "series": "Death Note",
+      "category": "cosplay",
+      "tags": [
+        "l",
+        "death note"
+      ]
     },
     {
       "characterName": "Denj (Chainsaw Man)",
@@ -174,6 +185,20 @@
       "animeImage": "/transformations/anime-1767050752297.jpg",
       "realImage": "/transformations/real-1767050754394.jpg",
       "id": "transform-1767050755602"
+    },
+    {
+      "characterName": "Hitori Goto",
+      "animeImage": "/transformations/anime-1767289497145.jpg",
+      "realImage": "/transformations/real-1767289499142.jpg",
+      "series": "Bocchi the Rock",
+      "category": "2.5d",
+      "tags": [
+        "hitori goto",
+        "bocchi",
+        "anime cute"
+      ],
+      "likes": 0,
+      "id": "transform-1767289500081"
     }
   ]
 }
