@@ -54,17 +54,21 @@
           "id": "d3",
           "name": "",
           "price": "$21",
-          "image": "/mockups/1767098923932-1000028055.jpg",
+          "image": "/mockups/1767281312646-skull-reze.jpg",
           "buyUrl": "https://www.redbubble.com/es/i/camiseta/Reze-Bomb-Girl-Skull-Anime-Manga-Est%C3%A9tica-angustiada-de-sosacrash/177212471.IJ6L0",
           "category": "DESIGN",
           "description": "",
           "name_en": "Reze Bomb Girl Skull Anime",
           "description_es": "Diseñé esta calavera para capturar la esencia cruda y minimalista del estilo de Reze (Chica Bomba), ya que me pareció el diseño visualmente más impactante del arco. Quería algo que no fuera solo merchandising, sino una pieza de diseño gráfico genial y versátil. Características principales: Este diseño de calavera de anime es ideal para fans del manga oscuro, los cazadores de demonios y la estética grunge. Optimizado para impresión de alta calidad en camisetas negras y pegatinas con borde blanco.",
           "tags": [
-            "Chainsawman"
+            "reze",
+            "chainsaw man",
+            "the bomb girl",
+            "chica bomba"
           ],
           "name_es": "Reze Bomb Girl Calavera Anime",
-          "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise."
+          "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise.",
+          "tagsInput": "reze, chainsaw man, the bomb girl, chica bomba"
         }
       ],
       "likes": 2,
