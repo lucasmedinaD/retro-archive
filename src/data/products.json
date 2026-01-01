@@ -28,10 +28,13 @@
             "description": "",
             "name_en": "Denji Aesthetic (Chainsaw Man)",
             "tags": [
-                "Denji"
+                "Denji",
+                "chainsaw man",
+                "anime art"
             ],
             "name_es": "Denji Aesthetic (Chainsaw Man)",
-            "description_en": "Denji Art, denji minimalist, design denji, chainsaw man design"
+            "description_en": "Denji Art, denji minimalist, design denji, chainsaw man design",
+            "tagsInput": "Denji, chainsaw man, anime art"
         },
         {
             "id": "d3",
@@ -96,7 +99,9 @@
             "description": "",
             "name_en": "Denji Aesthetic (Chainsaw Man)",
             "tags": [
-                "Denji"
+                "Denji",
+                "chainsaw man",
+                "anime art"
             ]
         },
         {
