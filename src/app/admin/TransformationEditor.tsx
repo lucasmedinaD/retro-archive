@@ -480,41 +480,53 @@ export default function TransformationEditor({ transformation, isNew = false, on
                             + Add Amazon Product
                         </button>
 
-                        {/* Added Amazon Products List */}
-                        {amazonProducts.length > 0 && (
-                            <div className="mt-4 space-y-2">
-                                <p className="text-xs text-gray-500">
-                                    {amazonProducts.length} Amazon product{amazonProducts.length !== 1 ? 's' : ''} added
-                                </p>
-                                {amazonProducts.map((product, index) => (
-                                    <div key={index} className="flex items-center gap-3 bg-black border border-[#333] p-3">
-                                        {/* Product Image */}
-                                        <div className="relative w-12 h-12 flex-shrink-0 bg-white">
-                                            <img
-                                                src={product.image}
-                                                alt={product.title}
-                                                className="w-full h-full object-contain"
-                                            />
-                                        </div>
-
-                                        {/* Product Info */}
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-bold truncate">{product.title}</p>
-                                            <p className="text-xs text-[#FF9900]">{product.price || 'No price'} • {product.category}</p>
-                                        </div>
-
-                                        {/* Remove Button */}
-                                        <button
-                                            onClick={() => setAmazonProducts(amazonProducts.filter((_, i) => i !== index))}
-                                            className="p-2 text-red-500 hover:bg-red-500/10 transition-colors"
-                                            title="Remove product"
-                                        >
-                                            <X size={16} />
-                                        </button>
-                                    </div>
-                                ))}
+                        {/* Added Amazon Products List - Always visible */}
+                        <div className="mt-4 border-t border-[#FF9900]/30 pt-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <h4 className="text-sm font-bold text-[#FF9900]">
+                                    📦 Productos Agregados: {amazonProducts.length}
+                                </h4>
                             </div>
-                        )}
+
+                            {amazonProducts.length === 0 ? (
+                                <p className="text-xs text-gray-500 italic py-4 text-center border border-dashed border-[#333]">
+                                    No hay productos Amazon agregados aún
+                                </p>
+                            ) : (
+                                <div className="space-y-2">
+                                    {amazonProducts.map((product, index) => (
+                                        <div key={index} className="flex items-center gap-3 bg-[#1a1a1a] border border-[#FF9900]/30 p-3 rounded">
+                                            {/* Product Image */}
+                                            <div className="relative w-14 h-14 flex-shrink-0 bg-white rounded overflow-hidden">
+                                                <img
+                                                    src={product.image}
+                                                    alt={product.title}
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            </div>
+
+                                            {/* Product Info */}
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-bold truncate text-white">{product.title}</p>
+                                                <p className="text-xs text-[#FF9900]">{product.price || 'Sin precio'} • {product.category}</p>
+                                                <a href={product.affiliateUrl} target="_blank" rel="noopener" className="text-[10px] text-gray-500 hover:text-[#FF9900] truncate block">
+                                                    {product.affiliateUrl.slice(0, 40)}...
+                                                </a>
+                                            </div>
+
+                                            {/* Remove Button */}
+                                            <button
+                                                onClick={() => setAmazonProducts(amazonProducts.filter((_, i) => i !== index))}
+                                                className="p-2 text-red-500 hover:bg-red-500/20 transition-colors rounded"
+                                                title="Eliminar producto"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {/* Descriptions */}
