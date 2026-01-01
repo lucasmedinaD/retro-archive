@@ -154,10 +154,14 @@ export default function ProductEditor({ product, onCancel, onSave, isNew }: { pr
                         <label className="text-gray-500 block mb-1">TAGS (comma-separated)</label>
                         <input
                             type="text"
-                            value={Array.isArray(formData.tags) ? formData.tags.join(', ') : formData.tags || ''}
+                            name="tagsInput"
+                            value={formData.tagsInput !== undefined ? formData.tagsInput : (Array.isArray(formData.tags) ? formData.tags.join(', ') : formData.tags || '')}
                             onChange={(e) => {
-                                const tagsArray = e.target.value.split(',').map(t => t.trim()).filter(t => t);
-                                setFormData({ ...formData, tags: tagsArray });
+                                // Store raw input value to allow typing commas
+                                const rawValue = e.target.value;
+                                // Also update tags array for saving
+                                const tagsArray = rawValue.split(',').map(t => t.trim()).filter(t => t);
+                                setFormData({ ...formData, tagsInput: rawValue, tags: tagsArray });
                             }}
                             placeholder="cyber, retro, glitch, neon..."
                             className="w-full bg-[#222] border border-[#333] p-2 text-white focus:border-accent outline-none text-xs"
