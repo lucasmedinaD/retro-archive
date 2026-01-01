@@ -42,7 +42,7 @@
     {
       "characterName": "Reze (Chainsaw Man)",
       "animeImage": "/transformations/anime-1767049452958.jpg",
-      "realImage": "/transformations/real-1767049454796.jpg",
+      "realImage": "/transformations/real-1767279437126.jpg",
       "id": "transform-1767049455822",
       "category": "cosplay",
       "tags": [
@@ -89,12 +89,19 @@
           "affiliateUrl": "https://amzn.to/3Lq7Fs8",
           "price": "$90",
           "category": "figure"
+        },
+        {
+          "title": "LABEAUTÉ Anime Purple Wigs for Girls Women Cosplay Wig with Ponytail for Halloween Party Wig + Cap",
+          "image": "/transformations/amazon-1767279431182.jpg",
+          "affiliateUrl": "https://amzn.to/3LajouY",
+          "price": "Check Price",
+          "category": "cosplay"
         }
       ]
     },
     {
       "characterName": "Makima (Chainsaw Man)",
-      "animeImage": "/transformations/anime-1767049570353.jpg",
+      "animeImage": "/transformations/anime-1767280155607.jpg",
       "realImage": "/transformations/real-1767049572416.jpg",
       "id": "transform-1767049573446",
       "category": "cosplay",
@@ -108,12 +115,14 @@
           "category": "DESIGN",
           "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
           "tags": [
-            "\"makima",
-            "chainsaw man\""
+            "makima",
+            "chainsaw man",
+            "demon control"
           ],
           "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
           "featured": false,
-          "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below."
+          "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "tagsInput": "makima, chainsaw man, demon control"
         }
       ],
       "likes": 1,
@@ -137,6 +146,13 @@
           "affiliateUrl": "https://amzn.to/4pnTH8e",
           "price": "Check Price",
           "category": "figure"
+        },
+        {
+          "title": "Cosplay Costume Adult Makima",
+          "image": "/transformations/amazon-1767280147403.jpg",
+          "affiliateUrl": "https://amzn.to/4sDoEbt",
+          "price": "Check Price",
+          "category": "cosplay"
         }
       ]
     },

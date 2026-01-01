@@ -9,12 +9,14 @@
             "category": "DESIGN",
             "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
             "tags": [
-                "\"makima",
-                "chainsaw man\""
+                "makima",
+                "chainsaw man",
+                "demon control"
             ],
             "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
             "featured": false,
-            "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below."
+            "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+            "tagsInput": "makima, chainsaw man, demon control"
         },
         {
             "id": "d1",
@@ -29,7 +31,7 @@
                 "Denji"
             ],
             "name_es": "Denji Aesthetic (Chainsaw Man)",
-            "description_en": "Denji Art"
+            "description_en": "Denji Art, denji minimalist, design denji, chainsaw man design"
         },
         {
             "id": "d3",
@@ -74,8 +76,9 @@
             "category": "DESIGN",
             "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
             "tags": [
-                "\"makima",
-                "chainsaw man\""
+                "makima",
+                "chainsaw man",
+                "demon control"
             ],
             "featured": false
         },
