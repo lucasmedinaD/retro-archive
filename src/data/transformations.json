@@ -115,7 +115,13 @@
           "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below."
         }
       ],
-      "likes": 1
+      "likes": 1,
+      "series": "Chainsaw Man",
+      "tags": [
+        "Demon control",
+        "makima",
+        "manipulation"
+      ]
     },
     {
       "characterName": "L - Ryuzaki (Death Note)",
