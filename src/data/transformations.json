@@ -158,10 +158,16 @@
       ]
     },
     {
-      "characterName": "L - Ryuzaki (Death Note)",
+      "characterName": "L - Ryuzaki",
       "animeImage": "/transformations/anime-1767049933297.jpg",
       "realImage": "/transformations/real-1767049935447.jpg",
-      "id": "transform-1767049936359"
+      "id": "transform-1767049936359",
+      "series": "Death Note",
+      "category": "cosplay",
+      "tags": [
+        "l",
+        "death note"
+      ]
     },
     {
       "characterName": "Denj (Chainsaw Man)",
