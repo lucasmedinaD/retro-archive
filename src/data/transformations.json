@@ -185,6 +185,20 @@
       "animeImage": "/transformations/anime-1767050752297.jpg",
       "realImage": "/transformations/real-1767050754394.jpg",
       "id": "transform-1767050755602"
+    },
+    {
+      "characterName": "Hitori Goto",
+      "animeImage": "/transformations/anime-1767289497145.jpg",
+      "realImage": "/transformations/real-1767289499142.jpg",
+      "series": "Bocchi the Rock",
+      "category": "2.5d",
+      "tags": [
+        "hitori goto",
+        "bocchi",
+        "anime cute"
+      ],
+      "likes": 0,
+      "id": "transform-1767289500081"
     }
   ]
 }
