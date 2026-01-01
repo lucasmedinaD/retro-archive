@@ -192,7 +192,7 @@ export async function deleteTransformationAction(transformationId: string) {
     }
 }
 
-export async function uploadTransformationImageAction(imageFile: File, type: 'anime' | 'real') {
+export async function uploadTransformationImageAction(imageFile: File, type: 'anime' | 'real' | 'amazon') {
     const token = process.env.GITHUB_TOKEN;
     if (!token) return { error: 'Configuration Error: Missing GITHUB_TOKEN' };
 

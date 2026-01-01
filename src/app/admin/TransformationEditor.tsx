@@ -44,6 +44,8 @@ export default function TransformationEditor({ transformation, isNew = false, on
         price: '',
         category: 'figure'
     });
+    const [amazonImageFile, setAmazonImageFile] = useState<File | null>(null);
+    const [amazonImagePreview, setAmazonImagePreview] = useState<string>('');
 
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
@@ -388,13 +390,33 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, title: e.target.value })}
                                 className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
                             />
-                            <input
-                                type="text"
-                                placeholder="Image URL"
-                                value={newAmazonProduct.image || ''}
-                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, image: e.target.value })}
-                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
-                            />
+                            {/* Image Upload */}
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="amazon-product-image"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setAmazonImageFile(file);
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => setAmazonImagePreview(reader.result as string);
+                                            reader.readAsDataURL(file);
+                                        }
+                                    }}
+                                />
+                                <label
+                                    htmlFor="amazon-product-image"
+                                    className="flex-1 bg-black border border-[#333] p-2 text-gray-400 text-sm cursor-pointer hover:border-[#FF9900] transition-colors text-center"
+                                >
+                                    {amazonImageFile ? '✓ ' + amazonImageFile.name.slice(0, 20) : '📷 Upload Image'}
+                                </label>
+                                {amazonImagePreview && (
+                                    <img src={amazonImagePreview} alt="Preview" className="w-10 h-10 object-cover border border-[#FF9900]" />
+                                )}
+                            </div>
                             <input
                                 type="text"
                                 placeholder="Amazon Affiliate URL (with your tag)"
@@ -423,12 +445,34 @@ export default function TransformationEditor({ transformation, isNew = false, on
                         </div>
                         <button
                             type="button"
-                            onClick={() => {
-                                if (newAmazonProduct.title && newAmazonProduct.image && newAmazonProduct.affiliateUrl) {
-                                    setAmazonProducts([...amazonProducts, newAmazonProduct as AmazonProduct]);
-                                    setNewAmazonProduct({ title: '', image: '', affiliateUrl: '', price: '', category: 'figure' });
+                            onClick={async () => {
+                                if (newAmazonProduct.title && amazonImageFile && newAmazonProduct.affiliateUrl) {
+                                    try {
+                                        // Upload image first
+                                        const upload = await uploadTransformationImageAction(amazonImageFile, 'amazon');
+                                        if (upload.error) {
+                                            alert('Image upload failed: ' + upload.error);
+                                            return;
+                                        }
+
+                                        // Add product with uploaded image path
+                                        const productWithImage: AmazonProduct = {
+                                            title: newAmazonProduct.title,
+                                            image: upload.path!,
+                                            affiliateUrl: newAmazonProduct.affiliateUrl,
+                                            price: newAmazonProduct.price || '',
+                                            category: newAmazonProduct.category || 'figure'
+                                        };
+
+                                        setAmazonProducts([...amazonProducts, productWithImage]);
+                                        setNewAmazonProduct({ title: '', image: '', affiliateUrl: '', price: '', category: 'figure' });
+                                        setAmazonImageFile(null);
+                                        setAmazonImagePreview('');
+                                    } catch (err: any) {
+                                        alert('Error: ' + err.message);
+                                    }
                                 } else {
-                                    alert('Title, Image URL, and Affiliate URL are required');
+                                    alert('Title, Image, and Affiliate URL are required');
                                 }
                             }}
                             className="px-4 py-2 bg-[#FF9900] text-black font-bold text-xs uppercase hover:bg-[#cc7a00] transition-colors"
