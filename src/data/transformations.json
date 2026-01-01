@@ -40,7 +40,7 @@
       "id": "transform-1767049409789"
     },
     {
-      "characterName": "Reze (Chainsaw Man)",
+      "characterName": "Reze",
       "animeImage": "/transformations/anime-1767049452958.jpg",
       "realImage": "/transformations/real-1767279437126.jpg",
       "id": "transform-1767049455822",
@@ -97,7 +97,8 @@
           "price": "Check Price",
           "category": "cosplay"
         }
-      ]
+      ],
+      "series": "Chainsaw Man"
     },
     {
       "characterName": "Makima (Chainsaw Man)",
