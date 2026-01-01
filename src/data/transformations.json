@@ -101,7 +101,7 @@
     },
     {
       "characterName": "Makima (Chainsaw Man)",
-      "animeImage": "/transformations/anime-1767049570353.jpg",
+      "animeImage": "/transformations/anime-1767280155607.jpg",
       "realImage": "/transformations/real-1767049572416.jpg",
       "id": "transform-1767049573446",
       "category": "cosplay",
@@ -115,12 +115,14 @@
           "category": "DESIGN",
           "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
           "tags": [
-            "\"makima",
-            "chainsaw man\""
+            "makima",
+            "chainsaw man",
+            "demon control"
           ],
           "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
           "featured": false,
-          "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below."
+          "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "tagsInput": "makima, chainsaw man, demon control"
         }
       ],
       "likes": 1,
@@ -144,6 +146,13 @@
           "affiliateUrl": "https://amzn.to/4pnTH8e",
           "price": "Check Price",
           "category": "figure"
+        },
+        {
+          "title": "Cosplay Costume Adult Makima",
+          "image": "/transformations/amazon-1767280147403.jpg",
+          "affiliateUrl": "https://amzn.to/4sDoEbt",
+          "price": "Check Price",
+          "category": "cosplay"
         }
       ]
     },
