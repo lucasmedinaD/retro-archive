@@ -6,18 +6,19 @@
       "realImage": "/transformations/real-1767130722821.jpg",
       "id": "transform-1767049294239",
       "likes": 2,
-      "series": "Chainsaw man ",
+      "series": "Komi can't communicate",
       "category": "2.5d",
       "tags": [
-        "makima",
-        "chainsaw man",
-        "demonio control"
+        "komi",
+        "introvert",
+        "kawai",
+        "Komi can't communicate"
       ],
       "outfit": [
         {
           "id": "d4",
           "name": "",
-          "price": "$20",
+          "price": "20",
           "image": "/mockups/1767130217440-Gemini_Generated_Image_fhf6uffhf6uffhf6.jpg",
           "buyUrl": "https://www.redbubble.com/es/i/camiseta/Habilidades-sociales-cargando-1-Anime-lindo-e-introvertido-en-pixel-art-de-sosacrash/177149387.WFLAH",
           "category": "Pixel art",
@@ -66,30 +67,28 @@
           "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise."
         }
       ],
-      "likes": 1
-    },
-    {
-      "characterName": "Reze (Chainsaw Man)",
-      "animeImage": "/transformations/anime-1767049503814.webp",
-      "realImage": "/transformations/real-1767049505905.jpg",
-      "id": "transform-1767049506971",
-      "category": "cosplay",
-      "outfit": [
+      "likes": 2,
+      "amazonProducts": [
         {
-          "id": "d3",
-          "name": "",
-          "price": "$21",
-          "image": "/mockups/1767098923932-1000028055.jpg",
-          "buyUrl": "https://www.redbubble.com/es/i/camiseta/Reze-Bomb-Girl-Skull-Anime-Manga-Est%C3%A9tica-angustiada-de-sosacrash/177212471.IJ6L0",
-          "category": "DESIGN",
-          "description": "",
-          "name_en": "Reze Bomb Girl Skull Anime",
-          "description_es": "Diseñé esta calavera para capturar la esencia cruda y minimalista del estilo de Reze (Chica Bomba), ya que me pareció el diseño visualmente más impactante del arco. Quería algo que no fuera solo merchandising, sino una pieza de diseño gráfico genial y versátil. Características principales: Este diseño de calavera de anime es ideal para fans del manga oscuro, los cazadores de demonios y la estética grunge. Optimizado para impresión de alta calidad en camisetas negras y pegatinas con borde blanco.",
-          "tags": [
-            "Chainsawman"
-          ],
-          "name_es": "Reze Bomb Girl Calavera Anime",
-          "description_en": "I designed this skull to capture the raw, minimalist essence of Reze's (Bomb Girl) style, as I felt it was the most visually striking design in the arc. I wanted something that wasn't just merchandise."
+          "title": "Gothic Choker Necklace Black Geometric Leather Collar Necklace Fashion Punk Jewelry for Women",
+          "image": "/transformations/amazon-1767239764468.jpg",
+          "affiliateUrl": "https://amzn.to/3YSeCoY",
+          "price": "$9.8",
+          "category": "accessory"
+        },
+        {
+          "title": "Reze Cosplay Costume Anime",
+          "image": "/transformations/amazon-1767240324407.jpg",
+          "affiliateUrl": "https://amzn.to/49mVowH",
+          "price": "$35.8",
+          "category": "cosplay"
+        },
+        {
+          "title": "Chainsaw Man - The Movie: Reze Arc - Bomb S.H.Figuarts Action Figure",
+          "image": "/transformations/amazon-1767241468138.avif",
+          "affiliateUrl": "https://amzn.to/3Lq7Fs8",
+          "price": "$90",
+          "category": "figure"
         }
       ]
     },
@@ -115,6 +114,29 @@
           "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
           "featured": false,
           "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below."
+        }
+      ],
+      "likes": 1,
+      "series": "Chainsaw Man",
+      "tags": [
+        "Demon control",
+        "makima",
+        "manipulation"
+      ],
+      "amazonProducts": [
+        {
+          "title": "Makima vol. 3, Bandai Spirits Chain Spirits Figure",
+          "image": "/transformations/amazon-1767242099396.webp",
+          "affiliateUrl": "https://amzn.to/3LgCIqb",
+          "price": "Check Price",
+          "category": "figure"
+        },
+        {
+          "title": "BiCute Bunnies Figure -Makima",
+          "image": "/transformations/amazon-1767242272861.jpg",
+          "affiliateUrl": "https://amzn.to/4pnTH8e",
+          "price": "Check Price",
+          "category": "figure"
         }
       ]
     },
