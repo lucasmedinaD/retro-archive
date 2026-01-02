@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts, Product } from '@/data/products';
+import { getAffiliatesByTags } from '@/data/affiliates';
 import { getDictionary } from '@/get-dictionary';
 import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
@@ -83,6 +84,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }))
         .sort((a, b) => b.relevance - a.relevance)
         .slice(0, 3);
+
+    // Get related affiliate products by matching tags
+    const affiliateProducts = product.tags ? getAffiliatesByTags(product.tags) : [];
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black pb-20 dark:bg-[#111111] dark:text-[#f4f4f0] transition-colors duration-300">
@@ -171,6 +175,49 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     ))}
                 </div>
             </section>
+
+            {/* Amazon Affiliate Products */}
+            {affiliateProducts.length > 0 && (
+                <section className="max-w-7xl mx-auto px-6 pt-16 border-t border-black/20 dark:border-white/20">
+                    <h3 className="text-xl font-bold mb-6 uppercase flex items-center gap-2">
+                        🛒 {lang === 'es' ? 'Productos Relacionados en Amazon' : 'Related Products on Amazon'}
+                    </h3>
+                    <p className="text-xs font-mono text-gray-500 mb-6">
+                        {lang === 'es'
+                            ? 'Como Asociado de Amazon, gano por compras elegibles.'
+                            : 'As an Amazon Associate, I earn from qualifying purchases.'}
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {affiliateProducts.slice(0, 4).map(affiliate => (
+                            <a
+                                key={affiliate.id}
+                                href={affiliate.affiliateUrl}
+                                target="_blank"
+                                rel="noopener noreferrer sponsored"
+                                className="group block border border-black/20 dark:border-white/20 bg-white dark:bg-[#111111] hover:border-black dark:hover:border-white transition-all hover:-translate-y-1 hover:shadow-[3px_3px_0px_rgba(0,0,0,1)] dark:hover:shadow-[3px_3px_0px_rgba(255,255,255,1)]"
+                            >
+                                <div className="relative aspect-square border-b border-black/20 dark:border-white/20 overflow-hidden">
+                                    <Image
+                                        src={affiliate.image}
+                                        alt={lang === 'es' && affiliate.name_es ? affiliate.name_es : affiliate.name}
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform"
+                                        unoptimized
+                                    />
+                                </div>
+                                <div className="p-3">
+                                    <h4 className="font-bold text-xs uppercase line-clamp-2">
+                                        {lang === 'es' && affiliate.name_es ? affiliate.name_es : affiliate.name}
+                                    </h4>
+                                    <p className="font-mono text-[10px] text-orange-600 dark:text-orange-400 mt-1">
+                                        {affiliate.price} →
+                                    </p>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-12 px-6 mt-20">
                 <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">

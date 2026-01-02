@@ -1,0 +1,19 @@
+{
+    "products": [
+        {
+            "id": "komi-nendoroid",
+            "name": "Good Smile Komi Nendoroid Figure",
+            "name_es": "Figura Nendoroid Komi Good Smile",
+            "image": "/transformations/amazon-1767318187337.jpg",
+            "affiliateUrl": "https://amzn.to/4bgt1CJ",
+            "price": "Check Price",
+            "category": "figure",
+            "tags": [
+                "komi",
+                "figure",
+                "nendoroid",
+                "cute"
+            ]
+        }
+    ]
+}
