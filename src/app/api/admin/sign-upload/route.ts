@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { getSupabaseAdmin, STORAGE_BUCKET, VALID_FOLDERS, ValidFolder, getPublicUrl } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
-    // 1. Verify admin authentication
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const authHeader = request.headers.get('x-admin-password');
+    // 1. Verify admin authentication via cookie (same as other admin actions)
+    const cookieStore = await cookies();
+    const adminSession = cookieStore.get('admin_session');
 
-    if (!adminPassword || authHeader !== adminPassword) {
+    if (!adminSession || adminSession.value !== 'authenticated') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

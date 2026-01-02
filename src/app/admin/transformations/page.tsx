@@ -12,7 +12,7 @@ import {
     deleteAllTransformationsAction,
     TransformationData
 } from '../actions/transformations';
-import { uploadImageToCloud, getStoredAdminPassword } from '@/lib/uploadHelper';
+import { uploadImageToCloud } from '@/lib/uploadHelper';
 import TransformationEditor from '../TransformationEditor';
 
 export default function TransformationsPage() {
@@ -82,11 +82,11 @@ export default function TransformationsPage() {
 
         try {
             // 1. Upload anime image
-            const animeUpload = await uploadImageToCloud(animeImage, 'transformations', getStoredAdminPassword());
+            const animeUpload = await uploadImageToCloud(animeImage, 'transformations');
             if (!animeUpload.success) throw new Error(`Anime upload failed: ${animeUpload.error}`);
 
             // 2. Upload real image
-            const realUpload = await uploadImageToCloud(realImage, 'transformations', getStoredAdminPassword());
+            const realUpload = await uploadImageToCloud(realImage, 'transformations');
             if (!realUpload.success) throw new Error(`Real upload failed: ${realUpload.error}`);
 
             // 3. Create transformation

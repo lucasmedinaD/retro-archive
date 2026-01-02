@@ -1,6 +1,7 @@
 /**
- * Hybrid Upload Helper
- * Attempts Supabase first, falls back to GitHub if Supabase is not configured
+ * Cloud Upload Helper
+ * Uploads images to Supabase Storage via presigned URLs
+ * Authentication is handled by cookies (admin_session)
  */
 
 interface UploadResult {
@@ -11,17 +12,16 @@ interface UploadResult {
 
 export async function uploadImageToCloud(
     file: File,
-    folder: 'products' | 'transformations' | 'slider-demos',
-    adminPassword: string
+    folder: 'products' | 'transformations' | 'slider-demos'
 ): Promise<UploadResult> {
     try {
-        // Try Supabase first
+        // Step 1: Get signed URL from our API (cookies are sent automatically)
         const signResponse = await fetch('/api/admin/sign-upload', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-admin-password': adminPassword
             },
+            credentials: 'include', // Include cookies
             body: JSON.stringify({
                 folder,
                 filename: file.name,
@@ -29,32 +29,33 @@ export async function uploadImageToCloud(
             })
         });
 
-        if (signResponse.ok) {
-            const { signedUrl, publicUrl } = await signResponse.json();
-
-            // Upload directly to Supabase
-            const uploadResponse = await fetch(signedUrl, {
-                method: 'PUT',
-                headers: { 'Content-Type': file.type },
-                body: file
-            });
-
-            if (uploadResponse.ok) {
-                return { success: true, path: publicUrl };
-            }
+        if (!signResponse.ok) {
+            const errorData = await signResponse.json().catch(() => ({}));
+            return { success: false, error: errorData.error || `API error: ${signResponse.status}` };
         }
 
-        // If we get here, Supabase failed - return error
-        const errorData = await signResponse.json().catch(() => ({}));
-        return { success: false, error: errorData.error || 'Supabase upload failed' };
+        const { signedUrl, publicUrl } = await signResponse.json();
+
+        // Step 2: Upload directly to Supabase
+        const uploadResponse = await fetch(signedUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': file.type },
+            body: file
+        });
+
+        if (!uploadResponse.ok) {
+            return { success: false, error: 'Upload to storage failed' };
+        }
+
+        // Success
+        return { success: true, path: publicUrl };
 
     } catch (error: any) {
         return { success: false, error: error.message || 'Upload failed' };
     }
 }
 
-// Helper to get admin password from sessionStorage
+// Legacy export for backward compatibility (no longer needs password)
 export function getStoredAdminPassword(): string {
-    if (typeof window === 'undefined') return '';
-    return sessionStorage.getItem('adminPassword') || '';
+    return ''; // Not needed anymore - using cookies
 }
