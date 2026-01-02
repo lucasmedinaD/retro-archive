@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { X, Upload, ExternalLink } from 'lucide-react';
 import { TransformationData } from './actions/transformations';
-import { uploadTransformationImageAction } from './actions/transformations';
+import { uploadImageToCloud, getStoredAdminPassword } from '@/lib/uploadHelper';
 import { getProducts, Product } from '@/data/products';
 import { AmazonProduct } from '@/types/transformations';
 
@@ -84,14 +84,14 @@ export default function TransformationEditor({ transformation, isNew = false, on
 
             // Upload new images if selected
             if (animeImage) {
-                const upload = await uploadTransformationImageAction(animeImage, 'anime');
-                if (upload.error) throw new Error('Anime image upload failed');
+                const upload = await uploadImageToCloud(animeImage, 'transformations', getStoredAdminPassword());
+                if (!upload.success) throw new Error('Anime image upload failed: ' + upload.error);
                 finalAnimeImage = upload.path!;
             }
 
             if (realImage) {
-                const upload = await uploadTransformationImageAction(realImage, 'real');
-                if (upload.error) throw new Error('Real image upload failed');
+                const upload = await uploadImageToCloud(realImage, 'transformations', getStoredAdminPassword());
+                if (!upload.success) throw new Error('Real image upload failed: ' + upload.error);
                 finalRealImage = upload.path!;
             }
 
@@ -449,8 +449,8 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 if (newAmazonProduct.title && amazonImageFile && newAmazonProduct.affiliateUrl) {
                                     try {
                                         // Upload image first
-                                        const upload = await uploadTransformationImageAction(amazonImageFile, 'amazon');
-                                        if (upload.error) {
+                                        const upload = await uploadImageToCloud(amazonImageFile, 'products', getStoredAdminPassword());
+                                        if (!upload.success) {
                                             alert('Image upload failed: ' + upload.error);
                                             return;
                                         }
