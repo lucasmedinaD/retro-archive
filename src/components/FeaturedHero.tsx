@@ -78,9 +78,12 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                     </div>
                 </div>
 
-                {/* Image Section - Below on mobile, side on desktop */}
-                <div className="flex-1 flex items-center justify-center p-4 md:p-6 bg-gray-100 dark:bg-black/50">
-                    <div className="relative w-full max-w-sm md:max-w-none md:h-full md:max-h-[70vh] aspect-[4/5] shadow-xl border border-black/10 dark:border-white/10 overflow-hidden">
+                {/* Image Section - Below on mobile, side on desktop - CLICKABLE */}
+                <Link
+                    href={`/${lang}/anime-to-real/${transformation.id}`}
+                    className="flex-1 flex items-center justify-center p-4 md:p-6 bg-gray-100 dark:bg-black/50 cursor-pointer group"
+                >
+                    <div className="relative w-full max-w-sm md:max-w-none md:h-full md:max-h-[70vh] aspect-[4/5] shadow-xl border border-black/10 dark:border-white/10 overflow-hidden group-hover:border-accent transition-colors">
                         {/* Background: Real Image */}
                         <img
                             src={transformation.realImage}
@@ -101,7 +104,7 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                             />
                             <div className="absolute top-4 left-4 z-20">
                                 <span className="bg-blue-600 text-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full">
-                                    {dict?.transformation?.from || 'ANIME'}
+                                    ANIME
                                 </span>
                             </div>
                         </motion.div>
@@ -109,7 +112,7 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                         {/* Real Label */}
                         <div className="absolute top-4 right-4 z-0">
                             <span className="bg-green-600 text-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full">
-                                {dict?.anime_to_real?.title || 'REAL'}
+                                REAL
                             </span>
                         </div>
 
@@ -119,8 +122,13 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
                             animate={{ left: `${sliderX}%` }}
                             transition={{ type: "spring", stiffness: 100, damping: 20 }}
                         />
+
+                        {/* Hover indicator */}
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-white px-3 py-1 text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity uppercase">
+                            Ver transformación →
+                        </div>
                     </div>
-                </div>
+                </Link>
             </div>
         </section>
     );
