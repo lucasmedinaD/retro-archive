@@ -3,7 +3,6 @@ import { getTransformations } from '@/data/transformations';
 import Header from '@/components/Header';
 import TransformationDetail from '@/components/anime-to-real/TransformationDetail';
 import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
-import Comments from '@/components/Comments';
 import { Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -66,11 +65,6 @@ export default async function TransformationDetailPage({ params }: PageProps) {
                 transformation={transformation}
                 dict={dict}
             />
-
-            {/* Comments Section */}
-            <section className="max-w-[90rem] mx-auto px-6">
-                <Comments lang={lang} />
-            </section>
 
             {/* Related Transformations */}
             <section className="max-w-[90rem] mx-auto px-6 py-12 border-t-2 border-black dark:border-white mt-12">
