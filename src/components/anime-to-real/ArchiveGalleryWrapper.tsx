@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 import ArchiveProgressBar from '@/components/ArchiveProgressBar';
 import EmailCapturePopup from '@/components/EmailCapturePopup';
 import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
+import SearchBar from '@/components/SearchBar';
 import { Transformation } from '@/data/transformations';
 import { Filter, X } from 'lucide-react';
 
@@ -17,6 +18,12 @@ interface ArchiveGalleryWrapperProps {
 export default function ArchiveGalleryWrapper({ transformations, lang, dict }: ArchiveGalleryWrapperProps) {
     const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
     const [showFilters, setShowFilters] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Handle search
+    const handleSearch = useCallback((query: string) => {
+        setSearchQuery(query.toLowerCase());
+    }, []);
 
     // Extract unique series from transformations
     const allSeries = useMemo(() => {
@@ -29,21 +36,44 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict }: A
         return Array.from(seriesSet).sort();
     }, [transformations]);
 
-    // Filter transformations based on selected series
+    // Filter transformations based on search AND selected series
     const filteredTransformations = useMemo(() => {
-        if (!selectedSeries) return transformations;
-        return transformations.filter(t => t.series === selectedSeries);
-    }, [transformations, selectedSeries]);
+        let result = transformations;
+
+        // Filter by series
+        if (selectedSeries) {
+            result = result.filter(t => t.series === selectedSeries);
+        }
+
+        // Filter by search query
+        if (searchQuery) {
+            result = result.filter(t =>
+                t.characterName.toLowerCase().includes(searchQuery) ||
+                (t.series && t.series.toLowerCase().includes(searchQuery)) ||
+                (t.tags && t.tags.some(tag => tag.toLowerCase().includes(searchQuery)))
+            );
+        }
+
+        return result;
+    }, [transformations, selectedSeries, searchQuery]);
 
     const filterLabel = lang === 'es' ? 'Filtrar por Anime' : 'Filter by Anime';
     const allLabel = lang === 'es' ? 'Todos' : 'All';
     const showingLabel = lang === 'es' ? 'Mostrando' : 'Showing';
     const ofLabel = lang === 'es' ? 'de' : 'of';
+    const searchPlaceholder = lang === 'es' ? 'Buscar personaje o serie...' : 'Search character or series...';
 
     return (
         <>
-            {/* Filter Section */}
-            <div className="mb-8">
+            {/* Search + Filter Section */}
+            <div className="mb-8 space-y-4">
+                {/* Search Bar */}
+                <SearchBar
+                    onSearch={handleSearch}
+                    placeholder={searchPlaceholder}
+                    className="max-w-md"
+                />
+
                 {/* Filter Toggle Button (Mobile) */}
                 <button
                     onClick={() => setShowFilters(!showFilters)}
@@ -62,8 +92,8 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict }: A
                     <button
                         onClick={() => setSelectedSeries(null)}
                         className={`px-4 py-2 border-2 font-bold text-xs uppercase transition-all ${!selectedSeries
-                                ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                            ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                            : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
                             }`}
                     >
                         {allLabel} ({transformations.length})
@@ -77,8 +107,8 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict }: A
                                 key={series}
                                 onClick={() => setSelectedSeries(series === selectedSeries ? null : series)}
                                 className={`px-4 py-2 border-2 font-bold text-xs uppercase transition-all flex items-center gap-2 ${selectedSeries === series
-                                        ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                                        : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                                    ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                                    : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
                                     }`}
                             >
                                 {series}
