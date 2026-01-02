@@ -1,6 +1,6 @@
 /**
  * Cloud Upload Helper with Auto Compression
- * Compresses images before upload to Supabase Storage
+ * Compresses images and uploads via server endpoint (no CORS issues)
  * Authentication is handled by cookies (admin_session)
  */
 
@@ -24,62 +24,55 @@ export async function uploadImageToCloud(
         // Step 1: Compress image before upload
         let processedFile = file;
         if (file.type.startsWith('image/')) {
-            processedFile = await compressImage(file, {
-                maxWidth: 2000,
-                maxHeight: 2000,
-                quality: 0.85,
-                maxSizeMB: 1
-            });
+            try {
+                processedFile = await compressImage(file, {
+                    maxWidth: 2000,
+                    maxHeight: 2000,
+                    quality: 0.85,
+                    maxSizeMB: 1
+                });
+            } catch (compressError) {
+                console.warn('Compression failed, using original file:', compressError);
+                // Continue with original file if compression fails
+            }
         }
 
         const compressedSize = processedFile.size;
 
-        // Step 2: Get signed URL from our API (cookies are sent automatically)
-        const signResponse = await fetch('/api/admin/sign-upload', {
+        // Step 2: Create FormData for server upload
+        const formData = new FormData();
+        formData.append('file', processedFile);
+        formData.append('folder', folder);
+
+        // Step 3: Upload via server endpoint (avoids CORS)
+        const uploadResponse = await fetch('/api/admin/upload', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             credentials: 'include',
-            body: JSON.stringify({
-                folder,
-                filename: processedFile.name,
-                contentType: processedFile.type
-            })
-        });
-
-        if (!signResponse.ok) {
-            const errorData = await signResponse.json().catch(() => ({}));
-            return { success: false, error: errorData.error || `API error: ${signResponse.status}` };
-        }
-
-        const { signedUrl, publicUrl } = await signResponse.json();
-
-        // Step 3: Upload compressed image directly to Supabase
-        const uploadResponse = await fetch(signedUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': processedFile.type },
-            body: processedFile
+            body: formData
         });
 
         if (!uploadResponse.ok) {
-            return { success: false, error: 'Upload to storage failed' };
+            const errorData = await uploadResponse.json().catch(() => ({}));
+            return { success: false, error: errorData.error || `Upload failed: ${uploadResponse.status}` };
         }
+
+        const result = await uploadResponse.json();
 
         // Success
         return {
             success: true,
-            path: publicUrl,
+            path: result.publicUrl,
             originalSize,
             compressedSize
         };
 
     } catch (error: any) {
+        console.error('Upload error:', error);
         return { success: false, error: error.message || 'Upload failed' };
     }
 }
 
-// Legacy export for backward compatibility (no longer needs password)
+// Legacy export for backward compatibility
 export function getStoredAdminPassword(): string {
-    return ''; // Not needed anymore - using cookies
+    return '';
 }
