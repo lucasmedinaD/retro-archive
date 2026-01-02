@@ -45,6 +45,9 @@ export default function EnhancedComparisonSlider({
     const lastTapRef = useRef<number>(0);
     const isDraggingRef = useRef<boolean>(false);
     const startXRef = useRef<number>(0);
+    const startYRef = useRef<number>(0);
+    const directionDecidedRef = useRef<boolean>(false);
+    const isHorizontalRef = useRef<boolean>(false);
 
     // Spring animation for smooth movement
     const springPosition = useSpring(position, {
@@ -121,33 +124,54 @@ export default function EnhancedComparisonSlider({
         if (isDragging) checkEdges();
     }, [position, isDragging, hasReachedEdge, triggerHaptic, funFact]);
 
-    // --- UNIFIED POINTER EVENTS (Mouse + Touch) ---
+    // --- UNIFIED POINTER EVENTS with direction detection ---
     const handlePointerDown = (e: React.PointerEvent) => {
         isDraggingRef.current = false;
+        directionDecidedRef.current = false;
+        isHorizontalRef.current = false;
         startXRef.current = e.clientX;
-        setIsDragging(true);
-        e.currentTarget.setPointerCapture(e.pointerId);
-        updatePosition(e.clientX);
-        triggerSparkle();
+        startYRef.current = e.clientY;
+        // Don't set isDragging yet - wait for direction
     };
 
     const handlePointerMove = (e: React.PointerEvent) => {
-        if (!isDragging) return;
-        // If moved more than 5px, it's a drag not a tap
-        if (Math.abs(e.clientX - startXRef.current) > 5) {
-            isDraggingRef.current = true;
+        const deltaX = Math.abs(e.clientX - startXRef.current);
+        const deltaY = Math.abs(e.clientY - startYRef.current);
+
+        // Decide direction after 10px of movement
+        if (!directionDecidedRef.current && (deltaX > 10 || deltaY > 10)) {
+            directionDecidedRef.current = true;
+            if (deltaX > deltaY) {
+                // Horizontal = slider control
+                isHorizontalRef.current = true;
+                setIsDragging(true);
+                e.currentTarget.setPointerCapture(e.pointerId);
+                triggerSparkle();
+            }
+            // If vertical, do nothing - let browser scroll
         }
-        updatePosition(e.clientX);
+
+        // Only update slider if horizontal drag
+        if (isHorizontalRef.current && isDragging) {
+            isDraggingRef.current = true;
+            updatePosition(e.clientX);
+        }
     };
 
     const handlePointerUp = (e: React.PointerEvent) => {
+        if (isHorizontalRef.current) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+        }
         setIsDragging(false);
-        e.currentTarget.releasePointerCapture(e.pointerId);
 
-        // If NOT dragging, process as potential double-tap
-        if (!isDraggingRef.current) {
+        // If no direction decided (quick tap), process as potential double-tap
+        if (!directionDecidedRef.current) {
             handleDoubleTap();
         }
+
+        // Reset refs
+        directionDecidedRef.current = false;
+        isHorizontalRef.current = false;
     };
 
     const handleLike = () => {
@@ -169,10 +193,10 @@ export default function EnhancedComparisonSlider({
                 style={{ opacity: glowIntensity }}
             />
 
-            {/* Slider Container - touch-none prevents scroll conflicts */}
+            {/* Slider Container - touch-pan-y allows vertical scroll, captures horizontal */}
             <motion.div
                 ref={containerRef}
-                className="relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-none"
+                className="relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-pan-y"
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
