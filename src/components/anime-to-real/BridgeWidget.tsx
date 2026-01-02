@@ -70,6 +70,10 @@ export default function BridgeWidget({ transformation, dict }: BridgeWidgetProps
                 <p className="font-mono text-[9px] text-gray-500 text-center">
                     {dict?.bridge?.secure || 'Envío seguro vía Redbubble.'}
                 </p>
+                {/* Available on more products */}
+                <p className="font-mono text-[10px] text-gray-600 dark:text-gray-400 text-center mt-1">
+                    🎨 {dict?.bridge?.alsoAvailable || 'También en: Stickers • Hoodies • Tazas • Posters y +60 más'}
+                </p>
             </div>
 
             {/* Additional Products (if more than 1) */}
