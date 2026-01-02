@@ -1,0 +1,36 @@
+{
+    "requests": [
+        {
+            "id": "makima",
+            "characterName": "Makima",
+            "series": "Chainsaw Man",
+            "votes": 0,
+            "aliases": [
+                "makima",
+                "control devil"
+            ]
+        },
+        {
+            "id": "gojo-satoru",
+            "characterName": "Gojo Satoru",
+            "series": "Jujutsu Kaisen",
+            "votes": 0,
+            "aliases": [
+                "gojo",
+                "satoru",
+                "sensei"
+            ]
+        },
+        {
+            "id": "yor-forger",
+            "characterName": "Yor Forger",
+            "series": "Spy x Family",
+            "votes": 0,
+            "aliases": [
+                "yor",
+                "thorn princess",
+                "yor briar"
+            ]
+        }
+    ]
+}

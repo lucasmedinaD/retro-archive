@@ -2,6 +2,7 @@ import { getDictionary } from '@/get-dictionary';
 import { getTransformations } from '@/data/transformations';
 import Header from '@/components/Header';
 import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
+import CharacterRequestSection from '@/components/CharacterRequestSection';
 import { Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
 
@@ -60,6 +61,11 @@ export default async function AnimeToRealPage({ params }: PageProps) {
                     lang={lang}
                     dict={dict}
                 />
+            </section>
+
+            {/* Character Request Section */}
+            <section className="max-w-[90rem] mx-auto px-6 py-12">
+                <CharacterRequestSection lang={lang} />
             </section>
 
             {/* Footer */}
