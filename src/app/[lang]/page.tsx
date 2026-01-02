@@ -116,11 +116,11 @@ export default async function Home({ params }: HomeProps) {
               {dict.footer.description}
             </p>
             <div className="flex gap-4 mt-3 justify-center md:justify-start font-mono text-xs">
-              <Link href="/legal/privacy" className="hover:underline text-gray-600 dark:text-gray-400">
-                Privacy
+              <Link href={`/${lang}/legal/privacy`} className="hover:underline text-gray-600 dark:text-gray-400">
+                {lang === 'es' ? 'Privacidad' : 'Privacy'}
               </Link>
-              <Link href="/legal/terms" className="hover:underline text-gray-600 dark:text-gray-400">
-                Terms
+              <Link href={`/${lang}/legal/terms`} className="hover:underline text-gray-600 dark:text-gray-400">
+                {lang === 'es' ? 'Términos' : 'Terms'}
               </Link>
             </div>
           </div>
