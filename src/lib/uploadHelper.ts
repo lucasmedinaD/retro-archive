@@ -1,13 +1,17 @@
 /**
- * Cloud Upload Helper
- * Uploads images to Supabase Storage via presigned URLs
+ * Cloud Upload Helper with Auto Compression
+ * Compresses images before upload to Supabase Storage
  * Authentication is handled by cookies (admin_session)
  */
+
+import { compressImage } from './imageCompressor';
 
 interface UploadResult {
     success: boolean;
     path?: string;
     error?: string;
+    originalSize?: number;
+    compressedSize?: number;
 }
 
 export async function uploadImageToCloud(
@@ -15,17 +19,32 @@ export async function uploadImageToCloud(
     folder: 'products' | 'transformations' | 'slider-demos'
 ): Promise<UploadResult> {
     try {
-        // Step 1: Get signed URL from our API (cookies are sent automatically)
+        const originalSize = file.size;
+
+        // Step 1: Compress image before upload
+        let processedFile = file;
+        if (file.type.startsWith('image/')) {
+            processedFile = await compressImage(file, {
+                maxWidth: 2000,
+                maxHeight: 2000,
+                quality: 0.85,
+                maxSizeMB: 1
+            });
+        }
+
+        const compressedSize = processedFile.size;
+
+        // Step 2: Get signed URL from our API (cookies are sent automatically)
         const signResponse = await fetch('/api/admin/sign-upload', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include', // Include cookies
+            credentials: 'include',
             body: JSON.stringify({
                 folder,
-                filename: file.name,
-                contentType: file.type
+                filename: processedFile.name,
+                contentType: processedFile.type
             })
         });
 
@@ -36,11 +55,11 @@ export async function uploadImageToCloud(
 
         const { signedUrl, publicUrl } = await signResponse.json();
 
-        // Step 2: Upload directly to Supabase
+        // Step 3: Upload compressed image directly to Supabase
         const uploadResponse = await fetch(signedUrl, {
             method: 'PUT',
-            headers: { 'Content-Type': file.type },
-            body: file
+            headers: { 'Content-Type': processedFile.type },
+            body: processedFile
         });
 
         if (!uploadResponse.ok) {
@@ -48,7 +67,12 @@ export async function uploadImageToCloud(
         }
 
         // Success
-        return { success: true, path: publicUrl };
+        return {
+            success: true,
+            path: publicUrl,
+            originalSize,
+            compressedSize
+        };
 
     } catch (error: any) {
         return { success: false, error: error.message || 'Upload failed' };
