@@ -69,8 +69,8 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                     <button
                         onClick={() => setViewMode('grid')}
                         className={`w-8 h-8 border flex items-center justify-center transition-colors ${viewMode === 'grid'
-                                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                            ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                            : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
                             }`}
                         aria-label="Grid view"
                     >
@@ -79,8 +79,8 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                     <button
                         onClick={() => setViewMode('list')}
                         className={`w-8 h-8 border flex items-center justify-center transition-colors font-mono text-xs ${viewMode === 'list'
-                                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                                : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                            ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                            : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
                             }`}
                         aria-label="List view"
                     >
@@ -144,12 +144,13 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
                 : 'flex flex-col gap-4'
             }>
-                {visibleProducts.map((product) => (
+                {visibleProducts.map((product, index) => (
                     <ProductCard
                         key={product.id}
                         product={product}
                         lang={lang}
                         label={dict.catalog.get_it}
+                        index={index}
                     />
                 ))}
                 {filteredProducts.length === 0 && (
