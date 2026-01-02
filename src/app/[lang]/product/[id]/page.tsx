@@ -141,6 +141,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         label={dict.product_detail.buy_redbubble}
                         className="w-full md:w-auto text-center bg-accent text-white px-8 py-5 font-bold text-lg uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black border-2 border-black dark:border-white transition-all shadow-[4px_4px_0px_#111111] dark:shadow-[4px_4px_0px_#f4f4f0] transform hover:-translate-y-1 mt-6 inline-block"
                     />
+
+                    {/* CRO: Security text and product variants */}
+                    <div className="mt-4 space-y-2">
+                        <p className="font-mono text-[10px] text-gray-500">
+                            ✓ {lang === 'es' ? 'Envío seguro vía Redbubble.' : 'Secure fulfillment via Redbubble.'}
+                        </p>
+                        <p className="font-mono text-[11px] text-gray-600 dark:text-gray-400">
+                            🎨 {lang === 'es' ? 'También en: Stickers • Hoodies • Tazas • Posters y +60 más' : 'Also on: Stickers • Hoodies • Mugs • Posters and 60+ more'}
+                        </p>
+                    </div>
                 </div>
             </section>
 
