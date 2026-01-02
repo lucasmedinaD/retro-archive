@@ -80,7 +80,7 @@ export default function FeaturedHero({ transformation, dict, lang }: FeaturedHer
 
                 {/* Image Section - Below on mobile, side on desktop - CLICKABLE */}
                 <Link
-                    href={`/${lang}/anime-to-real/${transformation.id}`}
+                    href={`/${lang}/anime-to-real`}
                     className="flex-1 flex items-center justify-center p-4 md:p-6 bg-gray-100 dark:bg-black/50 cursor-pointer group"
                 >
                     <div className="relative w-full max-w-sm md:max-w-none md:h-full md:max-h-[70vh] aspect-[4/5] shadow-xl border border-black/10 dark:border-white/10 overflow-hidden group-hover:border-accent transition-colors">
