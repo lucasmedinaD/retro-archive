@@ -239,7 +239,27 @@
         "makima sexy"
       ],
       "likes": 0,
-      "id": "transform-1767356857520"
+      "id": "transform-1767356857520",
+      "outfit": [
+        {
+          "id": "d2",
+          "name": "Makima Original Anime Art",
+          "price": "23",
+          "image": "/mockups/1767316391386-Gemini_Generated_Image_uzvz.jpg",
+          "buyUrl": "https://www.redbubble.com/es/i/camiseta/El-Demonio-del-Control-Makima-CSM-Est%C3%A9tica-de-sosacrash/177148047.WFLAH",
+          "category": "DESIGN",
+          "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "tags": [
+            "makima",
+            "chainsaw man",
+            "demon control"
+          ],
+          "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
+          "featured": false,
+          "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "tagsInput": "makima, chainsaw man, demon control"
+        }
+      ]
     },
     {
       "characterName": "Satoru Gojo",
