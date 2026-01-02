@@ -7,7 +7,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { Product } from '@/data/products';
 import { Transformation } from '@/data/transformations';
 import ProductCard from '@/components/ProductCard';
-import { Heart, ArrowLeft, Sparkles } from 'lucide-react';
+import { Heart, ArrowLeft, Sparkles, Package } from 'lucide-react';
 import Header from '@/components/Header';
 
 interface FavoritesClientProps {
@@ -17,10 +17,13 @@ interface FavoritesClientProps {
     allTransformations: Transformation[];
 }
 
+type TabType = 'designs' | 'transformations';
+
 export default function FavoritesClient({ lang, dict, allProducts, allTransformations }: FavoritesClientProps) {
     const { favorites, isLoaded } = useFavorites();
     const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
     const [likedTransformations, setLikedTransformations] = useState<Transformation[]>([]);
+    const [activeTab, setActiveTab] = useState<TabType>('designs');
 
     useEffect(() => {
         if (isLoaded) {
@@ -38,6 +41,21 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
 
     const hasContent = favoriteProducts.length > 0 || likedTransformations.length > 0;
 
+    const tabs = [
+        {
+            id: 'designs' as TabType,
+            label: lang === 'es' ? 'DISEÑOS GUARDADOS' : 'SAVED DESIGNS',
+            count: favoriteProducts.length,
+            icon: Package
+        },
+        {
+            id: 'transformations' as TabType,
+            label: lang === 'es' ? 'TRANSFORMACIONES' : 'TRANSFORMATIONS',
+            count: likedTransformations.length,
+            icon: Sparkles
+        },
+    ];
+
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black dark:bg-[#111111] dark:text-[#f4f4f0] transition-colors duration-300">
             <Header lang={lang} dict={dict} />
@@ -50,12 +68,12 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
             </div>
 
             {/* Page Content */}
-            <section className="max-w-[90rem] mx-auto px-6 py-20">
-                <div className="flex items-center gap-4 mb-12">
-                    <div className="p-4 border-2 border-black dark:border-white">
-                        <Heart size={32} fill="currentColor" className="text-red-500" />
+            <section className="max-w-[90rem] mx-auto px-6 py-12">
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="p-3 border-2 border-black dark:border-white">
+                        <Heart size={24} fill="currentColor" className="text-red-500" />
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9]">
+                    <h1 className="text-4xl md:text-5xl font-black uppercase leading-[0.9]">
                         {dict.favorites.title}
                     </h1>
                 </div>
@@ -78,69 +96,99 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
                     </div>
                 )}
 
-                {/* Liked Transformations Section */}
-                {likedTransformations.length > 0 && (
-                    <div className="mb-16">
-                        <div className="flex items-center gap-3 mb-6">
-                            <Sparkles size={24} className="text-accent" />
-                            <h2 className="text-2xl font-black uppercase">
-                                {lang === 'es' ? 'Transformaciones que te gustaron' : 'Transformations you liked'}
-                            </h2>
-                            <span className="bg-accent text-white px-2 py-0.5 text-xs font-bold">
-                                {likedTransformations.length}
-                            </span>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {likedTransformations.map((t) => (
-                                <Link
-                                    key={t.id}
-                                    href={`/${lang}/anime-to-real/${t.id}`}
-                                    className="group relative border-2 border-black dark:border-white overflow-hidden hover:border-accent transition-colors"
-                                >
-                                    <div className="relative aspect-square">
-                                        <Image
-                                            src={t.realImage}
-                                            alt={t.characterName}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                        <div className="absolute bottom-2 left-2 right-2">
-                                            <p className="font-bold text-white text-sm uppercase truncate">{t.characterName}</p>
-                                            <p className="text-[10px] font-mono text-white/70 truncate">{t.series}</p>
-                                        </div>
-                                        <div className="absolute top-2 right-2">
-                                            <Heart size={16} fill="red" className="text-red-500" />
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Favorite Products Section */}
-                {isLoaded && favoriteProducts.length > 0 && (
+                {hasContent && (
                     <>
-                        <div className="flex items-center gap-3 mb-6">
-                            <Heart size={24} className="text-red-500" />
-                            <h2 className="text-2xl font-black uppercase">
-                                {lang === 'es' ? 'Diseños guardados' : 'Saved designs'}
-                            </h2>
-                            <span className="bg-black dark:bg-white text-white dark:text-black px-2 py-0.5 text-xs font-bold">
-                                {favoriteProducts.length}
-                            </span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {favoriteProducts.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    lang={lang}
-                                    label={dict.catalog.get_it}
-                                />
+                        {/* Tabs */}
+                        <div className="flex border-b-2 border-black dark:border-white mb-8">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-2 px-4 py-3 font-bold text-xs uppercase tracking-wider transition-colors ${activeTab === tab.id
+                                            ? 'bg-black text-white dark:bg-white dark:text-black'
+                                            : 'hover:bg-black/10 dark:hover:bg-white/10'
+                                        }`}
+                                >
+                                    <tab.icon size={16} />
+                                    <span className="hidden sm:inline">{tab.label}</span>
+                                    <span className="bg-accent text-white px-1.5 py-0.5 text-[10px] rounded-full">
+                                        {tab.count}
+                                    </span>
+                                </button>
                             ))}
                         </div>
+
+                        {/* Designs Tab Content */}
+                        {activeTab === 'designs' && (
+                            <>
+                                {favoriteProducts.length === 0 ? (
+                                    <div className="text-center py-16 border border-dashed border-black/30 dark:border-white/30">
+                                        <Package size={48} className="mx-auto mb-4 text-gray-300 dark:text-gray-600" />
+                                        <p className="font-mono text-sm text-gray-500">
+                                            {lang === 'es' ? 'No tenés diseños guardados aún' : 'No saved designs yet'}
+                                        </p>
+                                        <Link href={`/${lang}#catalog`} className="inline-block mt-4 text-accent font-bold text-sm hover:underline">
+                                            {lang === 'es' ? 'Explorar diseños →' : 'Explore designs →'}
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {favoriteProducts.map((product) => (
+                                            <ProductCard
+                                                key={product.id}
+                                                product={product}
+                                                lang={lang}
+                                                label={dict.catalog.get_it}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* Transformations Tab Content */}
+                        {activeTab === 'transformations' && (
+                            <>
+                                {likedTransformations.length === 0 ? (
+                                    <div className="text-center py-16 border border-dashed border-black/30 dark:border-white/30">
+                                        <Sparkles size={48} className="mx-auto mb-4 text-gray-300 dark:text-gray-600" />
+                                        <p className="font-mono text-sm text-gray-500">
+                                            {lang === 'es' ? 'No le diste like a ninguna transformación' : 'No liked transformations yet'}
+                                        </p>
+                                        <Link href={`/${lang}/anime-to-real`} className="inline-block mt-4 text-accent font-bold text-sm hover:underline">
+                                            {lang === 'es' ? 'Explorar transformaciones →' : 'Explore transformations →'}
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        {likedTransformations.map((t) => (
+                                            <Link
+                                                key={t.id}
+                                                href={`/${lang}/anime-to-real/${t.id}`}
+                                                className="group relative border-2 border-black dark:border-white overflow-hidden hover:border-accent transition-colors"
+                                            >
+                                                <div className="relative aspect-square">
+                                                    <Image
+                                                        src={t.realImage}
+                                                        alt={t.characterName}
+                                                        fill
+                                                        className="object-cover group-hover:scale-105 transition-transform"
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                                    <div className="absolute bottom-2 left-2 right-2">
+                                                        <p className="font-bold text-white text-sm uppercase truncate">{t.characterName}</p>
+                                                        <p className="text-[10px] font-mono text-white/70 truncate">{t.series}</p>
+                                                    </div>
+                                                    <div className="absolute top-2 right-2">
+                                                        <Heart size={16} fill="red" className="text-red-500" />
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
                     </>
                 )}
             </section>
