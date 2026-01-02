@@ -29,12 +29,19 @@ export default function TransformationDetail({
     dict
 }: TransformationDetailProps) {
     const [showShareModal, setShowShareModal] = useState(false);
-    const [isLiked, setIsLiked] = useState(initialLiked);
     const [likeCount, setLikeCount] = useState(transformation.likes || 0);
     const [isLiking, setIsLiking] = useState(false);
+    const [isLiked, setIsLiked] = useState(() => {
+        // Check localStorage on initial render (client-side only)
+        if (typeof window !== 'undefined') {
+            const likedItems = JSON.parse(localStorage.getItem('likedTransformations') || '[]');
+            return likedItems.includes(transformation.id);
+        }
+        return initialLiked;
+    });
     const { markAsViewed, isLoaded } = useArchiveProgress();
 
-    // Check if already liked from localStorage
+    // Also check on mount in case SSR had different value
     useEffect(() => {
         const likedItems = JSON.parse(localStorage.getItem('likedTransformations') || '[]');
         if (likedItems.includes(transformation.id)) {

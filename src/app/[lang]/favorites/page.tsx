@@ -1,4 +1,5 @@
 import { getProducts, Product } from '@/data/products';
+import { getTransformations } from '@/data/transformations';
 import { getDictionary } from '@/get-dictionary';
 import Link from 'next/link';
 import FavoritesClient from './FavoritesClient';
@@ -11,6 +12,7 @@ export default async function FavoritesPage({ params }: FavoritesPageProps) {
     const { lang } = await params;
     const dict = await getDictionary(lang);
     const allProducts = getProducts(lang);
+    const allTransformations = getTransformations();
 
-    return <FavoritesClient lang={lang} dict={dict} allProducts={allProducts} />;
+    return <FavoritesClient lang={lang} dict={dict} allProducts={allProducts} allTransformations={allTransformations} />;
 }
