@@ -95,10 +95,10 @@ export default function ShareableComparison({ transformation }: ShareableCompari
                     />
                 </div>
 
-                {/* Branding Watermark - Bottom Right */}
-                <div className="absolute bottom-3 right-3 flex items-center gap-2 bg-black/90 text-white px-3 py-1.5">
-                    <img src="/logo.png" alt="" className="w-4 h-4 aspect-square object-contain" style={{ filter: 'invert(1)' }} />
-                    <span className="font-bold text-xs font-mono">retro-archive.art</span>
+                {/* Branding Watermark - Bottom Center on mobile, Bottom Right on desktop */}
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 md:left-auto md:right-3 md:translate-x-0 flex items-center gap-1.5 bg-black/90 text-white px-2 py-1 md:px-3 md:py-1.5">
+                    <img src="/logo.png" alt="" className="w-3 h-3 md:w-4 md:h-4 aspect-square object-contain" style={{ filter: 'invert(1)' }} />
+                    <span className="font-bold text-[10px] md:text-xs font-mono">retro-archive.art</span>
                 </div>
 
                 {/* Character Label - Smaller */}
