@@ -317,6 +317,20 @@
       ],
       "likes": 0,
       "id": "transform-1767366568469"
+    },
+    {
+      "characterName": "Power",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767368173783-1000029044.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767368176957-1000029046.jpg",
+      "series": "Chainsaw Man",
+      "category": "cosplay",
+      "tags": [
+        "Power",
+        "chainsaw man",
+        "crazy girl"
+      ],
+      "likes": 0,
+      "id": "transform-1767368177865"
     }
   ]
 }
