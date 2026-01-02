@@ -288,6 +288,20 @@
       ],
       "likes": 0,
       "id": "transform-1767358983012"
+    },
+    {
+      "characterName": "Toji Fushiguro",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767365142492-1000028930.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767365146560-1000028935.jpg",
+      "series": "Jujutsu Kaisen",
+      "category": "2.5d",
+      "tags": [
+        "Toji",
+        "strong character",
+        "jujutsu kaisen"
+      ],
+      "likes": 0,
+      "id": "transform-1767365153109"
     }
   ]
 }
