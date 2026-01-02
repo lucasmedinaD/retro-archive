@@ -101,11 +101,11 @@ export default function ShareableComparison({ transformation }: ShareableCompari
                     <span className="font-bold text-[10px] md:text-xs font-mono">retro-archive.art</span>
                 </div>
 
-                {/* Character Label - Smaller */}
-                <div className="absolute top-3 left-3 bg-white/95 px-3 py-1.5 border border-black">
-                    <div className="font-bold text-sm uppercase">{transformation.characterName}</div>
+                {/* Character Label - Smaller on mobile, positioned on anime side only */}
+                <div className="absolute top-2 left-2 md:top-3 md:left-3 bg-white/95 px-2 py-1 md:px-3 md:py-1.5 border border-black max-w-[45%]">
+                    <div className="font-bold text-[10px] md:text-sm uppercase truncate">{transformation.characterName}</div>
                     {transformation.series && (
-                        <div className="text-[10px] font-mono text-gray-600">{transformation.series}</div>
+                        <div className="text-[8px] md:text-[10px] font-mono text-gray-600 truncate">{transformation.series}</div>
                     )}
                 </div>
             </div>
