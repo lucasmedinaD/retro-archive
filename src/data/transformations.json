@@ -240,6 +240,21 @@
       ],
       "likes": 0,
       "id": "transform-1767356857520"
+    },
+    {
+      "characterName": "Satoru Gojo",
+      "animeImage": "/transformations/anime-1767358081784.jpg",
+      "realImage": "/transformations/real-1767358084207.jpg",
+      "series": "Jujutsu Kaisen",
+      "category": "cosplay",
+      "tags": [
+        "gojo",
+        "dios",
+        "god",
+        "jujutsu kaisen"
+      ],
+      "likes": 0,
+      "id": "transform-1767358085218"
     }
   ]
 }
