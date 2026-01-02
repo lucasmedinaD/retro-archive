@@ -226,6 +226,20 @@
       ],
       "likes": 1,
       "id": "transform-1767318531571"
+    },
+    {
+      "characterName": "Mankima",
+      "animeImage": "/transformations/anime-1767356854329.jpg",
+      "realImage": "/transformations/real-1767356856624.jpg",
+      "series": "Chainsaw Man",
+      "category": "2.5d",
+      "tags": [
+        "Chainsaw man",
+        "makima",
+        "makima sexy"
+      ],
+      "likes": 0,
+      "id": "transform-1767356857520"
     }
   ]
 }
