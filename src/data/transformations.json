@@ -302,6 +302,21 @@
       ],
       "likes": 0,
       "id": "transform-1767365153109"
+    },
+    {
+      "characterName": "Suguru Geto",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767366562996-1000028927.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767366566238-1000028929.jpg",
+      "series": "Jujutsu Kaisen",
+      "category": "cosplay",
+      "tags": [
+        "Suguru",
+        "jujutsu kaisen",
+        "antagonist",
+        "strong character"
+      ],
+      "likes": 0,
+      "id": "transform-1767366568469"
     }
   ]
 }
