@@ -226,6 +226,68 @@
       ],
       "likes": 1,
       "id": "transform-1767318531571"
+    },
+    {
+      "characterName": "Mankima",
+      "animeImage": "/transformations/anime-1767356854329.jpg",
+      "realImage": "/transformations/real-1767356856624.jpg",
+      "series": "Chainsaw Man",
+      "category": "2.5d",
+      "tags": [
+        "Chainsaw man",
+        "makima",
+        "makima sexy"
+      ],
+      "likes": 0,
+      "id": "transform-1767356857520",
+      "outfit": [
+        {
+          "id": "d2",
+          "name": "Makima Original Anime Art",
+          "price": "23",
+          "image": "/mockups/1767316391386-Gemini_Generated_Image_uzvz.jpg",
+          "buyUrl": "https://www.redbubble.com/es/i/camiseta/El-Demonio-del-Control-Makima-CSM-Est%C3%A9tica-de-sosacrash/177148047.WFLAH",
+          "category": "DESIGN",
+          "description": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "tags": [
+            "makima",
+            "chainsaw man",
+            "demon control"
+          ],
+          "description_es": "Una ilustración de anime en blanco y negro estilizada del personaje Makima guiñando un ojo y señalando con el dedo su ojo, dentro de un marco con rayos de sol y con el texto en negrita \"ORIGINAL\" abajo.",
+          "featured": false,
+          "description_en": "A stylized black and white anime illustration of the character Makima winking and pointing to her eye, set within a sunburst frame with bold \"ORIGINAL\" text below.",
+          "tagsInput": "makima, chainsaw man, demon control"
+        }
+      ]
+    },
+    {
+      "characterName": "Satoru Gojo",
+      "animeImage": "/transformations/anime-1767358081784.jpg",
+      "realImage": "/transformations/real-1767358084207.jpg",
+      "series": "Jujutsu Kaisen",
+      "category": "cosplay",
+      "tags": [
+        "gojo",
+        "dios",
+        "god",
+        "jujutsu kaisen"
+      ],
+      "likes": 0,
+      "id": "transform-1767358085218"
+    },
+    {
+      "characterName": "Marin Kitagawa",
+      "animeImage": "/transformations/anime-1767358979256.jpg",
+      "realImage": "/transformations/real-1767358982165.jpg",
+      "series": "My Dress-Up Darling",
+      "category": "2.5d",
+      "tags": [
+        "marin",
+        "kawai girl"
+      ],
+      "likes": 0,
+      "id": "transform-1767358983012"
     }
   ]
 }
