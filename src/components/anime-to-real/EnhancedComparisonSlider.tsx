@@ -36,9 +36,15 @@ export default function EnhancedComparisonSlider({
     const [isDragging, setIsDragging] = useState(false);
     const [showSparkle, setShowSparkle] = useState(false);
     const [showFunFact, setShowFunFact] = useState(false);
+    const [showHeartBurst, setShowHeartBurst] = useState(false);
     const [hasReachedEdge, setHasReachedEdge] = useState({ left: false, right: false });
     const containerRef = useRef<HTMLDivElement>(null);
     const lastHapticPosition = useRef<number | null>(null);
+
+    // Double-tap detection
+    const lastTapRef = useRef<number>(0);
+    const isDraggingRef = useRef<boolean>(false);
+    const startXRef = useRef<number>(0);
 
     // Spring animation for smooth movement
     const springPosition = useSpring(position, {
@@ -51,14 +57,6 @@ export default function EnhancedComparisonSlider({
     const glowIntensity = useSpring(isDragging ? 1 : 0, {
         stiffness: 200,
         damping: 20
-    });
-
-    // Touch state ref for gesture detection
-    const touchState = useRef({
-        startX: 0,
-        startY: 0,
-        isDraggingSlider: false,
-        hasDecidedDirection: false
     });
 
     const updatePosition = useCallback((clientX: number) => {
@@ -74,29 +72,44 @@ export default function EnhancedComparisonSlider({
         setTimeout(() => setShowSparkle(false), 600);
     }, []);
 
-    // Haptic feedback at key positions (0%, 50%, 100%)
+    // Haptic feedback
     const triggerHaptic = useCallback((intensity: number[] = [10]) => {
-        if ('vibrate' in navigator) {
+        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
             navigator.vibrate(intensity);
         }
     }, []);
 
+    // Double-tap like handler
+    const handleDoubleTap = useCallback(() => {
+        const now = Date.now();
+        const DOUBLE_TAP_DELAY = 300;
+
+        if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+            // Trigger like
+            if (!isLiked) {
+                setIsLiked(true);
+                onLike?.();
+            }
+            setShowHeartBurst(true);
+            triggerHaptic([50]);
+            setTimeout(() => setShowHeartBurst(false), 800);
+        }
+        lastTapRef.current = now;
+    }, [isLiked, onLike, triggerHaptic]);
+
     // Check for edge positions and trigger haptic/fun fact
     useEffect(() => {
         const checkEdges = () => {
-            // Left edge (0-5%)
             if (position <= 5 && !hasReachedEdge.left) {
                 setHasReachedEdge(prev => ({ ...prev, left: true }));
                 triggerHaptic([15, 30, 15]);
                 if (funFact) setShowFunFact(true);
             }
-            // Right edge (95-100%)
             if (position >= 95 && !hasReachedEdge.right) {
                 setHasReachedEdge(prev => ({ ...prev, right: true }));
                 triggerHaptic([15, 30, 15]);
                 if (funFact) setShowFunFact(true);
             }
-            // Center (45-55%) - subtle feedback
             if (position >= 45 && position <= 55 && lastHapticPosition.current !== 50) {
                 lastHapticPosition.current = 50;
                 triggerHaptic([5]);
@@ -108,87 +121,39 @@ export default function EnhancedComparisonSlider({
         if (isDragging) checkEdges();
     }, [position, isDragging, hasReachedEdge, triggerHaptic, funFact]);
 
-    // NATIVE event handlers with passive: false
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const handleTouchStart = (e: TouchEvent) => {
-            const touch = e.touches[0];
-            touchState.current = {
-                startX: touch.clientX,
-                startY: touch.clientY,
-                isDraggingSlider: false,
-                hasDecidedDirection: false
-            };
-        };
-
-        const handleTouchMove = (e: TouchEvent) => {
-            const touch = e.touches[0];
-            const deltaX = Math.abs(touch.clientX - touchState.current.startX);
-            const deltaY = Math.abs(touch.clientY - touchState.current.startY);
-
-            // Decide direction after 10px of movement
-            if (!touchState.current.hasDecidedDirection && (deltaX > 10 || deltaY > 10)) {
-                touchState.current.hasDecidedDirection = true;
-                if (deltaX > deltaY) {
-                    touchState.current.isDraggingSlider = true;
-                    setIsDragging(true);
-                    triggerSparkle();
-                }
-            }
-
-            // If horizontal drag, prevent scroll and update position
-            if (touchState.current.isDraggingSlider) {
-                e.preventDefault(); // This works because passive: false
-                updatePosition(touch.clientX);
-            }
-        };
-
-        const handleTouchEnd = () => {
-            setIsDragging(false);
-            touchState.current = {
-                startX: 0,
-                startY: 0,
-                isDraggingSlider: false,
-                hasDecidedDirection: false
-            };
-        };
-
-        // Add with passive: false to allow preventDefault
-        container.addEventListener('touchstart', handleTouchStart, { passive: true });
-        container.addEventListener('touchmove', handleTouchMove, { passive: false });
-        container.addEventListener('touchend', handleTouchEnd, { passive: true });
-
-        return () => {
-            container.removeEventListener('touchstart', handleTouchStart);
-            container.removeEventListener('touchmove', handleTouchMove);
-            container.removeEventListener('touchend', handleTouchEnd);
-        };
-    }, [updatePosition, triggerSparkle]);
-
-    // Mouse handlers (React events are fine for mouse)
-    const handleMouseDown = (e: React.MouseEvent) => {
+    // --- UNIFIED POINTER EVENTS (Mouse + Touch) ---
+    const handlePointerDown = (e: React.PointerEvent) => {
+        isDraggingRef.current = false;
+        startXRef.current = e.clientX;
         setIsDragging(true);
+        e.currentTarget.setPointerCapture(e.pointerId);
         updatePosition(e.clientX);
         triggerSparkle();
     };
 
-    const handleMouseMove = (e: React.MouseEvent) => {
+    const handlePointerMove = (e: React.PointerEvent) => {
         if (!isDragging) return;
+        // If moved more than 5px, it's a drag not a tap
+        if (Math.abs(e.clientX - startXRef.current) > 5) {
+            isDraggingRef.current = true;
+        }
         updatePosition(e.clientX);
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = (e: React.PointerEvent) => {
         setIsDragging(false);
+        e.currentTarget.releasePointerCapture(e.pointerId);
+
+        // If NOT dragging, process as potential double-tap
+        if (!isDraggingRef.current) {
+            handleDoubleTap();
+        }
     };
 
     const handleLike = () => {
         setIsLiked(!isLiked);
         onLike?.();
-        if ('vibrate' in navigator) {
-            navigator.vibrate([10, 50, 10]);
-        }
+        triggerHaptic([10, 50, 10]);
     };
 
     // Update spring when position changes
@@ -204,14 +169,18 @@ export default function EnhancedComparisonSlider({
                 style={{ opacity: glowIntensity }}
             />
 
-            {/* Slider Container */}
-            <div
+            {/* Slider Container - touch-none prevents scroll conflicts */}
+            <motion.div
                 ref={containerRef}
-                className="relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10"
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                className="relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-none"
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
+                animate={{
+                    scale: isDragging ? 1.02 : 1
+                }}
+                transition={{ duration: 0.2 }}
             >
                 {/* Background Image (Real) */}
                 <motion.img
@@ -220,7 +189,6 @@ export default function EnhancedComparisonSlider({
                     className="relative block w-full h-auto object-cover pointer-events-none"
                     draggable={false}
                     animate={{
-                        scale: isDragging ? 1.02 : 1,
                         filter: isDragging ? 'saturate(1.2)' : 'saturate(1)'
                     }}
                     transition={{ duration: 0.3 }}
@@ -237,11 +205,24 @@ export default function EnhancedComparisonSlider({
                         className="w-full h-full object-cover"
                         draggable={false}
                         animate={{
-                            scale: isDragging ? 1.02 : 1,
                             filter: isDragging ? 'saturate(1.2)' : 'saturate(1)'
                         }}
                         transition={{ duration: 0.3 }}
                     />
+                </motion.div>
+
+                {/* Heart Burst (Double-tap) */}
+                <motion.div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{
+                        opacity: showHeartBurst ? 1 : 0,
+                        scale: showHeartBurst ? 1.5 : 0.5,
+                        rotate: showHeartBurst ? [-12, 12, 0] : 0
+                    }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <Heart size={80} className="fill-red-500 text-red-500 drop-shadow-lg" />
                 </motion.div>
 
                 {/* Dynamic Slider Line */}
@@ -337,7 +318,7 @@ export default function EnhancedComparisonSlider({
                     animate={{ opacity: 0, scale: 0.9 }}
                     transition={{ delay: 2.5, duration: 0.5 }}
                 >
-                    ↔ {dict?.transformation?.slide || 'Slide'}
+                    ↔ {dict?.transformation?.slide || 'SLIDE & TAP ❤️'}
                 </motion.div>
 
                 {/* Fun Fact Reveal */}
@@ -403,9 +384,9 @@ export default function EnhancedComparisonSlider({
                 <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center gap-2 text-[8px] font-mono text-white/50 bg-black/20 px-2 py-0.5 rounded-full pointer-events-none border border-white/5">
                     <span>AR-X ENHANCED</span>
                     <span>•</span>
-                    <span>v2.5.0</span>
+                    <span>v2.6.0</span>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }
