@@ -40,6 +40,24 @@
           "tagsInput": "reze, chainsaw man, the bomb girl, chica bomba"
         }
       ]
+    },
+    {
+      "characterName": "Toji Fushiguro",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-toji-fushiguro.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-toji-fushiguro.jpg",
+      "series": "Jujutsu Kaisen",
+      "category": "2.5d",
+      "tags": [
+        "Toji",
+        "strong character",
+        "jjk"
+      ],
+      "description": {
+        "en": "Toji Fushiguro (also known as the \"Sorcerer Killer\") is a primary antagonist in the Jujutsu Kaisen manga and anime. Originally from the Zenin Clan, he possesses a Heavenly Restriction, trading cursed energy for supreme physical prowess. He is the father of Megumi Fushiguro and is renowned as the mercenary who nearly killed Satoru Gojo during the Hidden Inventory arc.",
+        "es": "Toji Fushiguro (conocido como el \"Asesino de Hechiceros\") es un antagonista clave en el manga y anime Jujutsu Kaisen. Nacido en el Clan Zenin, posee una Restricción Celestial que le otorga fuerza física sobrehumana a cambio de no tener energía maldita. Es el padre de Megumi Fushiguro y el mercenario famoso por derrotar temporalmente a Satoru Gojo durante el arco del Inventario Oculto."
+      },
+      "likes": 0,
+      "id": "transform-1767482201722"
     }
   ]
 }
