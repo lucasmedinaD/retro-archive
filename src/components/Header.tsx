@@ -30,6 +30,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                 <nav className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wide">
                     <Link href={`/${lang}`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.index}</Link>
                     <Link href={`/${lang}/anime-to-real`} className="hover:underline decoration-2 underline-offset-4 text-accent font-black">{dict.nav.anime_to_real}</Link>
+                    <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
                     <Link href={`/${lang}/favorites`} className="hover:underline decoration-2 underline-offset-4 relative">
                         {dict.nav.favorites}
                         {favorites.length > 0 && (
@@ -59,6 +60,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                     <nav className="flex flex-col items-center gap-6 text-2xl font-black uppercase tracking-widest">
                         <Link href={`/${lang}`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.index}</Link>
                         <Link href={`/${lang}/anime-to-real`} onClick={toggleMenu} className="text-accent">{dict.nav.anime_to_real}</Link>
+                        <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
                         <Link href={`/${lang}/favorites`} onClick={toggleMenu} className="hover:text-accent relative">
                             {dict.nav.favorites}
                             {favorites.length > 0 && (
@@ -67,7 +69,6 @@ export default function Header({ lang, dict }: HeaderProps) {
                                 </span>
                             )}
                         </Link>
-                        <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="text-gray-500 text-lg">{dict.nav.apparel}</Link>
                     </nav>
 
                     <div className="flex gap-6 mt-8">
