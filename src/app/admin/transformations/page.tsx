@@ -81,19 +81,25 @@ export default function TransformationsPage() {
         setError(null);
 
         try {
-            // 1. Upload anime image
-            const animeUpload = await uploadImageToCloud(animeImage, 'transformations');
+            // 1. Upload anime image with smart naming
+            const animeUpload = await uploadImageToCloud(animeImage, 'transformations', {
+                title: characterName,
+                prefix: 'anime'
+            });
             if (!animeUpload.success) throw new Error(`Anime upload failed: ${animeUpload.error}`);
 
-            // 2. Upload real image
-            const realUpload = await uploadImageToCloud(realImage, 'transformations');
+            // 2. Upload real image with smart naming
+            const realUpload = await uploadImageToCloud(realImage, 'transformations', {
+                title: characterName,
+                prefix: 'real'
+            });
             if (!realUpload.success) throw new Error(`Real upload failed: ${realUpload.error}`);
 
-            // 3. Create transformation
+            // 3. Create transformation with FULL Supabase URLs
             const transformation = {
                 characterName,
-                animeImage: animeUpload.path!,
-                realImage: realUpload.path!,
+                animeImage: animeUpload.publicUrl!,  // Full URL from Supabase
+                realImage: realUpload.publicUrl!,    // Full URL from Supabase
                 series: series || undefined,
                 category,
                 tags: tags ? tags.split(',').map(t => t.trim()).filter(t => t) : undefined,

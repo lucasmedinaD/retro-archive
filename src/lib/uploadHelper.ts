@@ -9,14 +9,22 @@ import { compressImage } from './imageCompressor';
 interface UploadResult {
     success: boolean;
     path?: string;
+    publicUrl?: string; // NEW: Full Supabase URL
     error?: string;
     originalSize?: number;
     compressedSize?: number;
+    filename?: string;
+}
+
+interface UploadOptions {
+    title?: string;      // Title for filename generation (e.g., "Komi-San")
+    prefix?: string;     // Prefix for file (e.g., "anime", "real", "product")
 }
 
 export async function uploadImageToCloud(
     file: File,
-    folder: 'products' | 'transformations' | 'slider-demos'
+    folder: 'products' | 'transformations' | 'slider-demos',
+    options: UploadOptions = {}
 ): Promise<UploadResult> {
     try {
         const originalSize = file.size;
@@ -44,6 +52,14 @@ export async function uploadImageToCloud(
         formData.append('file', processedFile);
         formData.append('folder', folder);
 
+        // NEW: Add title and prefix for smart naming
+        if (options.title) {
+            formData.append('title', options.title);
+        }
+        if (options.prefix) {
+            formData.append('prefix', options.prefix);
+        }
+
         // Step 3: Upload via server endpoint (avoids CORS)
         const uploadResponse = await fetch('/api/admin/upload', {
             method: 'POST',
@@ -58,10 +74,12 @@ export async function uploadImageToCloud(
 
         const result = await uploadResponse.json();
 
-        // Success
+        // Success - returns full Supabase URL
         return {
             success: true,
-            path: result.publicUrl,
+            path: result.path,
+            publicUrl: result.publicUrl, // Full URL
+            filename: result.filename,
             originalSize,
             compressedSize
         };

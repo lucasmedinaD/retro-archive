@@ -8,6 +8,60 @@ export const config = {
     },
 };
 
+/**
+ * Generate safe filename from title
+ * Example: "Komi-San Anime" → "komi-san-anime"
+ */
+function slugify(text: string): string {
+    return text
+        .toLowerCase()
+        .normalize('NFD') // Normalize unicode
+        .replace(/[\u0300-\u036f]/g, '') // Remove accents
+        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with dash
+        .replace(/^-+|-+$/g, '') // Remove leading/trailing dashes
+        .slice(0, 50); // Max 50 chars
+}
+
+/**
+ * Check if file exists in Supabase and find next available name
+ * Returns: unique filename with extension
+ */
+async function getUniqueFilename(
+    supabase: ReturnType<typeof getSupabaseAdmin>,
+    folder: string,
+    baseName: string,
+    extension: string
+): Promise<string> {
+    let filename = `${baseName}${extension}`;
+    let counter = 1;
+
+    while (true) {
+        const filePath = `${folder}/${filename}`;
+
+        // Check if file exists
+        const { data, error } = await supabase.storage
+            .from(STORAGE_BUCKET)
+            .list(folder, {
+                search: filename
+            });
+
+        // If error or file doesn't exist, this name is available
+        if (error || !data || data.length === 0) {
+            return filename;
+        }
+
+        // File exists, try next number
+        filename = `${baseName}-${counter}${extension}`;
+        counter++;
+
+        // Safety: don't loop forever
+        if (counter > 100) {
+            // Fallback to timestamp if we hit too many duplicates
+            return `${baseName}-${Date.now()}${extension}`;
+        }
+    }
+}
+
 export async function POST(request: NextRequest) {
     // 1. Verify admin authentication via cookie
     const cookieStore = await cookies();
@@ -18,10 +72,12 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-        // 2. Get form data with file
+        // 2. Get form data with file and title
         const formData = await request.formData();
         const file = formData.get('file') as File;
         const folder = formData.get('folder') as string;
+        const title = formData.get('title') as string; // NEW: title for naming
+        const prefix = formData.get('prefix') as string; // NEW: 'anime' or 'real' etc.
 
         // 3. Validate inputs
         if (!file) {
@@ -35,23 +91,25 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 4. Generate unique filename
-        const timestamp = Date.now();
-        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_').toLowerCase();
-        const uniqueFilename = `${timestamp}-${safeName}`;
+        // 4. Generate smart filename from title
+        const baseName = title ? slugify(title) : 'upload';
+        const extension = '.jpg'; // Always .jpg after compression
+        const finalBaseName = prefix ? `${prefix}-${baseName}` : baseName;
+
+        // 5. Get unique filename (checks for duplicates)
+        const supabase = getSupabaseAdmin();
+        const uniqueFilename = await getUniqueFilename(supabase, folder, finalBaseName, extension);
         const filePath = `${folder}/${uniqueFilename}`;
 
-        // 5. Convert file to buffer
+        // 6. Convert file to buffer
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // 6. Upload to Supabase (server-side, no CORS issues)
-        const supabase = getSupabaseAdmin();
-
+        // 7. Upload to Supabase
         const { data, error } = await supabase.storage
             .from(STORAGE_BUCKET)
             .upload(filePath, buffer, {
-                contentType: file.type,
+                contentType: 'image/jpeg',
                 upsert: false
             });
 
@@ -60,11 +118,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        // 7. Return public URL
+        // 8. Return full public URL
+        const publicUrl = getPublicUrl(filePath);
+
         return NextResponse.json({
             success: true,
             path: filePath,
-            publicUrl: getPublicUrl(filePath)
+            publicUrl,
+            filename: uniqueFilename
         });
 
     } catch (error: any) {
