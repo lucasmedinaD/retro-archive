@@ -2,7 +2,6 @@ import { getDictionary } from '@/get-dictionary';
 import SearchBar from '@/components/SearchBar';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import MobileBottomNav from '@/components/mobile/MobileBottomNav';
 
 export default async function SearchPage({
     params
