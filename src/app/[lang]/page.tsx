@@ -45,8 +45,8 @@ export default async function Home({ params, searchParams }: HomeProps) {
   return (
     <main className="min-h-screen bg-[#f4f4f0] text-black pb-20 selection:bg-black selection:text-white dark:bg-[#111111] dark:text-[#f4f4f0] dark:selection:bg-white dark:selection:text-black transition-colors duration-300">
 
-      {/* Top Marquee */}
-      <div className="bg-black text-white dark:bg-white dark:text-black text-xs font-mono py-2 overflow-hidden border-b border-black dark:border-white">
+      {/* Top Marquee - Hidden on mobile */}
+      <div className="hidden md:block bg-black text-white dark:bg-white dark:text-black text-xs font-mono py-2 overflow-hidden border-b border-black dark:border-white">
         <div className="marquee-content uppercase tracking-widest">
           {dict.catalog.marquee} {dict.catalog.marquee}
         </div>
@@ -55,30 +55,25 @@ export default async function Home({ params, searchParams }: HomeProps) {
       <Header lang={lang} dict={dict} />
       <MobileTopNav lang={lang} dict={dict} />
 
-      {/* Dynamic Featured Hero */}
-      {featuredTransformation ? (
-        <FeaturedHero
-          transformation={featuredTransformation}
-          dict={dict}
-          lang={lang}
-        />
-      ) : (
-        // Fallback if no transformations exist (shouldn't happen)
-        <section className="border-b border-black dark:border-white py-24 text-center">
-          <h1 className="text-4xl font-bold">SYSTEM OFFLINE</h1>
-        </section>
-      )}
-
-
-
-      {/* Catalog Marquee */}
-      <div className="border-b border-black dark:border-white py-3 overflow-hidden bg-accent">
-        <h2 className="text-8xl font-black opacity-100 whitespace-nowrap marquee-container text-black">
-          <div className="marquee-content">
-            {dict.anime_to_real.title} // {dict.anime_to_real.title} //
-          </div>
-        </h2>
+      {/* Dynamic Featured Hero - Desktop Only */}
+      <div className="hidden md:block">
+        {featuredTransformation ? (
+          <FeaturedHero
+            transformation={featuredTransformation}
+            dict={dict}
+            lang={lang}
+          />
+        ) : (
+          // Fallback if no transformations exist (shouldn't happen)
+          <section className="border-b border-black dark:border-white py-24 text-center">
+            <h1 className="text-4xl font-bold">SYSTEM OFFLINE</h1>
+          </section>
+        )}
       </div>
+
+
+
+
 
       {/* Main Transformation Feed (The Addiction Hook) */}
       <section className="max-w-[90rem] mx-auto px-6 py-12 border-b border-black dark:border-white">
