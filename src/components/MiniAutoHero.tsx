@@ -95,11 +95,6 @@ export default function MiniAutoHero({ transformation, lang }: MiniAutoHeroProps
                     </div>
                 </div>
             </div>
-
-            {/* Subtle Instruction Text */}
-            <p className="text-center mt-3 text-xs md:text-sm font-mono text-gray-500 dark:text-gray-400">
-                {lang === 'es' ? '↕️ Animación automática mostrando transformación 2D ↔ Real' : '↕️ Auto-playing transformation: 2D ↔ Real'}
-            </p>
         </div>
     );
 }

@@ -75,20 +75,8 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict, ini
             {/* Filter Section (Mobile Toggle + Pills) */}
             <div className="mb-8 space-y-4">
 
-                {/* Filter Toggle Button (Mobile) */}
-                <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className="md:hidden flex items-center gap-2 border-2 border-black dark:border-white px-4 py-2 font-bold text-sm uppercase mb-4 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
-                >
-                    <Filter size={16} />
-                    {filterLabel}
-                    {selectedSeries && (
-                        <span className="bg-accent text-black px-2 py-0.5 text-xs">1</span>
-                    )}
-                </button>
-
                 {/* Filter Pills */}
-                <div className={`flex flex-wrap gap-2 ${showFilters ? 'block' : 'hidden md:flex'}`}>
+                <div className="flex flex-wrap gap-2">
                     {/* All Button */}
                     <button
                         onClick={() => setSelectedSeries(null)}
