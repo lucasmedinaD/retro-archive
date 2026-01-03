@@ -1,3 +1,5 @@
+import { normalizeTransformation } from '@/lib/imageUrlHelper';
+
 export interface Transformation {
     id: string;
     characterName: string;
@@ -39,11 +41,12 @@ try {
     // This will be available after the first admin creation
     const jsonData = require('./transformations.json');
     if (jsonData && jsonData.transformations) {
-        transformationsData = jsonData.transformations;
+        // Normalize all image URLs (converts local paths to Supabase URLs)
+        transformationsData = jsonData.transformations.map(normalizeTransformation);
     }
 } catch (e) {
     // File doesn't exist yet, use fallback
-    transformationsData = fallbackTransformations;
+    transformationsData = fallbackTransformations.map(normalizeTransformation);
 }
 
 export function getTransformations(): Transformation[] {
