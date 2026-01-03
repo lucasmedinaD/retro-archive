@@ -302,6 +302,20 @@
       ],
       "likes": 0,
       "id": "transform-1767365153109"
+    },
+    {
+      "characterName": "Power",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767477573028-1000029044.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/1767477575465-1000029046.jpg",
+      "series": "Chainsaw Man",
+      "category": "2.5d",
+      "tags": [
+        "Power",
+        "chainsaw man",
+        "nyako"
+      ],
+      "likes": 0,
+      "id": "transform-1767477577222"
     }
   ]
 }
