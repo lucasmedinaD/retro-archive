@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -15,8 +16,19 @@ interface HeaderProps {
 export default function Header({ lang, dict }: HeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { favorites } = useFavorites();
+    const pathname = usePathname();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    // Helper to check if a path is active
+    const isActive = (path: string) => {
+        if (path === `/${lang}` && pathname === `/${lang}`) return true;
+        if (path !== `/${lang}` && pathname.startsWith(path)) return true;
+        return false;
+    };
+
+    const linkClass = (path: string) =>
+        `hover:underline decoration-2 underline-offset-4 ${isActive(path) ? 'text-accent font-black' : ''}`;
 
     return (
         <>
@@ -28,10 +40,10 @@ export default function Header({ lang, dict }: HeaderProps) {
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wide">
-                    <Link href={`/${lang}`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.index}</Link>
-                    <Link href={`/${lang}/anime-to-real`} className="hover:underline decoration-2 underline-offset-4 text-accent font-black">{dict.nav.anime_to_real}</Link>
+                    <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.index}</Link>
+                    <Link href={`/${lang}/anime-to-real`} className={linkClass(`/${lang}/anime-to-real`)}>{dict.nav.anime_to_real}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
-                    <Link href={`/${lang}/favorites`} className="hover:underline decoration-2 underline-offset-4 relative">
+                    <Link href={`/${lang}/favorites`} className={`${linkClass(`/${lang}/favorites`)} relative`}>
                         {dict.nav.favorites}
                         {favorites.length > 0 && (
                             <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
@@ -58,10 +70,10 @@ export default function Header({ lang, dict }: HeaderProps) {
             {isMenuOpen && (
                 <div className="fixed inset-0 z-40 bg-[#f4f4f0] dark:bg-[#111111] flex flex-col justify-center items-center gap-8 md:hidden">
                     <nav className="flex flex-col items-center gap-6 text-2xl font-black uppercase tracking-widest">
-                        <Link href={`/${lang}`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.index}</Link>
-                        <Link href={`/${lang}/anime-to-real`} onClick={toggleMenu} className="text-accent">{dict.nav.anime_to_real}</Link>
+                        <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.index}</Link>
+                        <Link href={`/${lang}/anime-to-real`} onClick={toggleMenu} className={isActive(`/${lang}/anime-to-real`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.anime_to_real}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
-                        <Link href={`/${lang}/favorites`} onClick={toggleMenu} className="hover:text-accent relative">
+                        <Link href={`/${lang}/favorites`} onClick={toggleMenu} className={`${isActive(`/${lang}/favorites`) ? 'text-accent' : 'hover:text-accent'} relative`}>
                             {dict.nav.favorites}
                             {favorites.length > 0 && (
                                 <span className="absolute -top-2 -right-6 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
