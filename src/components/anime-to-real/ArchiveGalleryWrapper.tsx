@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 import ArchiveProgressBar from '@/components/ArchiveProgressBar';
 import EmailCapturePopup from '@/components/EmailCapturePopup';
@@ -20,6 +20,11 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict, ini
     const [selectedSeries, setSelectedSeries] = useState<string | null>(initialFilter || null);
     const [showFilters, setShowFilters] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Sync state with URL filter changes
+    useEffect(() => {
+        setSelectedSeries(initialFilter || null);
+    }, [initialFilter]);
 
     // Handle search
     const handleSearch = useCallback((query: string) => {
