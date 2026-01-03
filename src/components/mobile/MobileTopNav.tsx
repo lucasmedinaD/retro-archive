@@ -12,7 +12,6 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
     const pathname = usePathname();
 
     const tabs = [
-        { label: dict?.nav?.index || 'For You', path: `/${lang}` },
         { label: 'Anime Design', path: `/${lang}/shop?category=design` },
         { label: 'Anime to Real', path: `/${lang}/anime-to-real` },
         { label: 'Favorites', path: `/${lang}/favorites` },
@@ -29,8 +28,8 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
                                 key={tab.label}
                                 href={tab.path}
                                 className={`text-sm font-bold uppercase tracking-wider px-2 py-1 relative ${isActive
-                                        ? 'text-black dark:text-white'
-                                        : 'text-gray-400 dark:text-gray-600'
+                                    ? 'text-black dark:text-white'
+                                    : 'text-gray-400 dark:text-gray-600'
                                     }`}
                             >
                                 {tab.label}
