@@ -2,30 +2,29 @@
 
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export default function ThemeToggle() {
-    const [isDark, setIsDark] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme, resolvedTheme } = useTheme();
 
     useEffect(() => {
-        // Default to LIGHT mode, only dark if explicitly set
-        if (localStorage.theme === 'dark') {
-            document.documentElement.classList.add('dark');
-            setIsDark(true);
-        } else {
-            document.documentElement.classList.remove('dark');
-            setIsDark(false);
-        }
+        setMounted(true);
     }, []);
 
+    if (!mounted) {
+        return (
+            <div className="p-1 border border-black dark:border-white opacity-50">
+                <Sun size={14} />
+            </div>
+        );
+    }
+
     const toggleTheme = () => {
-        if (isDark) {
-            document.documentElement.classList.remove('dark');
-            localStorage.theme = 'light';
-            setIsDark(false);
+        if (resolvedTheme === 'dark') {
+            setTheme('light');
         } else {
-            document.documentElement.classList.add('dark');
-            localStorage.theme = 'dark';
-            setIsDark(true);
+            setTheme('dark');
         }
     };
 
@@ -35,7 +34,7 @@ export default function ThemeToggle() {
             className="p-1 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
             aria-label="Toggle Theme"
         >
-            {isDark ? <Sun size={14} /> : <Moon size={14} />}
+            {resolvedTheme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
         </button>
     );
 }

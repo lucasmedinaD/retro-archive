@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AnalyticsScripts from "@/components/AnalyticsScripts";
 import { OrganizationSchema, WebSiteSchema } from "@/components/SchemaScript";
-import { WishlistProvider } from "@/contexts/WishlistContext";
+import { Providers } from "@/providers";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 
 const geistSans = Geist({
@@ -110,11 +110,11 @@ export default function RootLayout({
         <AnalyticsScripts />
         <OrganizationSchema />
         <WebSiteSchema />
-        <WishlistProvider>
+        <Providers>
           {children}
           {/* ExitIntentPopup temporarily disabled */}
           {/* <ExitIntentPopup /> */}
-        </WishlistProvider>
+        </Providers>
       </body>
     </html>
   );
