@@ -9,8 +9,9 @@ import NewsletterForm from '@/components/NewsletterForm';
 import { Instagram, Twitter } from 'lucide-react';
 import { getTransformations } from '@/data/transformations';
 import FeaturedHero from '@/components/FeaturedHero';
+import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
-import FeedSection from '@/components/FeedSection';
+import MiniAutoHero from '@/components/MiniAutoHero';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
