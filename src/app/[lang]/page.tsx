@@ -11,6 +11,7 @@ import { getTransformations } from '@/data/transformations';
 import FeaturedHero from '@/components/FeaturedHero';
 import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
+import MiniAutoHero from '@/components/MiniAutoHero';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -76,7 +77,13 @@ export default async function Home({ params, searchParams }: HomeProps) {
 
 
       {/* Main Transformation Feed (The Addiction Hook) */}
-      <section className="max-w-[90rem] mx-auto px-6 py-12 border-b border-black dark:border-white">
+      <section className="max-w-[90rem] mx-auto px-6 py-8 md:py-12 border-b border-black dark:border-white">
+        {/* Mini Auto Hero - Shows how transformations work */}
+        <MiniAutoHero
+          transformation={featuredTransformation || transformations[0]}
+          lang={lang}
+        />
+
         <ArchiveGalleryWrapper
           transformations={transformations}
           lang={lang}

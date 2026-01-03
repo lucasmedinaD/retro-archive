@@ -72,14 +72,8 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict, ini
 
     return (
         <>
-            {/* Search + Filter Section */}
+            {/* Filter Section (Mobile Toggle + Pills) */}
             <div className="mb-8 space-y-4">
-                {/* Search Bar */}
-                <SearchBar
-                    onSearch={handleSearch}
-                    placeholder={searchPlaceholder}
-                    className="max-w-md"
-                />
 
                 {/* Filter Toggle Button (Mobile) */}
                 <button
