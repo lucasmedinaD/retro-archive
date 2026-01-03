@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
 import ArchiveProgressBar from '@/components/ArchiveProgressBar';
 import EmailCapturePopup from '@/components/EmailCapturePopup';
 import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
-import SearchBar from '@/components/SearchBar';
 import { Transformation } from '@/data/transformations';
-import { Filter, X } from 'lucide-react';
 
 interface ArchiveGalleryWrapperProps {
     transformations: Transformation[];
@@ -18,57 +16,22 @@ interface ArchiveGalleryWrapperProps {
 
 export default function ArchiveGalleryWrapper({ transformations, lang, dict, initialFilter }: ArchiveGalleryWrapperProps) {
     const [selectedSeries, setSelectedSeries] = useState<string | null>(initialFilter || null);
-    const [showFilters, setShowFilters] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
 
     // Sync state with URL filter changes
     useEffect(() => {
         setSelectedSeries(initialFilter || null);
     }, [initialFilter]);
 
-    // Handle search
-    const handleSearch = useCallback((query: string) => {
-        setSearchQuery(query.toLowerCase());
-    }, []);
-
-    // Extract unique series from transformations
-    const allSeries = useMemo(() => {
-        const seriesSet = new Set<string>();
-        transformations.forEach(t => {
-            if (t.series) {
-                seriesSet.add(t.series);
-            }
-        });
-        return Array.from(seriesSet).sort();
-    }, [transformations]);
-
-    // Filter transformations based on search AND selected series
+    // Filter transformations based on selected series (case-insensitive)
     const filteredTransformations = useMemo(() => {
-        let result = transformations;
+        if (!selectedSeries) return transformations;
 
-        // Filter by series (case-insensitive)
-        if (selectedSeries) {
-            const normalizedFilter = selectedSeries.toLowerCase();
-            result = result.filter(t => t.series && t.series.toLowerCase() === normalizedFilter);
-        }
+        const normalizedFilter = selectedSeries.toLowerCase();
+        return transformations.filter(t => t.series && t.series.toLowerCase() === normalizedFilter);
+    }, [transformations, selectedSeries]);
 
-        // Filter by search query
-        if (searchQuery) {
-            result = result.filter(t =>
-                t.characterName.toLowerCase().includes(searchQuery) ||
-                (t.series && t.series.toLowerCase().includes(searchQuery)) ||
-                (t.tags && t.tags.some(tag => tag.toLowerCase().includes(searchQuery)))
-            );
-        }
-
-        return result;
-    }, [transformations, selectedSeries, searchQuery]);
-
-    const filterLabel = lang === 'es' ? 'Filtrar por Anime' : 'Filter by Anime';
-    const allLabel = lang === 'es' ? 'Todos' : 'All';
     const showingLabel = lang === 'es' ? 'Mostrando' : 'Showing';
     const ofLabel = lang === 'es' ? 'de' : 'of';
-    const searchPlaceholder = lang === 'es' ? 'Buscar personaje o serie...' : 'Search character or series...';
 
     return (
         <>
