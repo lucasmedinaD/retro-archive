@@ -23,7 +23,7 @@ export default function SearchPage() {
             (t.series && t.series.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (t.tags && t.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
         )
-        : [];
+        : allTransformations; // Show all when no search query
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black dark:bg-[#111111] dark:text-[#f4f4f0] pb-24">

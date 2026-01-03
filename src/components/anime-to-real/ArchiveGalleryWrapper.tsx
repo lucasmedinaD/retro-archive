@@ -72,52 +72,9 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict, ini
 
     return (
         <>
-            {/* Filter Section (Mobile Toggle + Pills) */}
-            <div className="mb-8 space-y-4">
-
-                {/* Filter Pills */}
-                <div className="flex flex-wrap gap-2">
-                    {/* All Button */}
-                    <button
-                        onClick={() => setSelectedSeries(null)}
-                        className={`px-4 py-2 border-2 font-bold text-xs uppercase transition-all ${!selectedSeries
-                            ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                            : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                            }`}
-                    >
-                        {allLabel} ({transformations.length})
-                    </button>
-
-                    {/* Series Buttons */}
-                    {allSeries.map(series => {
-                        const count = transformations.filter(t => t.series === series).length;
-                        return (
-                            <button
-                                key={series}
-                                onClick={() => setSelectedSeries(series === selectedSeries ? null : series)}
-                                className={`px-4 py-2 border-2 font-bold text-xs uppercase transition-all flex items-center gap-2 ${selectedSeries === series
-                                    ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                                    : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                                    }`}
-                            >
-                                {series}
-                                <span className="bg-accent text-black px-1.5 py-0.5 text-[10px] rounded-sm">
-                                    {count}
-                                </span>
-                                {selectedSeries === series && (
-                                    <X size={12} className="ml-1" />
-                                )}
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* Active Filter Indicator */}
-                {selectedSeries && (
-                    <div className="mt-4 font-mono text-sm text-gray-600 dark:text-gray-400">
-                        {showingLabel} {filteredTransformations.length} {ofLabel} {transformations.length}
-                    </div>
-                )}
+            {/* Results Counter */}
+            <div className="mb-6 font-mono text-sm text-gray-600 dark:text-gray-400">
+                {showingLabel} {filteredTransformations.length} {ofLabel} {transformations.length}
             </div>
 
             <InspirationFeed
