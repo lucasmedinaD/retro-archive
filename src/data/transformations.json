@@ -76,6 +76,25 @@
       },
       "likes": 0,
       "id": "transform-1767483707472"
+    },
+    {
+      "characterName": "Power",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-power.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-power.jpg",
+      "series": "Chainsaw Man",
+      "category": "2.5d",
+      "tags": [
+        "Power",
+        "nyako",
+        "chainsaw man",
+        "blood fiend"
+      ],
+      "description": {
+        "en": "Power (known as the Blood Fiend) is a Public Safety Devil Hunter in the Chainsaw Man manga and anime. As a Fiend, she possesses a human corpse and manipulates blood to conjure weapons. She acts as Denji's chaotic partner within Special Division 4, eventually forming a deep, sibling-like bond with the protagonist and Aki Hayakawa despite her initially selfish personality.",
+        "es": "Power (conocida como la Hombre Demonio Sangre) es una cazadora de demonios de Seguridad Pública en el manga y anime Chainsaw Man. Como una Posesa de la Sangre (Blood Fiend), tiene la capacidad de manipular su sangre para crear armas letales. Sirve como la compañera caótica de Denji en la División Especial 4, desarrollando un vínculo familiar disfuncional pero leal con el protagonista y Aki Hayakawa."
+      },
+      "likes": 0,
+      "id": "transform-1767484044197"
     }
   ]
 }
