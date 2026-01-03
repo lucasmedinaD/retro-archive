@@ -20,13 +20,15 @@ interface TransformationDetailProps {
     onLike?: () => void;
     initialLiked?: boolean;
     dict?: any;
+    lang: 'en' | 'es';  // NEW: language for i18n
 }
 
 export default function TransformationDetail({
     transformation,
     onLike,
     initialLiked = false,
-    dict
+    dict,
+    lang
 }: TransformationDetailProps) {
     const [showShareModal, setShowShareModal] = useState(false);
     const [likeCount, setLikeCount] = useState(transformation.likes || 0);
@@ -152,7 +154,7 @@ export default function TransformationDetail({
                         {/* Description */}
                         {transformation.description && (
                             <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                                {transformation.description.en}
+                                {transformation.description[lang] || transformation.description.en || transformation.description.es}
                             </p>
                         )}
 

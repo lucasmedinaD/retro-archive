@@ -60,6 +60,7 @@ export default async function TransformationDetailPage({ params }: PageProps) {
             <TransformationDetail
                 transformation={transformation}
                 dict={dict}
+                lang={lang}
             />
 
             {/* Support Section */}
