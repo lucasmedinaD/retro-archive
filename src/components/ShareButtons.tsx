@@ -45,7 +45,7 @@ export default function ShareButtons({ url, title, description }: ShareButtonsPr
                     url: fullUrl,
                 });
             } catch (err) {
-                console.log('Share cancelled');
+                // Share cancelled by user - no action needed
             }
         }
     };
@@ -68,8 +68,8 @@ export default function ShareButtons({ url, title, description }: ShareButtonsPr
             <button
                 onClick={handleCopyLink}
                 className={`p-2 border transition-colors ${copied
-                        ? 'bg-green-500 text-white border-green-500'
-                        : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
+                    ? 'bg-green-500 text-white border-green-500'
+                    : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
                     }`}
                 aria-label="Copy link"
                 title={copied ? 'Link copied!' : 'Copy link'}

@@ -79,7 +79,9 @@ export function useArchiveProgress() {
         // Save immediately to localStorage
         saveProgress(newProgress);
 
-        console.log('[Archive] Marked as viewed:', id, 'Total:', newProgress.viewed.length);
+        if (process.env.NODE_ENV === 'development') {
+            console.log('[Archive] Marked as viewed:', id, 'Total:', newProgress.viewed.length);
+        }
     }, []);
 
     const isViewed = useCallback((id: string) => {

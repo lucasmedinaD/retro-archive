@@ -34,7 +34,9 @@ export async function compressImage(
 
     // Skip already small files (< 500KB)
     if (file.size < 500 * 1024) {
-        console.log('Image already small, skipping compression');
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Image already small, skipping compression');
+        }
         return file;
     }
 
@@ -87,7 +89,9 @@ export async function compressImage(
                             { type: 'image/jpeg' }
                         );
 
-                        console.log(`Compressed: ${(file.size / 1024).toFixed(0)}KB → ${(compressedFile.size / 1024).toFixed(0)}KB (${Math.round((1 - compressedFile.size / file.size) * 100)}% reduction)`);
+                        if (process.env.NODE_ENV === 'development') {
+                            console.log(`Compressed: ${(file.size / 1024).toFixed(0)}KB → ${(compressedFile.size / 1024).toFixed(0)}KB (${Math.round((1 - compressedFile.size / file.size) * 100)}% reduction)`);
+                        }
 
                         resolve(compressedFile);
                     },

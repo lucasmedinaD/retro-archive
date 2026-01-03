@@ -30,7 +30,9 @@ export interface NotificationPayload {
  * Currently logs to console - replace with actual email service
  */
 export async function sendNotificationEmail(payload: NotificationPayload): Promise<boolean> {
-    console.log('📧 [EMAIL HOOK] Notification:', payload.type, payload.data);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('📧 [EMAIL HOOK] Notification:', payload.type, payload.data);
+    }
 
     // TODO: Uncomment and configure when Brevo/SendGrid is set up
     // return await sendWithBrevo({
@@ -47,7 +49,9 @@ export async function sendNotificationEmail(payload: NotificationPayload): Promi
  * Currently logs to console - replace with actual email service
  */
 export async function sendConfirmationEmail(to: string, type: 'brief' | 'contact' | 'newsletter', lang: 'en' | 'es' = 'en'): Promise<boolean> {
-    console.log('📧 [EMAIL HOOK] Confirmation to:', to, 'type:', type, 'lang:', lang);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('📧 [EMAIL HOOK] Confirmation to:', to, 'type:', type, 'lang:', lang);
+    }
 
     // TODO: Uncomment and configure when Brevo/SendGrid is set up
     // return await sendWithBrevo({
@@ -63,7 +67,9 @@ export async function sendConfirmationEmail(to: string, type: 'brief' | 'contact
  * Send welcome email with freebie download links
  */
 export async function sendWelcomeEmail(to: string, lang: 'en' | 'es' = 'en'): Promise<boolean> {
-    console.log('📧 [EMAIL HOOK] Welcome email to:', to, 'lang:', lang);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('📧 [EMAIL HOOK] Welcome email to:', to, 'lang:', lang);
+    }
 
     // TODO: Uncomment and configure when Brevo/SendGrid is set up
     // return await sendWithBrevo({

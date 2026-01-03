@@ -77,8 +77,10 @@ export async function POST(request: NextRequest) {
         // TODO: Hook for email integration (Brevo/SendGrid)
         // await sendNotificationEmail(contactMessage);
 
-        // Log for now
-        console.log('📧 New contact message:', contactMessage.id, contactMessage.email);
+        // Log for development
+        if (process.env.NODE_ENV === 'development') {
+            console.log('📧 New contact message:', contactMessage.id, contactMessage.email);
+        }
 
         // Redirect back with success
         const redirectUrl = new URL(`/${lang}/contact`, request.url);

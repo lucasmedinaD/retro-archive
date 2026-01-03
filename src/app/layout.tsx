@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AnalyticsScripts from "@/components/AnalyticsScripts";
@@ -36,10 +36,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   manifest: '/manifest.json',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4f4f0' },
-    { media: '(prefers-color-scheme: dark)', color: '#111111' }
-  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -89,6 +85,15 @@ export const metadata: Metadata = {
       { url: '/logo.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f4f0' },
+    { media: '(prefers-color-scheme: dark)', color: '#111111' }
+  ],
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({

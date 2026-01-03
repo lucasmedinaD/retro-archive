@@ -87,8 +87,10 @@ export async function POST(request: NextRequest) {
         // await sendNotificationEmail(brief);
         // await sendConfirmationEmail(brief);
 
-        // Log for now (replace with email later)
-        console.log('📬 New brief submission:', brief.id, brief.email);
+        // Log for development (replace with email later)
+        if (process.env.NODE_ENV === 'development') {
+            console.log('📬 New brief submission:', brief.id, brief.email);
+        }
 
         // Redirect to success page or return JSON
         const successMessage = lang === 'es'

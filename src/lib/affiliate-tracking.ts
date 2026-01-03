@@ -44,11 +44,13 @@ export function trackAffiliateClick(productId: string, productName: string, affi
     }
 
     // Console log for development
-    console.log('Affiliate click tracked:', {
-        productId,
-        productName,
-        url: affiliateUrl
-    });
+    if (process.env.NODE_ENV === 'development') {
+        console.log('Affiliate click tracked:', {
+            productId,
+            productName,
+            url: affiliateUrl
+        });
+    }
 }
 
 /**

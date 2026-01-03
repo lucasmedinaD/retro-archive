@@ -87,7 +87,7 @@ export function measureWebVitals() {
     // Measure FCP (First Contentful Paint)
     const paintEntries = performance.getEntriesByType('paint');
     const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
-    if (fcp) {
+    if (fcp && process.env.NODE_ENV === 'development') {
         console.log('FCP:', fcp.startTime, 'ms');
     }
 
@@ -96,7 +96,9 @@ export function measureWebVitals() {
         const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             const lastEntry = entries[entries.length - 1];
-            console.log('LCP:', lastEntry.startTime, 'ms');
+            if (process.env.NODE_ENV === 'development') {
+                console.log('LCP:', lastEntry.startTime, 'ms');
+            }
         });
         observer.observe({ entryTypes: ['largest-contentful-paint'] });
     }
