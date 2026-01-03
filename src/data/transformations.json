@@ -1,3 +1,23 @@
 {
-  "transformations": []
+  "transformations": [
+    {
+      "characterName": "Reze",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-reze.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-reze.jpg",
+      "series": "Chainsaw Man",
+      "category": "2.5d",
+      "tags": [
+        "reze",
+        "bomb girl",
+        "chica bomba",
+        "chainsaw man"
+      ],
+      "description": {
+        "en": "Reze (also known as Lady Reze or the Bomb Girl) is the primary antagonist and love interest during the Bomb Girl arc. She initially introduces herself as a kind, flirtatious girl working at a café who takes a liking to Denji. However, her true identity is the Bomb Hybrid, a Soviet assassin trained from childhood as a living weapon.\n\nShe is recognized by her signature choker, which hides the grenade pin she pulls to trigger her transformation. She represents one of Denji's first experiences with genuine (albeit complicated) romance.\n\nBiography\nOrigin: Reze was raised in the Soviet Union as part of a secret military experiment. She endured inhumane training to become the perfect soldier and had the Bomb Devil implanted in her.\n\nMission in Japan: She is sent to Japan with a single objective: to steal Chainsaw Man’s heart (Pochita/Denji). She infiltrates civilian life and seduces Denji, exploiting his naivety and desperate need for affection.\n\nThe Reveal: After gaining Denji's trust and teaching him \"normal\" things (like swimming and going to school at night), she reveals her true nature and attempts to kill him, leading to a destructive battle across the city.\n\nThe Tragic End: Although Denji defeats her, he refuses to kill her and instead asks her to run away with him. In a pivotal moment, Reze decides to abandon her mission and returns to the café to meet Denji (choosing him over her duty). However, she is intercepted in an alleyway by Makima and the Angel Devil, who eliminate her before she can reunite with Denji, leaving him waiting for her in vain.\n\nAftermath: She reappears near the end of Part 1 as one of the weapon hybrids brainwashed and controlled by Makima to fight Chainsaw Man.\n\nPowers\nBy pulling the pin in her choker, her head detonates, and she transforms. She can create devastating explosions, turn her limbs into torpedoes, and use explosive propulsion to move at high speeds or fly.",
+        "es": "Reze (también conocida como Lady Reze o la Chica Bomba) es un personaje principal del arco que lleva su nombre. Inicialmente se presenta como una chica amable y coqueta que trabaja en una cafetería, mostrando interés romántico en Denji. Sin embargo, su verdadera identidad es la Híbrido Bomba (Bomb Girl), una agente soviética entrenada desde la infancia como arma viviente.\n\nEs conocida por su diseño distintivo con una gargantilla (que oculta el anilla de granada que detona su transformación) y por ser uno de los primeros intereses amorosos genuinos, aunque trágicos, de Denji.\n\nBiografía\nOrigen: Fue criada en la Unión Soviética como parte de un programa militar experimental. Fue sometida a entrenamientos inhumanos para convertirse en una soldado perfecta y le fue implantado el Demonio Bomba.\n\nMisión en Japón: Es enviada a Japón con el objetivo de robar el corazón de Chainsaw Man (Pochita/Denji). Para ello, se infiltra en la vida civil y seduce a Denji, aprovechándose de su ingenuidad y deseo de afecto.\n\nRevelación: Tras ganarse la confianza de Denji y enseñarle cosas \"normales\" (como nadar o ir a la escuela de noche), revela su verdadera naturaleza e intenta matarlo. Esto desata una batalla destructiva en la ciudad.\n\nEl Desenlace Trágico: Aunque Denji logra vencerla, decide no matarla y le ofrece huir juntos. En un giro emocional, Reze decide abandonar su misión y vuelve a la cafetería para encontrarse con él (eligiendo a Denji sobre su deber). Sin embargo, en el camino es interceptada por Makima y el Demonio Ángel, quienes la eliminan (y posteriormente la controlan) antes de que pueda reunirse con Denji, dejándolo a él esperando en vano.\n\nEstado posterior: Reaparece al final de la Parte 1 como una de las armas controladas mentalmente por Makima para luchar contra el Chainsaw Man, sin voluntad propia.\n\nPoderes\nAl tirar del anilla en su gargantilla, su cabeza explota y se transforma. Puede generar explosiones devastadoras, convertir sus extremidades en torpedos y usar la propulsión explosiva para moverse a velocidades extremas o volar."
+      },
+      "likes": 0,
+      "id": "transform-1767478896208"
+    }
+  ]
 }
