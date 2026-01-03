@@ -72,32 +72,32 @@ export default function SearchPage() {
                 </div>
 
                 {/* Results */}
-                {searchQuery && (
-                    <div>
+                <div>
+                    {searchQuery && (
                         <p className="text-sm font-mono mb-4 text-gray-600 dark:text-gray-400">
                             {lang === 'es'
                                 ? `${filteredTransformations.length} resultados para "${searchQuery}"`
                                 : `${filteredTransformations.length} results for "${searchQuery}"`
                             }
                         </p>
+                    )}
 
-                        {filteredTransformations.length > 0 ? (
-                            <InspirationFeed
-                                transformations={filteredTransformations}
-                                lang={lang}
-                                hasMore={false}
-                                isLoading={false}
-                                dict={{}}
-                            />
-                        ) : (
-                            <div className="text-center py-20">
-                                <p className="text-gray-500 font-mono">
-                                    {lang === 'es' ? 'No se encontraron transformaciones' : 'No transformations found'}
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                )}
+                    {filteredTransformations.length > 0 ? (
+                        <InspirationFeed
+                            transformations={filteredTransformations}
+                            lang={lang}
+                            hasMore={false}
+                            isLoading={false}
+                            dict={{}}
+                        />
+                    ) : (
+                        <div className="text-center py-20">
+                            <p className="text-gray-500 font-mono">
+                                {lang === 'es' ? 'No se encontraron transformaciones' : 'No transformations found'}
+                            </p>
+                        </div>
+                    )}
+                </div>
             </div>
         </main>
     );
