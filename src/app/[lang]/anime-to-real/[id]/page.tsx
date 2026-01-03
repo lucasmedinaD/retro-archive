@@ -52,10 +52,6 @@ export default async function TransformationDetailPage({ params }: PageProps) {
                         Home
                     </Link>
                     <span>/</span>
-                    <Link href={`/${lang}/anime-to-real`} className="hover:text-black dark:hover:text-white transition-colors">
-                        Anime to Real
-                    </Link>
-                    <span>/</span>
                     <span className="text-black dark:text-white font-bold">{transformation.characterName}</span>
                 </div>
             </div>

@@ -41,7 +41,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wide">
                     <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.index}</Link>
-                    <Link href={`/${lang}/anime-to-real`} className={linkClass(`/${lang}/anime-to-real`)}>{dict.nav.anime_to_real}</Link>
+                    <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.anime_to_real}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
                     <Link href={`/${lang}/favorites`} className={`${linkClass(`/${lang}/favorites`)} relative`}>
                         {dict.nav.favorites}
@@ -71,7 +71,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                 <div className="fixed inset-0 z-40 bg-[#f4f4f0] dark:bg-[#111111] flex flex-col justify-center items-center gap-8 md:hidden">
                     <nav className="flex flex-col items-center gap-6 text-2xl font-black uppercase tracking-widest">
                         <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.index}</Link>
-                        <Link href={`/${lang}/anime-to-real`} onClick={toggleMenu} className={isActive(`/${lang}/anime-to-real`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.anime_to_real}</Link>
+                        <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.anime_to_real}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
                         <Link href={`/${lang}/favorites`} onClick={toggleMenu} className={`${isActive(`/${lang}/favorites`) ? 'text-accent' : 'hover:text-accent'} relative`}>
                             {dict.nav.favorites}
