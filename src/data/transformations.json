@@ -58,6 +58,24 @@
       },
       "likes": 0,
       "id": "transform-1767482201722"
+    },
+    {
+      "characterName": "Makima",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-makima.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-makima.jpg",
+      "series": "Chainsaw Man",
+      "category": "2.5d",
+      "tags": [
+        "Demon control",
+        "Makima",
+        "Chainsaw man"
+      ],
+      "description": {
+        "en": "Makima is the primary antagonist in the Chainsaw Man manga and anime. Initially introduced as the high-ranking leader of Public Safety Special Division 4, she is revealed to be the Control Devil. She manipulates the protagonist, Denji, and orchestrates the deaths of his loved ones to break his contract with Pochita, seeking to control the Chainsaw Devil's power to reshape the world.",
+        "es": "Makima es la antagonista principal en el manga y anime Chainsaw Man. Inicialmente presentada como la líder de la División Especial 4 de Seguridad Pública, su verdadera identidad es el Demonio del Control. Establece una relación manipuladora con Denji, orquestando tragedias personales para romper su psique y así dominar al Demonio Motosierra (Pochita) con el fin de crear su visión de un mundo ideal."
+      },
+      "likes": 0,
+      "id": "transform-1767483707472"
     }
   ]
 }
