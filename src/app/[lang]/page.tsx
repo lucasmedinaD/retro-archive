@@ -9,6 +9,7 @@ import NewsletterForm from '@/components/NewsletterForm';
 import { Instagram, Twitter } from 'lucide-react';
 import { getTransformations } from '@/data/transformations';
 import FeaturedHero from '@/components/FeaturedHero';
+import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -64,15 +65,24 @@ export default async function Home({ params }: HomeProps) {
 
 
       {/* Catalog Marquee */}
-      <div className="border-b border-black dark:border-white py-3 overflow-hidden">
-        <h2 className="text-8xl font-black opacity-10 whitespace-nowrap marquee-container">
+      <div className="border-b border-black dark:border-white py-3 overflow-hidden bg-accent">
+        <h2 className="text-8xl font-black opacity-100 whitespace-nowrap marquee-container text-black">
           <div className="marquee-content">
-            {dict.catalog.marquee} {dict.catalog.marquee}
+            {dict.anime_to_real.title} // {dict.anime_to_real.title} //
           </div>
         </h2>
       </div>
 
-      {/* Product Grid Section */}
+      {/* Main Transformation Feed (The Addiction Hook) */}
+      <section className="max-w-[90rem] mx-auto px-6 py-12 border-b border-black dark:border-white">
+        <ArchiveGalleryWrapper
+          transformations={transformations}
+          lang={lang}
+          dict={dict}
+        />
+      </section>
+
+      {/* Secondary Product Grid */}
       <section id="catalog" className="max-w-[90rem] mx-auto px-6 py-12">
         <h3 className="text-4xl font-serif italic text-black dark:text-white mb-8">
           {dict.catalog.collection}
