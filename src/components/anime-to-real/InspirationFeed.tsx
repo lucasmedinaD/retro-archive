@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, ChevronDown } from 'lucide-react';
 import { TransformationExtended } from '@/types/transformations';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
@@ -65,18 +66,9 @@ export default function InspirationFeed({
 
     return (
         <section className="py-12">
-            {/* Header */}
-            <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl font-black uppercase mb-2">
-                    {dict?.archive?.more_transformations || 'More Transformations'}
-                </h2>
-                <p className="font-mono text-sm text-gray-600 dark:text-gray-400">
-                    {dict?.archive?.discover_more || 'Discover more anime to real comparisons'}
-                </p>
-            </div>
-
+            {/* Header Removed as it's now main feed */}
             {/* Masonry Grid */}
-            <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6">
+            <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
                 {visibleItems.map((transformation, idx) => (
                     <TransformationCard
                         key={transformation.id}
@@ -137,7 +129,7 @@ function TransformationCard({
                 filter: 'blur(0px)',
                 transition: { delay: index * 0.05, duration: 0.4 }
             } : {}}
-            className="mb-4 break-inside-avoid relative"
+            className="break-inside-avoid relative mb-4"
         >
             {/* Viewed Badge */}
             {isViewed(transformation.id) && (
@@ -151,18 +143,15 @@ function TransformationCard({
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    {/* Image */}
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                        {!imageLoaded && (
-                            <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
-                        )}
-
-                        <img
+                    {/* Image with Next.js Optimization */}
+                    <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                        <Image
                             src={isHovered ? transformation.realImage : transformation.animeImage}
                             alt={transformation.characterName}
-                            className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
                             onLoad={() => setImageLoaded(true)}
-                            loading="lazy"
                         />
 
                         {/* Overlay */}
