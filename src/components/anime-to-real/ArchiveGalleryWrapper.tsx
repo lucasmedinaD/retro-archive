@@ -41,9 +41,10 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict, ini
     const filteredTransformations = useMemo(() => {
         let result = transformations;
 
-        // Filter by series
+        // Filter by series (case-insensitive)
         if (selectedSeries) {
-            result = result.filter(t => t.series === selectedSeries);
+            const normalizedFilter = selectedSeries.toLowerCase();
+            result = result.filter(t => t.series && t.series.toLowerCase() === normalizedFilter);
         }
 
         // Filter by search query
