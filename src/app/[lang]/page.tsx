@@ -116,6 +116,9 @@ export default async function Home({ params }: HomeProps) {
               {dict.footer.description}
             </p>
             <div className="flex gap-4 mt-3 justify-center md:justify-start font-mono text-xs">
+              <Link href={`/${lang}#catalog`} className="hover:underline text-gray-600 dark:text-gray-400">
+                {lang === 'es' ? 'Suministros' : 'Blueprints'}
+              </Link>
               <Link href={`/${lang}/legal/privacy`} className="hover:underline text-gray-600 dark:text-gray-400">
                 {lang === 'es' ? 'Privacidad' : 'Privacy'}
               </Link>
