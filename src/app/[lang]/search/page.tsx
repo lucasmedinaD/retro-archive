@@ -1,15 +1,13 @@
-import { getDictionary } from '@/get-dictionary';
+'use client';
+
+import { useParams } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-export default async function SearchPage({
-    params
-}: {
-    params: Promise<{ lang: 'en' | 'es' }>
-}) {
-    const { lang } = await params;
-    const dict = await getDictionary(lang);
+export default function SearchPage() {
+    const params = useParams();
+    const lang = (params.lang as 'en' | 'es') || 'en';
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black dark:bg-[#111111] dark:text-[#f4f4f0] pb-24">

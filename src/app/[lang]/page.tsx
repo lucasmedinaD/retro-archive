@@ -21,12 +21,17 @@ const SocialIcon = ({ Icon }: { Icon: any }) => (
 
 interface HomeProps {
   params: Promise<{ lang: 'en' | 'es' }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Home({ params }: HomeProps) {
+export default async function Home({ params, searchParams }: HomeProps) {
   const { lang } = await params;
+  const resolvedSearchParams = await searchParams;
   const dict = await getDictionary(lang);
   const products = getProducts(lang);
+
+  // Filter from MobileTopNav tabs
+  const initialFilter = resolvedSearchParams.filter as string | undefined;
 
   // Get featured transformation for the hero
   const transformations = getTransformations();
@@ -81,6 +86,7 @@ export default async function Home({ params }: HomeProps) {
           transformations={transformations}
           lang={lang}
           dict={dict}
+          initialFilter={initialFilter}
         />
       </section>
 

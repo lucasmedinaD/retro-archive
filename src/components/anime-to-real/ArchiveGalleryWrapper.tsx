@@ -13,10 +13,11 @@ interface ArchiveGalleryWrapperProps {
     transformations: Transformation[];
     lang: 'en' | 'es';
     dict: any;
+    initialFilter?: string;
 }
 
-export default function ArchiveGalleryWrapper({ transformations, lang, dict }: ArchiveGalleryWrapperProps) {
-    const [selectedSeries, setSelectedSeries] = useState<string | null>(null);
+export default function ArchiveGalleryWrapper({ transformations, lang, dict, initialFilter }: ArchiveGalleryWrapperProps) {
+    const [selectedSeries, setSelectedSeries] = useState<string | null>(initialFilter || null);
     const [showFilters, setShowFilters] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
 

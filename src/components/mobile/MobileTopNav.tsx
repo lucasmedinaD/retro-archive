@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface MobileTopNavProps {
     lang: 'en' | 'es';
@@ -10,9 +10,11 @@ interface MobileTopNavProps {
 
 export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const currentFilter = searchParams.get('filter');
 
     const filters = [
-        { label: lang === 'es' ? 'Todo' : 'All', tag: 'all' },
+        { label: lang === 'es' ? 'Todo' : 'All', tag: '' },
         { label: 'Bocchi The Rock', tag: 'Bocchi The Rock' },
         { label: 'Chainsaw Man', tag: 'Chainsaw Man' },
         { label: 'Dandadan', tag: 'Dandadan' },
@@ -29,10 +31,14 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
             <div className="overflow-x-auto no-scrollbar py-3 px-4">
                 <div className="flex gap-2 whitespace-nowrap min-w-max">
                     {filters.map((filter) => {
-                        const isAll = filter.tag === 'all';
-                        const href = isAll
-                            ? `/${lang}/shop`
-                            : `/${lang}/shop?search=${encodeURIComponent(filter.tag)}`;
+                        // Link stays on Home page with filter query param
+                        const href = filter.tag
+                            ? `/${lang}?filter=${encodeURIComponent(filter.tag)}`
+                            : `/${lang}`;
+
+                        const isActive = filter.tag
+                            ? currentFilter === filter.tag
+                            : !currentFilter;
 
                         return (
                             <Link
@@ -40,7 +46,7 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
                                 href={href}
                                 className={`
                                     text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200
-                                    ${pathname.includes('shop') && (isAll || decodeURIComponent(pathname).includes(filter.tag)) // Basic active check, improves with searchParams
+                                    ${isActive
                                         ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
                                         : 'bg-transparent text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400 hover:border-black dark:hover:border-white'
                                     }
