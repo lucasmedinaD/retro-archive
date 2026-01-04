@@ -4,8 +4,9 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import MiniAutoHero from '@/components/MiniAutoHero';
 import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 import { Transformation } from '@/data/transformations';
-import { GalleryTriggerButton } from '@/components/GalleryTrigger';
-import { TransformationExtended } from '@/types/transformations';
+// DISABLED: Gallery mode commented to prioritize affiliate conversions
+// import { GalleryTriggerButton } from '@/components/GalleryTrigger';
+// import { TransformationExtended } from '@/types/transformations';
 
 interface FeedSectionProps {
     featuredTransformation: Transformation;
@@ -40,11 +41,12 @@ export default function FeedSection({
                 initialFilter={initialFilter}
             />
 
-            {/* TikTok-style Gallery Mode Button */}
+            {/* DISABLED: Gallery mode commented to prioritize affiliate conversions
             <GalleryTriggerButton
                 transformations={transformations as TransformationExtended[]}
                 lang={lang}
             />
+            */}
         </>
     );
 }
