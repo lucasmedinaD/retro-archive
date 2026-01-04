@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getSupabaseAdmin, STORAGE_BUCKET, TRANSFORMATIONS_BUCKET, VALID_FOLDERS, ValidFolder, getPublicUrl } from '@/lib/supabase';
 
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
+// App Router doesn't need bodyParser config - it's automatic
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 
 /**
  * Generate safe filename from title
