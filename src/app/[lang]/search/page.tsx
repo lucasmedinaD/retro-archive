@@ -21,6 +21,14 @@ export default function SearchPage() {
     // Get all transformations
     const allTransformations = getTransformations();
 
+    // Extract unique series from all transformations (dynamic trending)
+    const uniqueSeries = useMemo(() => {
+        const series = allTransformations
+            .map(t => t.series)
+            .filter((s): s is string => !!s && s.trim() !== '');
+        return [...new Set(series)];
+    }, [allTransformations]);
+
     // Filter transformations based on URL query
     const filteredTransformations = useMemo(() => {
         if (!urlQuery) return allTransformations;
@@ -76,7 +84,7 @@ export default function SearchPage() {
                         {lang === 'es' ? 'Tendencias' : 'Trending'}
                     </p>
                     <div className="flex flex-wrap gap-2">
-                        {['Chainsaw Man', 'Jujutsu Kaisen', 'Bocchi The Rock', 'Dandadan'].map(series => (
+                        {uniqueSeries.map(series => (
                             <button
                                 key={series}
                                 onClick={() => handleSearch(series)}
