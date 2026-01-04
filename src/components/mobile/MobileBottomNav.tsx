@@ -84,7 +84,7 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
                                     onClick={item.action}
                                     className="flex flex-col items-center gap-1 p-2 w-14"
                                 >
-                                    <div className={`relative w-[22px] h-[22px] rounded-full overflow-hidden border-2 ${active ? 'border-black dark:border-white' : 'border-transparent'}`}>
+                                    <div className={`relative w-[28px] h-[28px] rounded-full overflow-hidden border-2 ${active ? 'border-black dark:border-white' : 'border-transparent'}`}>
                                         <Image
                                             src={user.user_metadata.avatar_url}
                                             alt="Profile"

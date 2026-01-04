@@ -14,6 +14,7 @@ import ShareToStories from '@/components/ShareToStories';
 import PinItButton from '@/components/PinItButton';
 import { likeTransformationAction } from '@/app/admin/actions/transformations';
 import AmazonAffiliateWidget from '@/components/AmazonAffiliateWidget';
+import RatingSystem from '@/components/RatingSystem';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -174,6 +175,14 @@ export default function TransformationDetail({
                             className="mt-3"
                             dict={dict}
                         />
+                    </div>
+
+                    {/* Rating System */}
+                    <div className="mb-6">
+                        <label className="block font-mono text-xs uppercase text-gray-500 mb-2">
+                            {lang === 'es' ? 'Ranking de la Comunidad' : 'Community Ranking'}
+                        </label>
+                        <RatingSystem transformationId={transformation.id} lang={lang} />
                     </div>
 
                     {/* Stats */}

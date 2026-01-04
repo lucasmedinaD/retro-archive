@@ -60,12 +60,12 @@ export default function AuthButton({ lang }: AuthButtonProps) {
                     <Image
                         src={user.user_metadata.avatar_url}
                         alt="Profile"
-                        width={32}
-                        height={32}
-                        className="rounded-full object-cover w-8 h-8"
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover w-10 h-10"
                     />
                 ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
                         {user.email?.charAt(0).toUpperCase() || 'U'}
                     </div>
                 )}

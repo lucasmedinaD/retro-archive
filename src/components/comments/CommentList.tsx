@@ -66,6 +66,7 @@ export default function CommentList({ comments, lang, onDelete, onReplyPosted }:
     const CommentItem = ({ comment, depth = 0 }: { comment: Comment, depth?: number }) => {
         const hasLiked = comment.user_has_liked || false;
         const replies = comments.filter(c => c.parent_id === comment.id).sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        const [areRepliesOpen, setAreRepliesOpen] = useState(false);
 
         return (
             <div className={`flex gap-4 group ${depth > 0 ? 'mt-4 ml-8 border-l-2 border-gray-100 dark:border-zinc-800 pl-4' : ''}`}>
@@ -140,6 +141,7 @@ export default function CommentList({ comments, lang, onDelete, onReplyPosted }:
                                 onCommentPosted={() => {
                                     setReplyingTo(null);
                                     onReplyPosted();
+                                    setAreRepliesOpen(true); // Auto open when replying
                                 }}
                                 parentId={comment.id}
                                 autoFocus
@@ -147,12 +149,27 @@ export default function CommentList({ comments, lang, onDelete, onReplyPosted }:
                         </div>
                     )}
 
-                    {/* Nested Replies */}
+                    {/* Nested Replies Toggle & List */}
                     {replies.length > 0 && (
                         <div className="mt-2">
-                            {replies.map(reply => (
-                                <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
-                            ))}
+                            <button
+                                onClick={() => setAreRepliesOpen(!areRepliesOpen)}
+                                className="text-xs font-bold text-gray-500 hover:text-black dark:hover:text-white flex items-center gap-2 mb-2"
+                            >
+                                <div className="w-6 h-[1px] bg-gray-300 dark:bg-zinc-700"></div>
+                                {areRepliesOpen
+                                    ? (lang === 'es' ? 'Ocultar respuestas' : 'Hide replies')
+                                    : (lang === 'es' ? `Ver ${replies.length} respuestas` : `View ${replies.length} replies`)
+                                }
+                            </button>
+
+                            {areRepliesOpen && (
+                                <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+                                    {replies.map(reply => (
+                                        <CommentItem key={reply.id} comment={reply} depth={depth + 1} />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
