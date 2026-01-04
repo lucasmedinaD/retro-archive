@@ -4,6 +4,8 @@ import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import MiniAutoHero from '@/components/MiniAutoHero';
 import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 import { Transformation } from '@/data/transformations';
+import { GalleryTriggerButton } from '@/components/GalleryTrigger';
+import { TransformationExtended } from '@/types/transformations';
 
 interface FeedSectionProps {
     featuredTransformation: Transformation;
@@ -37,6 +39,13 @@ export default function FeedSection({
                 dict={dict}
                 initialFilter={initialFilter}
             />
+
+            {/* TikTok-style Gallery Mode Button */}
+            <GalleryTriggerButton
+                transformations={transformations as TransformationExtended[]}
+                lang={lang}
+            />
         </>
     );
 }
+
