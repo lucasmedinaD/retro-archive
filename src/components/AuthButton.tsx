@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogIn, LogOut, User, ChevronDown } from 'lucide-react';
+import { LogIn, LogOut, User, ChevronDown, Settings } from 'lucide-react';
 import Image from 'next/image';
+import ProfileModal from './ProfileModal';
 
 interface AuthButtonProps {
     lang: 'en' | 'es';
@@ -12,6 +13,7 @@ interface AuthButtonProps {
 export default function AuthButton({ lang }: AuthButtonProps) {
     const { user, isLoading, signInWithGoogle, signOut } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     // Close when clicking outside
@@ -51,6 +53,7 @@ export default function AuthButton({ lang }: AuthButtonProps) {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 p-1 rounded-full border-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                title={user.user_metadata?.full_name || user.email}
             >
                 {user.user_metadata?.avatar_url ? (
                     <Image
@@ -58,7 +61,7 @@ export default function AuthButton({ lang }: AuthButtonProps) {
                         alt="Profile"
                         width={32}
                         height={32}
-                        className="rounded-full"
+                        className="rounded-full object-cover w-8 h-8"
                     />
                 ) : (
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
@@ -74,7 +77,17 @@ export default function AuthButton({ lang }: AuthButtonProps) {
                         <p className="text-sm font-medium truncate">{user.user_metadata?.full_name || 'Usuario'}</p>
                         <p className="text-xs text-gray-500 truncate">{user.email}</p>
                     </div>
-                    <div className="p-2">
+                    <div className="p-2 space-y-1">
+                        <button
+                            onClick={() => {
+                                setIsOpen(false);
+                                setIsProfileModalOpen(true);
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-md transition-colors"
+                        >
+                            <Settings size={16} />
+                            {lang === 'es' ? 'Editar Perfil' : 'Edit Profile'}
+                        </button>
                         <button
                             onClick={() => {
                                 signOut();
@@ -88,6 +101,12 @@ export default function AuthButton({ lang }: AuthButtonProps) {
                     </div>
                 </div>
             )}
+
+            <ProfileModal
+                isOpen={isProfileModalOpen}
+                onClose={() => setIsProfileModalOpen(false)}
+                lang={lang}
+            />
         </div>
     );
 }

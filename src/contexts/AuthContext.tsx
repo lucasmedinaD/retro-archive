@@ -10,6 +10,7 @@ interface AuthContextType {
     isLoading: boolean;
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
+    updateProfile: (updates: { full_name?: string; avatar_url?: string }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -76,13 +77,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const updateProfile = async (updates: { full_name?: string; avatar_url?: string }) => {
+        if (!supabase || !user) return;
+
+        const { data, error } = await supabase.auth.updateUser({
+            data: updates
+        });
+
+        if (error) {
+            console.error('Error updating profile:', error);
+            throw error;
+        }
+
+        if (data.user) {
+            setUser(data.user);
+            setSession(prev => prev ? { ...prev, user: data.user } : null);
+        }
+    };
+
     return (
         <AuthContext.Provider value={{
             user,
             session,
             isLoading,
             signInWithGoogle,
-            signOut
+            signOut,
+            updateProfile
         }}>
             {children}
         </AuthContext.Provider>
