@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, Upload, ExternalLink } from 'lucide-react';
 import { TransformationData } from './actions/transformations';
 import { uploadImageToCloud } from '@/lib/uploadHelper';
 import { getProducts, Product } from '@/data/products';
 import { AmazonProduct } from '@/types/transformations';
+import { fetchAmazonProductsAction, StoredAmazonProduct } from './actions/amazonProducts';
 
 interface TransformationEditorProps {
     transformation: TransformationData;
@@ -46,9 +47,21 @@ export default function TransformationEditor({ transformation, isNew = false, on
     });
     const [amazonImageFile, setAmazonImageFile] = useState<File | null>(null);
     const [amazonImagePreview, setAmazonImagePreview] = useState<string>('');
+    const [catalogProducts, setCatalogProducts] = useState<StoredAmazonProduct[]>([]);
 
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
+
+    // Load Amazon products catalog on mount
+    useEffect(() => {
+        const loadCatalog = async () => {
+            const result = await fetchAmazonProductsAction();
+            if (result.success && result.data) {
+                setCatalogProducts(result.data);
+            }
+        };
+        loadCatalog();
+    }, []);
 
     const handleAnimeImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -377,116 +390,68 @@ export default function TransformationEditor({ transformation, isNew = false, on
 
                     {/* Amazon Affiliate Products */}
                     <div className="border-2 border-[#FF9900] p-4 mt-6">
-                        <h3 className="text-sm font-bold uppercase mb-4 text-[#FF9900]">
-                            🛒 Amazon Affiliate Products
-                        </h3>
-
-                        {/* Add New Amazon Product Form */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                            <input
-                                type="text"
-                                placeholder="Product Title"
-                                value={newAmazonProduct.title || ''}
-                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, title: e.target.value })}
-                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
-                            />
-                            {/* Image Upload */}
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    id="amazon-product-image"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) {
-                                            setAmazonImageFile(file);
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => setAmazonImagePreview(reader.result as string);
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }}
-                                />
-                                <label
-                                    htmlFor="amazon-product-image"
-                                    className="flex-1 bg-black border border-[#333] p-2 text-gray-400 text-sm cursor-pointer hover:border-[#FF9900] transition-colors text-center"
-                                >
-                                    {amazonImageFile ? '✓ ' + amazonImageFile.name.slice(0, 20) : '📷 Upload Image'}
-                                </label>
-                                {amazonImagePreview && (
-                                    <img src={amazonImagePreview} alt="Preview" className="w-10 h-10 object-cover border border-[#FF9900]" />
-                                )}
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="Amazon Affiliate URL (with your tag)"
-                                value={newAmazonProduct.affiliateUrl || ''}
-                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, affiliateUrl: e.target.value })}
-                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900] md:col-span-2"
-                            />
-                            <input
-                                type="text"
-                                placeholder="Price (e.g. $29.99)"
-                                value={newAmazonProduct.price || ''}
-                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, price: e.target.value })}
-                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
-                            />
-                            <select
-                                value={newAmazonProduct.category || 'figure'}
-                                onChange={(e) => setNewAmazonProduct({ ...newAmazonProduct, category: e.target.value as AmazonProduct['category'] })}
-                                className="bg-black border border-[#333] p-2 text-white text-sm outline-none focus:border-[#FF9900]"
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-sm font-bold uppercase text-[#FF9900]">
+                                🛒 Amazon Affiliate Products
+                            </h3>
+                            <a
+                                href="/admin/amazon-products"
+                                target="_blank"
+                                className="text-xs text-[#FF9900] hover:underline"
                             >
-                                <option value="figure">🗿 Figure</option>
-                                <option value="manga">📚 Manga</option>
-                                <option value="cosplay">👘 Cosplay</option>
-                                <option value="accessory">💍 Accessory</option>
-                                <option value="other">🎁 Other</option>
-                            </select>
+                                Manage Catalog →
+                            </a>
                         </div>
-                        <button
-                            type="button"
-                            onClick={async () => {
-                                if (newAmazonProduct.title && amazonImageFile && newAmazonProduct.affiliateUrl) {
-                                    try {
-                                        // Upload image first
-                                        const upload = await uploadImageToCloud(amazonImageFile, 'products');
-                                        if (!upload.success) {
-                                            alert('Image upload failed: ' + upload.error);
-                                            return;
+
+                        {/* Product Selector from Catalog */}
+                        <div className="mb-4">
+                            <label className="block text-xs uppercase mb-2 text-gray-400">
+                                Add from Catalog ({catalogProducts.length} available)
+                            </label>
+                            <select
+                                onChange={(e) => {
+                                    const productId = e.target.value;
+                                    const catalogProduct = catalogProducts.find(p => p.id === productId);
+                                    if (catalogProduct) {
+                                        // Check if already added
+                                        const alreadyAdded = amazonProducts.some(p =>
+                                            p.title === catalogProduct.title && p.affiliateUrl === catalogProduct.affiliateUrl
+                                        );
+                                        if (!alreadyAdded) {
+                                            setAmazonProducts([...amazonProducts, {
+                                                title: catalogProduct.title,
+                                                image: catalogProduct.image,
+                                                affiliateUrl: catalogProduct.affiliateUrl,
+                                                price: catalogProduct.price || '',
+                                                category: catalogProduct.category
+                                            }]);
+                                        } else {
+                                            alert('Este producto ya está agregado');
                                         }
-
-                                        // Add product with uploaded image path
-                                        const productWithImage: AmazonProduct = {
-                                            title: newAmazonProduct.title,
-                                            image: upload.path!,
-                                            affiliateUrl: newAmazonProduct.affiliateUrl,
-                                            price: newAmazonProduct.price || '',
-                                            category: newAmazonProduct.category || 'figure'
-                                        };
-
-                                        setAmazonProducts([...amazonProducts, productWithImage]);
-                                        setNewAmazonProduct({ title: '', image: '', affiliateUrl: '', price: '', category: 'figure' });
-                                        setAmazonImageFile(null);
-                                        setAmazonImagePreview('');
-                                    } catch (err: any) {
-                                        alert('Error: ' + err.message);
                                     }
-                                } else {
-                                    alert('Title, Image, and Affiliate URL are required');
-                                }
-                            }}
-                            className="px-4 py-2 bg-[#FF9900] text-black font-bold text-xs uppercase hover:bg-[#cc7a00] transition-colors"
-                        >
-                            + Add Amazon Product
-                        </button>
+                                    e.target.value = '';
+                                }}
+                                className="w-full bg-black border border-[#FF9900]/50 p-3 text-white outline-none focus:border-[#FF9900] transition-colors"
+                            >
+                                <option value="">-- Seleccionar producto del catálogo --</option>
+                                {catalogProducts.map(product => (
+                                    <option key={product.id} value={product.id}>
+                                        {product.title} - {product.price || 'Sin precio'} ({product.category})
+                                    </option>
+                                ))}
+                            </select>
+                            {catalogProducts.length === 0 && (
+                                <p className="text-xs text-gray-500 mt-2">
+                                    No hay productos en el catálogo. <a href="/admin/amazon-products" target="_blank" className="text-[#FF9900] hover:underline">Crear productos →</a>
+                                </p>
+                            )}
+                        </div>
 
-                        {/* Added Amazon Products List - Always visible */}
-                        <div className="mt-4 border-t border-[#FF9900]/30 pt-4">
-                            <div className="flex items-center justify-between mb-3">
-                                <h4 className="text-sm font-bold text-[#FF9900]">
-                                    📦 Productos Agregados: {amazonProducts.length}
-                                </h4>
-                            </div>
+                        {/* Added Products List */}
+                        <div className="border-t border-[#FF9900]/30 pt-4">
+                            <h4 className="text-sm font-bold text-[#FF9900] mb-3">
+                                📦 Productos Agregados: {amazonProducts.length}
+                            </h4>
 
                             {amazonProducts.length === 0 ? (
                                 <p className="text-xs text-gray-500 italic py-4 text-center border border-dashed border-[#333]">
@@ -509,9 +474,6 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-sm font-bold truncate text-white">{product.title}</p>
                                                 <p className="text-xs text-[#FF9900]">{product.price || 'Sin precio'} • {product.category}</p>
-                                                <a href={product.affiliateUrl} target="_blank" rel="noopener" className="text-[10px] text-gray-500 hover:text-[#FF9900] truncate block">
-                                                    {product.affiliateUrl.slice(0, 40)}...
-                                                </a>
                                             </div>
 
                                             {/* Remove Button */}

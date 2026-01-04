@@ -23,7 +23,7 @@ interface UploadOptions {
 
 export async function uploadImageToCloud(
     file: File,
-    folder: 'products' | 'transformations' | 'slider-demos',
+    folder: 'products' | 'transformations' | 'slider-demos' | 'amazon-products',
     options: UploadOptions = {}
 ): Promise<UploadResult> {
     try {
