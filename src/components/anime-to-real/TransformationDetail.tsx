@@ -155,13 +155,8 @@ export default function TransformationDetail({
                             </div>
                         )}
 
-                        {/* Owner Badge - Highlighted */}
-                        <div className="p-4 border-2 border-purple-500/50 bg-purple-500/10 rounded">
-                            <p className="text-xs font-mono uppercase text-purple-600 dark:text-purple-400 mb-2">
-                                🏆 Current Champion
-                            </p>
-                            <OwnerBadge transformationId={transformation.id} />
-                        </div>
+                        {/* Owner Badge - Only shows if owner exists */}
+                        <OwnerBadge transformationId={transformation.id} showTitle={true} />
 
                         {/* Description */}
                         {transformation.description && (

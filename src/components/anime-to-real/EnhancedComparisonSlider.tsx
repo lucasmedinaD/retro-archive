@@ -143,7 +143,7 @@ export default function EnhancedComparisonSlider({
         if (isDragging) checkEdges();
     }, [position, isDragging, hasReachedEdge, triggerHaptic, funFact]);
 
-    // Easter Egg: Secret Zone Detection
+    // Easter Egg: Secret Zone Detection - Fixed timer logic
     useEffect(() => {
         if (!secretPosition || hasUnlocked || !secretImage) {
             return;
@@ -153,37 +153,50 @@ export default function EnhancedComparisonSlider({
         const inZone = Math.abs(position - secretPosition) <= tolerance;
 
         if (inZone && !isInSecretZone && isDragging) {
-            // Entered secret zone!
+            // Entered secret zone - start timer!
             setIsInSecretZone(true);
-            triggerHaptic([200, 100, 200]); // Strong vibration pattern
+            triggerHaptic([200, 100, 200]);
 
-            // Start hold timer (1.5s)
-            secretZoneTimer.current = setTimeout(() => {
-                setHasUnlocked(true);
-                setShowUnlockModal(true);
-                triggerHaptic([100, 50, 100, 50, 100]); // Unlock celebration
+            // Only create timer if one doesn't exist
+            if (!secretZoneTimer.current) {
+                secretZoneTimer.current = setTimeout(() => {
+                    setHasUnlocked(true);
+                    setShowUnlockModal(true);
+                    triggerHaptic([100, 50, 100, 50, 100]);
 
-                // Save to localStorage
-                if (transformationId) {
-                    localStorage.setItem(`secret_${transformationId}`, 'true');
-                }
-            }, 1500);
+                    if (transformationId) {
+                        localStorage.setItem(`secret_${transformationId}`, 'true');
+                    }
+                    secretZoneTimer.current = null;
+                }, 1500);
+            }
         } else if (!inZone && isInSecretZone) {
-            // Left secret zone
+            // Left secret zone - cancel timer
+            setIsInSecretZone(false);
+            if (secretZoneTimer.current) {
+                clearTimeout(secretZoneTimer.current);
+                secretZoneTimer.current = null;
+            }
+        } else if (!isDragging && isInSecretZone) {
+            // Stopped dragging while in zone - cancel timer
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
                 clearTimeout(secretZoneTimer.current);
                 secretZoneTimer.current = null;
             }
         }
+        // NOTE: No cleanup return - timer should persist across position changes
+    }, [position, secretPosition, isInSecretZone, hasUnlocked, isDragging, transformationId, secretImage, triggerHaptic]);
 
-        // Cleanup timer on unmount
+    // Cleanup timer only on unmount
+    useEffect(() => {
         return () => {
             if (secretZoneTimer.current) {
                 clearTimeout(secretZoneTimer.current);
+                secretZoneTimer.current = null;
             }
         };
-    }, [position, secretPosition, isInSecretZone, hasUnlocked, isDragging, transformationId, secretImage, triggerHaptic]);
+    }, []);
 
     // Check localStorage for already unlocked secrets on mount
     useEffect(() => {
