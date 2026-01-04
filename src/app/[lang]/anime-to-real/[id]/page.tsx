@@ -83,17 +83,57 @@ export default async function TransformationDetailPage({ params }: PageProps) {
                 </div>
             </section>
 
-            {/* Related Transformations */}
-            <section className="max-w-[90rem] mx-auto px-6 py-12 border-t-2 border-black dark:border-white mt-12">
-                <InspirationFeed
-                    transformations={transformations}
-                    currentTransformationId={id}
-                    hasMore={false}
-                    isLoading={false}
-                    lang={lang}
-                    dict={dict}
-                />
-            </section>
+            {/* Related Transformations - Same Series Only */}
+            {(() => {
+                const relatedTransformations = transformations
+                    .filter(t => t.id !== id && t.series === transformation.series)
+                    .slice(0, 6);
+
+                const hasRelated = relatedTransformations.length > 0;
+
+                return (
+                    <section className="max-w-[90rem] mx-auto px-6 py-12 border-t-2 border-black dark:border-white mt-12">
+                        {hasRelated ? (
+                            <>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-xl font-bold uppercase">
+                                        {lang === 'es' ? `Más de ${transformation.series}` : `More from ${transformation.series}`}
+                                    </h3>
+                                    <span className="text-sm font-mono text-gray-500">
+                                        {relatedTransformations.length} {lang === 'es' ? 'personajes' : 'characters'}
+                                    </span>
+                                </div>
+                                <InspirationFeed
+                                    transformations={relatedTransformations}
+                                    currentTransformationId={id}
+                                    hasMore={false}
+                                    isLoading={false}
+                                    lang={lang}
+                                    dict={dict}
+                                />
+                            </>
+                        ) : (
+                            <div className="text-center py-8">
+                                <p className="text-gray-500 font-mono text-sm mb-4">
+                                    {lang === 'es'
+                                        ? `${transformation.characterName} es el único de ${transformation.series} por ahora`
+                                        : `${transformation.characterName} is the only one from ${transformation.series} so far`}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* CTA to explore more */}
+                        <div className="mt-8 text-center">
+                            <Link
+                                href={`/${lang}`}
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase text-sm hover:scale-105 transition-transform"
+                            >
+                                {lang === 'es' ? '✨ Explorar más personajes' : '✨ Explore more characters'}
+                            </Link>
+                        </div>
+                    </section>
+                );
+            })()}
 
             {/* Footer */}
             <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-8 px-6 mt-20">
