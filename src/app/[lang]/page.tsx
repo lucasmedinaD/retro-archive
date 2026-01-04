@@ -7,7 +7,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import { Instagram, Twitter, Heart, ShoppingBag, Sparkles } from 'lucide-react';
 import { getTransformationsFromDB } from '@/lib/transformations-db'; // Updated import
-import FeaturedHero from '@/components/FeaturedHero';
+import RandomHero from '@/components/RandomHero';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
 import FeedSection from '@/components/FeedSection';
 import DesktopFilterBar from '@/components/DesktopFilterBar';
@@ -39,8 +39,9 @@ export default async function Home({ params, searchParams }: HomeProps) {
   // Get featured transformation for the hero from DB
   const transformations = await getTransformationsFromDB();
 
-  // Try to find one marked as "featured" in metadata, or default to the first one
-  const featuredTransformation = transformations.find(t => t.metadata?.featured) || transformations[0];
+  // Pick a random transformation for the hero (changes on each page load)
+  const randomIndex = Math.floor(Math.random() * transformations.length);
+  const randomTransformation = transformations[randomIndex];
 
   // Get dynamic settings for social media
   const { getSettings } = await import('@/data/settings');
@@ -59,21 +60,15 @@ export default async function Home({ params, searchParams }: HomeProps) {
       <Header lang={lang} dict={dict} />
       <MobileTopNav lang={lang} dict={dict} />
 
-      {/* REMOVED: FeaturedHero - Design focus is now on the feed itself
-      <div className="hidden md:block">
-        {featuredTransformation ? (
-          <FeaturedHero
-            transformation={featuredTransformation}
-            dict={dict}
+      {/* Random Hero - Shows different transformation each page load */}
+      {randomTransformation && (
+        <div className="hidden md:block">
+          <RandomHero
+            transformation={randomTransformation}
             lang={lang}
           />
-        ) : (
-          <section className="border-b border-black dark:border-white py-24 text-center">
-            <h1 className="text-4xl font-bold">SYSTEM OFFLINE</h1>
-          </section>
-        )}
-      </div>
-      */}
+        </div>
+      )}
 
 
 
@@ -84,7 +79,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
       <section className="max-w-[90rem] mx-auto px-6 py-8 md:py-12 border-b border-black dark:border-white">
         {transformations.length > 0 ? (
           <FeedSection
-            featuredTransformation={featuredTransformation!}
+            featuredTransformation={randomTransformation!}
             transformations={transformations}
             lang={lang}
             dict={dict}
