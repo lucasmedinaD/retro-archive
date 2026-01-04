@@ -95,6 +95,25 @@
       },
       "likes": 0,
       "id": "transform-1767484044197"
+    },
+    {
+      "characterName": "Makise Kurise",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-makise-kurise.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-makise-kurise.jpg",
+      "series": "Steins;Gate",
+      "category": "2.5d",
+      "tags": [
+        "Steins Gate characters",
+        "Makise Kurisu wallpaper",
+        "anime sci-fi waifu",
+        "tsundere genius girl"
+      ],
+      "description": {
+        "en": "Makise Kurisu (often called \"Christina\" or \"The Zombie\") is the main heroine and a genius neuroscientist in the Steins;Gate anime and visual novel. A researcher at Victor Chondria University, her time travel theories are central to the plot. She partners with Rintaro Okabe to solve temporal paradoxes, forming a deep romantic bond that endures across shifting world lines.",
+        "es": "Makise Kurisu (apodada \"Christina\" o \"Asistente\") es la heroína principal y una neurocientífica prodigio en el anime y novela visual Steins;Gate. Investigadora de la Universidad Victor Chondria, sus teorías sobre el viaje en el tiempo son el núcleo de la trama. Colabora con Rintaro Okabe para evitar distopías temporales, desarrollando un vínculo romántico crucial que trasciende las diferentes líneas de mundo."
+      },
+      "likes": 0,
+      "id": "transform-1767485069555"
     }
   ]
 }
