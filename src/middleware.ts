@@ -1,33 +1,39 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { updateSession } from '@/lib/supabase-middleware';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Check if accessing root path
+    // 1. Supabase Session Update (Critical for Auth Persistence)
+    // This MUST run first to header/cookie management works
+    const response = await updateSession(request);
+
+    // 2. Language Layout Logic
     if (pathname === '/') {
-        // Get preferred language from Accept-Language header
         const acceptLanguage = request.headers.get('accept-language') || '';
-
-        // Simple language detection - check if Spanish is preferred
         const preferredLang = acceptLanguage.toLowerCase().includes('es') ? 'es' : 'en';
-
-        // Redirect to detected language
         return NextResponse.redirect(new URL(`/${preferredLang}`, request.url));
     }
 
-    // Admin routes protection
+    // 3. Admin Routes Protection
     if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
         const session = request.cookies.get('admin_session');
-
         if (!session || session.value !== 'authenticated') {
             return NextResponse.redirect(new URL('/admin/login', request.url));
         }
     }
 
-    return NextResponse.next();
+    // Return the response created by updateSession (which carries the cookies)
+    // If we return NextResponse.next() here effectively, but we must use the response object from updateSession
+    // However, since we redirected above, this part is for non-redirect paths.
+
+    // Note: updateSession returns a response provided by NextResponse.next(). 
+    // If we need to modify headers further we should clone or use it. 
+    // Simpler approach for this specific file structure:
+    return response;
 }
 
 export const config = {
-    matcher: ['/', '/admin/:path*'],
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };
