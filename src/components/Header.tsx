@@ -8,6 +8,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useFavorites } from '@/hooks/useFavorites';
 import AuthButton from '@/components/AuthButton';
+import NotificationBell from '@/components/NotificationBell';
 
 interface HeaderProps {
     lang: 'en' | 'es';
@@ -47,6 +48,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                 </nav>
 
                 <div className="flex gap-4 items-center z-50">
+                    <NotificationBell lang={lang} />
                     <AuthButton lang={lang} />
                     <div className="hidden md:flex gap-4 items-center">
                         <LanguageSwitcher currentLang={lang} />
