@@ -145,6 +145,21 @@ export default function EnhancedComparisonSlider({
 
     // Easter Egg: Secret Zone Detection - Fixed timer logic
     useEffect(() => {
+        // Debug: Log state on every position change
+        if (secretPosition && secretImage) {
+            const tolerance = 10;
+            const inZone = Math.abs(position - secretPosition) <= tolerance;
+            console.log('🎮 SECRET DEBUG:', {
+                position: Math.round(position),
+                target: secretPosition,
+                inZone,
+                isDragging,
+                isInSecretZone,
+                hasUnlocked,
+                hasTimer: !!secretZoneTimer.current
+            });
+        }
+
         if (!secretPosition || hasUnlocked || !secretImage) {
             return;
         }
@@ -154,12 +169,14 @@ export default function EnhancedComparisonSlider({
 
         if (inZone && !isInSecretZone && isDragging) {
             // Entered secret zone - start timer!
+            console.log('🎮 ⭐ ENTERED SECRET ZONE - Starting 1.5s timer');
             setIsInSecretZone(true);
             triggerHaptic([200, 100, 200]);
 
             // Only create timer if one doesn't exist
             if (!secretZoneTimer.current) {
                 secretZoneTimer.current = setTimeout(() => {
+                    console.log('🎮 🎉 TIMER COMPLETE - Unlocking!');
                     setHasUnlocked(true);
                     setShowUnlockModal(true);
                     triggerHaptic([100, 50, 100, 50, 100]);
@@ -172,6 +189,7 @@ export default function EnhancedComparisonSlider({
             }
         } else if (!inZone && isInSecretZone) {
             // Left secret zone - cancel timer
+            console.log('🎮 ❌ LEFT SECRET ZONE');
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
                 clearTimeout(secretZoneTimer.current);
@@ -179,6 +197,7 @@ export default function EnhancedComparisonSlider({
             }
         } else if (!isDragging && isInSecretZone) {
             // Stopped dragging while in zone - cancel timer
+            console.log('🎮 ⏹️ STOPPED DRAGGING - Cancelling timer');
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
                 clearTimeout(secretZoneTimer.current);

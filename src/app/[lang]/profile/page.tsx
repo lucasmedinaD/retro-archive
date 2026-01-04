@@ -218,10 +218,33 @@ export default function ProfilePage() {
 
                 {/* My Collections - Unlocked Secrets */}
                 <div className="mb-8">
-                    <h2 className="text-xl font-black uppercase mb-4 flex items-center gap-2">
-                        <Unlock size={20} />
-                        My Collections
-                    </h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-black uppercase flex items-center gap-2">
+                            <Unlock size={20} />
+                            My Collections
+                        </h2>
+                        {unlockedSecrets.length > 0 && (
+                            <button
+                                onClick={() => {
+                                    // Clear all secret_* keys from localStorage
+                                    const keysToRemove: string[] = [];
+                                    for (let i = 0; i < localStorage.length; i++) {
+                                        const key = localStorage.key(i);
+                                        if (key?.startsWith('secret_')) {
+                                            keysToRemove.push(key);
+                                        }
+                                    }
+                                    keysToRemove.forEach(key => localStorage.removeItem(key));
+                                    setUnlockedSecrets([]);
+                                    setMessage({ type: 'success', text: 'Collections cleared! You can rediscover secrets now.' });
+                                }}
+                                className="text-xs px-3 py-1 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                            >
+                                🗑️ Reset
+                            </button>
+                        )}
+                    </div>
+
 
                     {unlockedSecrets.length === 0 ? (
                         <div className="p-8 border-2 border-dashed border-gray-300 dark:border-gray-700 text-center">
