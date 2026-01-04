@@ -3,14 +3,7 @@ import { getTransformations } from '@/data/transformations';
 import Header from '@/components/Header';
 import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 import CharacterRequestSection from '@/components/CharacterRequestSection';
-import { Instagram, Twitter } from 'lucide-react';
-import Link from 'next/link';
-
-const SocialIcon = ({ Icon }: { Icon: any }) => (
-    <div className="p-2 border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer">
-        <Icon size={18} />
-    </div>
-);
+import Footer from '@/components/Footer';
 
 interface PageProps {
     params: Promise<{ lang: 'en' | 'es' }>;
@@ -68,51 +61,7 @@ export default async function AnimeToRealPage({ params }: PageProps) {
                 <CharacterRequestSection lang={lang} />
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-8 px-6 mt-20">
-                <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div className="text-center md:text-left">
-                        <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
-                        <div className="flex justify-center md:justify-start gap-4 mb-4">
-                            {settings.socialMedia.instagram && (
-                                <a
-                                    href={settings.socialMedia.instagram}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Instagram"
-                                >
-                                    <SocialIcon Icon={Instagram} />
-                                </a>
-                            )}
-                            {settings.socialMedia.twitter && (
-                                <a
-                                    href={settings.socialMedia.twitter}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Twitter"
-                                >
-                                    <SocialIcon Icon={Twitter} />
-                                </a>
-                            )}
-                        </div>
-                        <p className="font-mono text-xs max-w-xs text-gray-500">
-                            {dict.footer.description}
-                        </p>
-                        <div className="flex gap-4 mt-3 justify-center md:justify-start font-mono text-xs">
-                            <Link href={`/${lang}/legal/privacy`} className="hover:underline text-gray-600 dark:text-gray-400">
-                                {lang === 'es' ? 'Privacidad' : 'Privacy'}
-                            </Link>
-                            <Link href={`/${lang}/legal/terms`} className="hover:underline text-gray-600 dark:text-gray-400">
-                                {lang === 'es' ? 'Términos' : 'Terms'}
-                            </Link>
-                        </div>
-                    </div>
-                    <div className="font-mono text-xs text-center md:text-right">
-                        <p>© 2024</p>
-                        <p>{dict.footer.rights}</p>
-                    </div>
-                </div>
-            </footer>
+            <Footer lang={lang} settings={settings} />
         </main>
     );
 }

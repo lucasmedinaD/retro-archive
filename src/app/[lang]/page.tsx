@@ -184,7 +184,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
               </Link>
             </div>
             <p className="font-mono text-xs text-gray-400">
-              © 2024 Retro Archive • {lang === 'es' ? 'Hecho con' : 'Made with'} ❤️
+              © 2026 Retro Archive • {lang === 'es' ? 'Hecho con' : 'Made with'} ❤️
             </p>
           </div>
         </div>

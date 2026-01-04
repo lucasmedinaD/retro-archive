@@ -9,6 +9,7 @@ import { Transformation } from '@/data/transformations';
 import ProductCard from '@/components/ProductCard';
 import { Heart, ArrowLeft, Sparkles, Package } from 'lucide-react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 interface FavoritesClientProps {
     lang: 'en' | 'es';
@@ -193,21 +194,7 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
                 )}
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-12 px-6 mt-20">
-                <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div className="text-center md:text-left">
-                        <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
-                        <p className="font-mono text-xs max-w-xs text-gray-500">
-                            {dict.footer.description}
-                        </p>
-                    </div>
-                    <div className="font-mono text-xs text-center md:text-right">
-                        <p>© 2024</p>
-                        <p>{dict.footer.rights}</p>
-                    </div>
-                </div>
-            </footer>
+            <Footer lang={lang} />
         </main>
     );
 }

@@ -9,6 +9,7 @@ import ShareButtons from '@/components/ShareButtons';
 import ImageZoom from '@/components/ImageZoom';
 import BuyButton from '@/components/BuyButton';
 import { ProductSchema } from '@/components/SchemaScript';
+import Footer from '@/components/Footer';
 
 interface ProductPageProps {
     params: Promise<{
@@ -219,21 +220,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </section>
             )}
 
-            <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-12 px-6 mt-20">
-                <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div className="text-center md:text-left">
-                        <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
-                        <p className="font-mono text-xs max-w-xs text-gray-500">
-                            {dict.footer.description}
-                        </p>
-                    </div>
-                    <div className="font-mono text-xs text-center md:text-right">
-                        <p>© 2024</p>
-                        <p>{dict.footer.rights}</p>
-                        <p>DESIGNED BY LUCAS</p>
-                    </div>
-                </div>
-            </footer>
+            <Footer lang={lang} />
         </main>
     );
 }
