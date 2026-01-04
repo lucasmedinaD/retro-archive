@@ -31,8 +31,8 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<string> 
         return '';
     }
 
-    canvas.width = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+    canvas.width = 150;
+    canvas.height = 150;
 
     ctx.drawImage(
         image,
@@ -42,8 +42,8 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<string> 
         pixelCrop.height,
         0,
         0,
-        pixelCrop.width,
-        pixelCrop.height
+        150,
+        150
     );
 
     return canvas.toDataURL('image/jpeg');
@@ -185,8 +185,8 @@ export default function ProfileModal({ isOpen, onClose, lang }: ProfileModalProp
                                         setZoom(1); // Reset zoom on change
                                     }}
                                     className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${selectedAvatar === avatar.url
-                                            ? 'border-black dark:border-white scale-95 ring-2 ring-offset-2 ring-black dark:ring-offset-black dark:ring-white'
-                                            : 'border-transparent hover:border-gray-300 dark:hover:border-gray-700'
+                                        ? 'border-black dark:border-white scale-95 ring-2 ring-offset-2 ring-black dark:ring-offset-black dark:ring-white'
+                                        : 'border-transparent hover:border-gray-300 dark:hover:border-gray-700'
                                         }`}
                                 >
                                     <Image
