@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, ShoppingBag, Coffee } from 'lucide-react';
+import { Home, Search, ShoppingBag, Heart, Coffee } from 'lucide-react';
 
 interface MobileBottomNavProps {
     lang: 'en' | 'es';
@@ -15,6 +15,7 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
     const isActive = (path: string) => {
         if (path === `/${lang}/search` && pathname.includes('search')) return true;
         if (path === `/${lang}/shop` && pathname.includes('shop')) return true;
+        if (path === `/${lang}/favorites` && pathname.includes('favorites')) return true;
         if (path === `/${lang}` && pathname === `/${lang}`) return true;
         return false;
     };
@@ -30,6 +31,12 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
             icon: Search,
             label: lang === 'es' ? 'Buscar' : 'Search',
             path: `/${lang}/search`,
+            action: null
+        },
+        {
+            icon: Heart,
+            label: lang === 'es' ? 'Favoritos' : 'Favorites',
+            path: `/${lang}/favorites`,
             action: null
         },
         {
@@ -58,10 +65,10 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
                             <button
                                 key={item.label}
                                 onClick={item.action}
-                                className="flex flex-col items-center gap-1 p-2 w-16"
+                                className="flex flex-col items-center gap-1 p-2 w-14"
                             >
                                 <Icon
-                                    size={24}
+                                    size={22}
                                     className="text-gray-500 dark:text-gray-400"
                                     strokeWidth={2}
                                 />
@@ -73,11 +80,11 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
                         <Link
                             key={item.label}
                             href={item.path!}
-                            className="flex flex-col items-center gap-1 p-2 w-16"
+                            className="flex flex-col items-center gap-1 p-2 w-14"
                         >
                             <Icon
-                                size={24}
-                                className={`${active ? 'text-black dark:text-white' : 'text-gray-400 dark:text-gray-600'}`}
+                                size={22}
+                                className={`${active ? 'text-black dark:text-white' : 'text-gray-400 dark:text-gray-600'} ${item.icon === Heart && active ? 'fill-red-500 text-red-500' : ''}`}
                                 strokeWidth={active ? 2.5 : 2}
                             />
                         </Link>
