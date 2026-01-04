@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, Upload, ExternalLink } from 'lucide-react';
-import { TransformationData } from './actions/transformations';
+import { TransformationExtended as TransformationData } from '@/types/transformations';
 import { uploadImageToCloud } from '@/lib/uploadHelper';
 import { getProducts, Product } from '@/data/products';
 import { AmazonProduct } from '@/types/transformations';

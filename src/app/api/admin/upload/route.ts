@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { getSupabaseAdmin, STORAGE_BUCKET, VALID_FOLDERS, ValidFolder, getPublicUrl } from '@/lib/supabase';
+import { getSupabaseAdmin, STORAGE_BUCKET, TRANSFORMATIONS_BUCKET, VALID_FOLDERS, ValidFolder, getPublicUrl } from '@/lib/supabase';
 
 export const config = {
     api: {
@@ -30,23 +30,30 @@ async function getUniqueFilename(
     supabase: ReturnType<typeof getSupabaseAdmin>,
     folder: string,
     baseName: string,
-    extension: string
+    extension: string,
+    bucket: string = STORAGE_BUCKET
 ): Promise<string> {
     let filename = `${baseName}${extension}`;
     let counter = 1;
 
     while (true) {
-        const filePath = `${folder}/${filename}`;
+        // If transformations bucket used, path is root, else folder/filename
+        const listPath = bucket === TRANSFORMATIONS_BUCKET ? '' : folder;
+        const searchName = filename;
 
         // Check if file exists
         const { data, error } = await supabase.storage
-            .from(STORAGE_BUCKET)
-            .list(folder, {
-                search: filename
+            .from(bucket)
+            .list(listPath, {
+                search: searchName
             });
 
-        // If error or file doesn't exist, this name is available
-        if (error || !data || data.length === 0) {
+        // If error (bucket might be empty) or file doesn't exist, this name is available
+        // Note: Supabase list returns exact matches if search is exact, but might match partials.
+        // Safer check: look for exact match in results
+        const exists = data?.some(f => f.name === filename);
+
+        if (error || !exists) {
             return filename;
         }
 
@@ -96,18 +103,31 @@ export async function POST(request: NextRequest) {
         const extension = '.jpg'; // Always .jpg after compression
         const finalBaseName = prefix ? `${prefix}-${baseName}` : baseName;
 
-        // 5. Get unique filename (checks for duplicates)
+        // 5. Determine bucket and path
         const supabase = getSupabaseAdmin();
-        const uniqueFilename = await getUniqueFilename(supabase, folder, finalBaseName, extension);
-        const filePath = `${folder}/${uniqueFilename}`;
 
-        // 6. Convert file to buffer
+        let bucket = STORAGE_BUCKET;
+        // Logic: if folder is transformations, use separate bucket.
+        if (folder === 'transformations') {
+            bucket = TRANSFORMATIONS_BUCKET;
+        }
+
+        // 6. Get unique filename (checks for duplicates in the correct bucket)
+        const uniqueFilename = await getUniqueFilename(supabase, folder, finalBaseName, extension, bucket);
+
+        // Path depends on bucket structure
+        // For transformations bucket, we might want root or folder. Let's stick to root?
+        // Actually earlier code used 'transformations/filename' for assets bucket.
+        // If we use dedicated bucket, root is cleaner.
+        const filePath = bucket === TRANSFORMATIONS_BUCKET ? uniqueFilename : `${folder}/${uniqueFilename}`;
+
+        // 7. Convert file to buffer
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // 7. Upload to Supabase
+        // 8. Upload to Supabase
         const { data, error } = await supabase.storage
-            .from(STORAGE_BUCKET)
+            .from(bucket)
             .upload(filePath, buffer, {
                 contentType: 'image/jpeg',
                 upsert: false
@@ -118,8 +138,8 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        // 8. Return full public URL
-        const publicUrl = getPublicUrl(filePath);
+        // 9. Return full public URL
+        const publicUrl = getPublicUrl(filePath, bucket);
 
         return NextResponse.json({
             success: true,

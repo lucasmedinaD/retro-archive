@@ -1,12 +1,11 @@
+import { TransformationExtended } from '@/types/transformations';
 import { createClient } from '@supabase/supabase-js';
-import { Transformation } from '@/data/transformations';
 
-// Server-side client for fetching in Server Components
 // Server-side client for fetching in Server Components
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export async function getTransformationsFromDB(): Promise<Transformation[]> {
+export async function getTransformationsFromDB(): Promise<TransformationExtended[]> {
     if (!supabaseUrl || !supabaseAnonKey) {
         console.warn('Supabase env vars missing, returning empty transformations');
         return [];
@@ -28,7 +27,7 @@ export async function getTransformationsFromDB(): Promise<Transformation[]> {
     return mapDBToTransformation(data);
 }
 
-export async function getTransformationByIdFromDB(id: string): Promise<Transformation | undefined> {
+export async function getTransformationByIdFromDB(id: string): Promise<TransformationExtended | undefined> {
     if (!supabaseUrl || !supabaseAnonKey) return undefined;
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -46,7 +45,7 @@ export async function getTransformationByIdFromDB(id: string): Promise<Transform
 }
 
 // Helper to map DB row to TS interface
-function mapDBToTransformation(rows: any[]): Transformation[] {
+function mapDBToTransformation(rows: any[]): TransformationExtended[] {
     return rows.map(row => ({
         id: row.id,
         characterName: row.character_name,
@@ -58,8 +57,8 @@ function mapDBToTransformation(rows: any[]): Transformation[] {
         tags: row.tags,
         likes: row.likes,
         artist: row.metadata?.artist,
+        outfit: row.metadata?.outfit,
         amazonProducts: row.amazon_products,
-        // Map other fields as needed
         metadata: row.metadata
     }));
 }

@@ -1,15 +1,5 @@
-export interface Product {
-    id: string;
-    name: string;
-    brand?: string;
-    price: number | string;
-    currency?: string;
-    image: string;
-    affiliateUrl?: string;
-    buyUrl?: string;
-    category: 'tops' | 'bottoms' | 'shoes' | 'accessories' | 'other' | 'DESIGN';
-    inStock?: boolean;
-}
+import { Product } from '@/data/products';
+export type { Product };
 
 export interface AmazonProduct {
     title: string;

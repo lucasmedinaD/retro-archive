@@ -18,16 +18,17 @@ export function getSupabaseAdmin() {
     });
 }
 
-// Storage bucket name
+// Storage bucket names
 export const STORAGE_BUCKET = 'assets';
+export const TRANSFORMATIONS_BUCKET = 'transformations'; // Created via SQL
 
 // Valid folders for organizing uploads
 export const VALID_FOLDERS = ['products', 'transformations', 'slider-demos', 'amazon-products'] as const;
 export type ValidFolder = typeof VALID_FOLDERS[number];
 
 // Get public URL for a file
-export function getPublicUrl(path: string): string {
+export function getPublicUrl(path: string, bucket: string = STORAGE_BUCKET): string {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     if (!supabaseUrl) return '';
-    return `${supabaseUrl}/storage/v1/object/public/${STORAGE_BUCKET}/${path}`;
+    return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
 }

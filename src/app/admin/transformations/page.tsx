@@ -9,9 +9,9 @@ import {
     createTransformationAction,
     deleteTransformationAction,
     updateTransformationAction,
-    deleteAllTransformationsAction,
-    TransformationData
+    deleteAllTransformationsAction
 } from '../actions/transformations';
+import { TransformationExtended as TransformationData } from '@/types/transformations';
 import { uploadImageToCloud } from '@/lib/uploadHelper';
 import TransformationEditor from '../TransformationEditor';
 
