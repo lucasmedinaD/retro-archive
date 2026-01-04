@@ -15,6 +15,7 @@ import PinItButton from '@/components/PinItButton';
 import { likeTransformationAction } from '@/app/admin/actions/transformations';
 import AmazonAffiliateWidget from '@/components/AmazonAffiliateWidget';
 import RatingSystem from '@/components/RatingSystem';
+import OwnerBadge from '@/components/OwnerBadge';
 
 interface TransformationDetailProps {
     transformation: TransformationExtended;
@@ -153,6 +154,14 @@ export default function TransformationDetail({
                                 ))}
                             </div>
                         )}
+
+                        {/* Owner Badge - Highlighted */}
+                        <div className="p-4 border-2 border-purple-500/50 bg-purple-500/10 rounded">
+                            <p className="text-xs font-mono uppercase text-purple-600 dark:text-purple-400 mb-2">
+                                🏆 Current Champion
+                            </p>
+                            <OwnerBadge transformationId={transformation.id} />
+                        </div>
 
                         {/* Description */}
                         {transformation.description && (

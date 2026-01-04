@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Heart, ChevronDown } from 'lucide-react';
 import { TransformationExtended } from '@/types/transformations';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
+import OwnerBadge from '@/components/OwnerBadge';
 
 interface InspirationFeedProps {
     transformations: TransformationExtended[];
@@ -169,6 +170,14 @@ function TransformationCard({
                                     </p>
                                 )}
                             </div>
+                        </div>
+
+                        {/* Owner Badge - Top Left */}
+                        <div className="absolute top-2 left-2 z-10">
+                            <OwnerBadge
+                                transformationId={transformation.id}
+                                className="bg-black/70 backdrop-blur-sm px-2 py-1 rounded"
+                            />
                         </div>
 
                         {/* Category Badge */}
