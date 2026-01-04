@@ -114,6 +114,26 @@
       },
       "likes": 0,
       "id": "transform-1767485069555"
+    },
+    {
+      "characterName": "L Lawliet",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-l-lawliet.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-l-lawliet.jpg",
+      "series": "Death Note",
+      "category": "2.5d",
+      "tags": [
+        "Death Note",
+        "L Lawliet",
+        "Ryuzaki",
+        "Kira",
+        "Anime Detective"
+      ],
+      "description": {
+        "en": "L Lawliet (also known as Ryuzaki) is the primary antagonist and co-protagonist in the Death Note manga and anime. He is a world-renowned private detective with superhuman intellect who leads the task force to capture Kira. His complex intellectual rivalry with Light Yagami defines the series' psychological tension and cat-and-mouse dynamic.",
+        "es": "L Lawliet (conocido como Ryuzaki) es el antagonista principal y co-protagonista en el manga y anime Death Note. Es un detective privado de renombre mundial dotado de un intelecto sobrehumano que lidera la investigación para capturar a Kira. Su compleja rivalidad intelectual con Light Yagami define la tensión psicológica de toda la serie."
+      },
+      "likes": 0,
+      "id": "transform-1767485783632"
     }
   ]
 }
