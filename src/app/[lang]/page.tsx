@@ -11,6 +11,7 @@ import { getTransformations } from '@/data/transformations';
 import FeaturedHero from '@/components/FeaturedHero';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
 import FeedSection from '@/components/FeedSection';
+import DesktopFilterBar from '@/components/DesktopFilterBar';
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -76,6 +77,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
 
 
       {/* Main Transformation Feed (The Addiction Hook) */}
+      <DesktopFilterBar lang={lang} />
       <section className="max-w-[90rem] mx-auto px-6 py-8 md:py-12 border-b border-black dark:border-white">
         <FeedSection
           featuredTransformation={featuredTransformation || transformations[0]}

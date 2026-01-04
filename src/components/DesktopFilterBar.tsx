@@ -5,12 +5,11 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { getTransformations } from '@/data/transformations';
 import { useMemo } from 'react';
 
-interface MobileTopNavProps {
+interface DesktopFilterBarProps {
     lang: 'en' | 'es';
-    dict: any;
 }
 
-export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
+export default function DesktopFilterBar({ lang }: DesktopFilterBarProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const currentFilter = searchParams.get('filter');
@@ -30,12 +29,17 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
         ...dynamicSeries.map(series => ({ label: series, tag: series }))
     ];
 
+    // Don't render if no series available
+    if (dynamicSeries.length === 0) return null;
+
     return (
-        <div className="sticky top-0 z-40 bg-white/95 dark:bg-black/95 backdrop-blur border-b border-black/5 dark:border-white/5 md:hidden transition-colors duration-300">
-            <div className="overflow-x-auto no-scrollbar py-3 px-4">
-                <div className="flex gap-2 whitespace-nowrap min-w-max">
+        <div className="hidden md:block py-4 px-6 max-w-[90rem] mx-auto">
+            <div className="flex items-center gap-4">
+                <p className="text-xs font-mono text-gray-500 uppercase tracking-wider">
+                    {lang === 'es' ? 'Filtrar:' : 'Filter:'}
+                </p>
+                <div className="flex flex-wrap gap-2">
                     {filters.map((filter) => {
-                        // Link stays on Home page with filter query param
                         const href = filter.tag
                             ? `/${lang}?filter=${encodeURIComponent(filter.tag)}`
                             : `/${lang}`;
@@ -49,10 +53,10 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
                                 key={filter.label}
                                 href={href}
                                 className={`
-                                    text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200
+                                    text-xs font-bold uppercase tracking-wider px-4 py-2 border-2 transition-all duration-200
                                     ${isActive
                                         ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                                        : 'bg-transparent text-gray-500 border-gray-200 dark:border-gray-800 dark:text-gray-400 hover:border-black dark:hover:border-white'
+                                        : 'bg-transparent text-gray-600 border-gray-300 dark:border-gray-700 dark:text-gray-400 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white'
                                     }
                                 `}
                             >
