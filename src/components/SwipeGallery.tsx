@@ -25,9 +25,12 @@ export default function SwipeGallery({
     const [isLiking, setIsLiking] = useState(false);
     const [likedIds, setLikedIds] = useState<string[]>([]);
     const [showHint, setShowHint] = useState(true);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const touchStartY = useRef(0);
-    const touchEndY = useRef(0);
+
+    // Gesture detection state
+    const touchStartRef = useRef({ x: 0, y: 0 });
+    const gestureDecidedRef = useRef(false);
+    const isVerticalGestureRef = useRef(false);
+    const accumulatedDeltaRef = useRef(0);
 
     const current = transformations[currentIndex];
 
@@ -56,41 +59,65 @@ export default function SwipeGallery({
     const goNext = useCallback(() => {
         if (currentIndex < transformations.length - 1) {
             setCurrentIndex(prev => prev + 1);
+            setShowHint(false);
         }
     }, [currentIndex, transformations.length]);
 
     const goPrev = useCallback(() => {
         if (currentIndex > 0) {
             setCurrentIndex(prev => prev - 1);
+            setShowHint(false);
         }
     }, [currentIndex]);
 
-    // Touch handlers for navigation (on the outer container, not slider)
+    // Improved touch handlers with gesture direction detection
     const handleTouchStart = (e: React.TouchEvent) => {
-        // Only track touches outside the slider area
-        const target = e.target as HTMLElement;
-        if (target.closest('.slider-area')) return;
-        touchStartY.current = e.touches[0].clientY;
+        touchStartRef.current = {
+            x: e.touches[0].clientX,
+            y: e.touches[0].clientY
+        };
+        gestureDecidedRef.current = false;
+        isVerticalGestureRef.current = false;
+        accumulatedDeltaRef.current = 0;
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
-        const target = e.target as HTMLElement;
-        if (target.closest('.slider-area')) return;
-        touchEndY.current = e.touches[0].clientY;
+        const deltaX = e.touches[0].clientX - touchStartRef.current.x;
+        const deltaY = e.touches[0].clientY - touchStartRef.current.y;
+
+        // Decide gesture direction after 15px of movement
+        if (!gestureDecidedRef.current && (Math.abs(deltaX) > 15 || Math.abs(deltaY) > 15)) {
+            gestureDecidedRef.current = true;
+
+            // If vertical movement is greater, it's a navigation gesture
+            if (Math.abs(deltaY) > Math.abs(deltaX) * 1.5) {
+                isVerticalGestureRef.current = true;
+            }
+            // Otherwise, it's horizontal (slider control) - let the slider handle it
+        }
+
+        // Track vertical movement for navigation
+        if (isVerticalGestureRef.current) {
+            accumulatedDeltaRef.current = deltaY;
+        }
     };
 
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        const target = e.target as HTMLElement;
-        if (target.closest('.slider-area')) return;
+    const handleTouchEnd = () => {
+        // Only navigate if it was a vertical gesture with enough movement
+        if (isVerticalGestureRef.current) {
+            const threshold = 60;
 
-        const diff = touchStartY.current - touchEndY.current;
-        const threshold = 50;
-
-        if (diff > threshold) {
-            goNext();
-        } else if (diff < -threshold) {
-            goPrev();
+            if (accumulatedDeltaRef.current < -threshold) {
+                goNext(); // Swipe up = next
+            } else if (accumulatedDeltaRef.current > threshold) {
+                goPrev(); // Swipe down = prev
+            }
         }
+
+        // Reset refs
+        gestureDecidedRef.current = false;
+        isVerticalGestureRef.current = false;
+        accumulatedDeltaRef.current = 0;
     };
 
     // Keyboard navigation
@@ -146,14 +173,13 @@ export default function SwipeGallery({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black flex flex-col"
-            ref={containerRef}
+            className="fixed inset-0 z-[100] bg-black flex flex-col touch-none"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
         >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 bg-gradient-to-b from-black to-transparent absolute top-0 left-0 right-0 z-50">
+            {/* Header - No counter, simulates infinite scroll */}
+            <div className="flex items-center justify-between p-4 bg-gradient-to-b from-black/80 to-transparent absolute top-0 left-0 right-0 z-50">
                 <button
                     onClick={onClose}
                     className="p-2 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-colors"
@@ -161,8 +187,20 @@ export default function SwipeGallery({
                     <X size={24} />
                 </button>
 
-                <div className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm font-mono">
-                    {currentIndex + 1} / {transformations.length}
+                {/* Progress dots instead of numbers - subtle indicator without showing total */}
+                <div className="flex gap-1">
+                    {[...Array(Math.min(5, transformations.length))].map((_, i) => {
+                        const relativeIndex = currentIndex - Math.floor(currentIndex / 5) * 5;
+                        return (
+                            <div
+                                key={i}
+                                className={`w-1.5 h-1.5 rounded-full transition-all ${i === relativeIndex % 5
+                                        ? 'bg-white scale-125'
+                                        : 'bg-white/30'
+                                    }`}
+                            />
+                        );
+                    })}
                 </div>
             </div>
 
@@ -170,10 +208,10 @@ export default function SwipeGallery({
             <AnimatePresence mode="wait">
                 <motion.div
                     key={current.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
                     className="flex-1 flex flex-col justify-center px-4 pt-16 pb-8"
                 >
                     {/* Character Info */}
@@ -188,8 +226,8 @@ export default function SwipeGallery({
                         )}
                     </div>
 
-                    {/* Slider - The actual comparison slider */}
-                    <div className="slider-area flex-1 flex items-center justify-center max-h-[60vh]">
+                    {/* Slider - touch-auto to allow horizontal gestures */}
+                    <div className="flex-1 flex items-center justify-center max-h-[60vh] touch-auto">
                         <div className="w-full max-w-md">
                             <EnhancedComparisonSlider
                                 animeImage={current.animeImage}
@@ -210,7 +248,7 @@ export default function SwipeGallery({
                             onClick={(e) => e.stopPropagation()}
                             className="inline-block px-6 py-2 bg-white text-black font-bold text-sm uppercase hover:bg-gray-200 transition-colors"
                         >
-                            {lang === 'es' ? 'Ver detalle completo' : 'View full detail'}
+                            {lang === 'es' ? 'Ver detalle' : 'View detail'}
                         </Link>
                     </div>
                 </motion.div>
@@ -226,15 +264,17 @@ export default function SwipeGallery({
                         className="absolute inset-x-0 bottom-8 flex flex-col items-center z-40 pointer-events-none"
                     >
                         <motion.div
-                            animate={{ y: [0, 10, 0] }}
+                            animate={{ y: [0, 8, 0] }}
                             transition={{ repeat: Infinity, duration: 1.5 }}
-                            className="flex flex-col items-center text-white/60"
+                            className="flex flex-col items-center text-white/70 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full"
                         >
-                            <ChevronUp size={24} />
-                            <span className="text-xs font-mono">
-                                {lang === 'es' ? 'Desliza arriba/abajo' : 'Swipe up/down'}
-                            </span>
-                            <ChevronDown size={24} />
+                            <div className="flex items-center gap-2">
+                                <ChevronUp size={18} />
+                                <span className="text-xs font-mono">
+                                    {lang === 'es' ? 'Desliza' : 'Swipe'}
+                                </span>
+                                <ChevronDown size={18} />
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}
