@@ -201,7 +201,49 @@ export default function EnhancedComparisonSlider({
         isHorizontalRef.current = false;
         startXRef.current = e.clientX;
         startYRef.current = e.clientY;
-        // Don't set isDragging yet - wait for direction
+
+        // Tap-Streak: Increment on each tap
+        currentStreak.current += 1;
+        setTapStreak(currentStreak.current);
+        setShowStreakIndicator(true);
+
+        // Reset tap timer (800ms)
+        if (tapStreakTimer.current) {
+            clearTimeout(tapStreakTimer.current);
+        }
+
+        tapStreakTimer.current = setTimeout(async () => {
+            // Streak ended - record it
+            const finalStreak = currentStreak.current;
+
+            if (finalStreak > 0 && transformationId) {
+                // Get current user from Supabase auth
+                const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
+                const supabase = createSupabaseBrowserClient();
+
+                if (!supabase) return; // Skip if not available
+
+                const { data: { user } } = await supabase.auth.getUser();
+
+                if (user) {
+                    // Import and call recordTapStreak
+                    const { recordTapStreak } = await import('@/lib/tapStreak');
+                    const result = await recordTapStreak(transformationId, user.id, finalStreak);
+
+                    if (result.success && result.newRecord) {
+                        // New record! Show celebration
+                        setPersonalBest(true);
+                        triggerHaptic([100, 50, 100, 50, 100]);
+                        setTimeout(() => setPersonalBest(false), 2000);
+                    }
+                }
+            }
+
+            // Reset streak
+            currentStreak.current = 0;
+            setTapStreak(0);
+            setTimeout(() => setShowStreakIndicator(false), 300);
+        }, 800);
     };
 
     const handlePointerMove = (e: React.PointerEvent) => {
@@ -477,6 +519,25 @@ export default function EnhancedComparisonSlider({
                         </motion.button>
                     )}
                 </motion.div>
+
+                {/* Tap-Streak Counter Overlay */}
+                {showStreakIndicator && tapStreak > 0 && (
+                    <motion.div
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.5, opacity: 0 }}
+                        className="absolute top-4 right-4 z-40 pointer-events-none"
+                    >
+                        <div className={`px-4 py-2 rounded-full font-black text-lg backdrop-blur-md border-2 ${personalBest
+                                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 border-yellow-400 animate-pulse'
+                                : 'bg-black/80 border-purple-500'
+                            }`}>
+                            <span className="text-white flex items-center gap-2">
+                                {personalBest && '🔥'} {tapStreak} TAP{tapStreak !== 1 ? 'S' : ''}
+                            </span>
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Tech Overlays */}
                 <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
