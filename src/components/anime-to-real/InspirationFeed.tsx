@@ -172,13 +172,14 @@ function TransformationCard({
                             </div>
                         </div>
 
-                        {/* Owner Badge - Top Left */}
+                        {/* DISABLED: Owner Badge - Feature not working
                         <div className="absolute top-2 left-2 z-10">
                             <OwnerBadge
                                 transformationId={transformation.id}
                                 className="bg-black/70 backdrop-blur-sm px-2 py-1 rounded"
                             />
                         </div>
+                        */}
 
                         {/* Category Badge */}
                         <div className="absolute top-2 right-2 bg-black text-white dark:bg-white dark:text-black px-2 py-1 text-[10px] font-bold uppercase">

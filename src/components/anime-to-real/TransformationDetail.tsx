@@ -155,8 +155,9 @@ export default function TransformationDetail({
                             </div>
                         )}
 
-                        {/* Owner Badge - Only shows if owner exists */}
+                        {/* DISABLED: Owner Badge - Feature not working
                         <OwnerBadge transformationId={transformation.id} showTitle={true} />
+                        */}
 
                         {/* Description */}
                         {transformation.description && (

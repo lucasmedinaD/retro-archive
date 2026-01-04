@@ -47,16 +47,16 @@ export default function EnhancedComparisonSlider({
     const containerRef = useRef<HTMLDivElement>(null);
     const lastHapticPosition = useRef<number | null>(null);
 
-    // Easter Egg: Secret Detection State
-    const [isInSecretZone, setIsInSecretZone] = useState(false);
-    const [hasUnlocked, setHasUnlocked] = useState(false);
+    // DISABLED: Secret Detection State (feature not working, kept for future)
+    const [isInSecretZone] = useState(false); // Always false - disabled
+    const [hasUnlocked] = useState(false); // Always false - disabled
     const [showUnlockModal, setShowUnlockModal] = useState(false);
     const secretZoneTimer = useRef<NodeJS.Timeout | null>(null);
 
-    // Tap-Streak Competition State
-    const [tapStreak, setTapStreak] = useState(0);
-    const [showStreakIndicator, setShowStreakIndicator] = useState(false);
-    const [personalBest, setPersonalBest] = useState(false);
+    // DISABLED: Tap-Streak Competition State (feature not working, kept for future)
+    const [tapStreak] = useState(0); // Always 0 - disabled
+    const [showStreakIndicator] = useState(false); // Always false - disabled
+    const [personalBest] = useState(false); // Always false - disabled
     const tapStreakTimer = useRef<NodeJS.Timeout | null>(null);
     const currentStreak = useRef<number>(0);
 
@@ -143,7 +143,7 @@ export default function EnhancedComparisonSlider({
         if (isDragging) checkEdges();
     }, [position, isDragging, hasReachedEdge, triggerHaptic, funFact]);
 
-    // Easter Egg: Secret Zone Detection - Fixed timer logic
+    /* DISABLED: Secret Zone Detection - Feature not working, kept for future
     useEffect(() => {
         // Debug: Log state on every position change
         if (secretPosition && secretImage) {
@@ -164,16 +164,14 @@ export default function EnhancedComparisonSlider({
             return;
         }
 
-        const tolerance = 10; // ±10% range
+        const tolerance = 10;
         const inZone = Math.abs(position - secretPosition) <= tolerance;
 
         if (inZone && !isInSecretZone && isDragging) {
-            // Entered secret zone - start timer!
             console.log('🎮 ⭐ ENTERED SECRET ZONE - Starting 1.5s timer');
             setIsInSecretZone(true);
             triggerHaptic([200, 100, 200]);
 
-            // Only create timer if one doesn't exist
             if (!secretZoneTimer.current) {
                 secretZoneTimer.current = setTimeout(() => {
                     console.log('🎮 🎉 TIMER COMPLETE - Unlocking!');
@@ -188,7 +186,6 @@ export default function EnhancedComparisonSlider({
                 }, 1500);
             }
         } else if (!inZone && isInSecretZone) {
-            // Left secret zone - cancel timer
             console.log('🎮 ❌ LEFT SECRET ZONE');
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
@@ -196,7 +193,6 @@ export default function EnhancedComparisonSlider({
                 secretZoneTimer.current = null;
             }
         } else if (!isDragging && isInSecretZone) {
-            // Stopped dragging while in zone - cancel timer
             console.log('🎮 ⏹️ STOPPED DRAGGING - Cancelling timer');
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
@@ -204,7 +200,6 @@ export default function EnhancedComparisonSlider({
                 secretZoneTimer.current = null;
             }
         }
-        // NOTE: No cleanup return - timer should persist across position changes
     }, [position, secretPosition, isInSecretZone, hasUnlocked, isDragging, transformationId, secretImage, triggerHaptic]);
 
     // Cleanup timer only on unmount
@@ -226,7 +221,7 @@ export default function EnhancedComparisonSlider({
             }
         }
     }, [transformationId, secretImage]);
-
+    END DISABLED BLOCK */
 
     // --- UNIFIED POINTER EVENTS with direction detection ---
     const handlePointerDown = (e: React.PointerEvent) => {
@@ -236,36 +231,31 @@ export default function EnhancedComparisonSlider({
         startXRef.current = e.clientX;
         startYRef.current = e.clientY;
 
-        // Tap-Streak: Increment on each tap
+        /* DISABLED: Tap-Streak logic - Feature not working, kept for future
         currentStreak.current += 1;
         setTapStreak(currentStreak.current);
         setShowStreakIndicator(true);
 
-        // Reset tap timer (800ms)
         if (tapStreakTimer.current) {
             clearTimeout(tapStreakTimer.current);
         }
 
         tapStreakTimer.current = setTimeout(async () => {
-            // Streak ended - record it
             const finalStreak = currentStreak.current;
 
             if (finalStreak > 0 && transformationId) {
-                // Get current user from Supabase auth
                 const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
                 const supabase = createSupabaseBrowserClient();
 
-                if (!supabase) return; // Skip if not available
+                if (!supabase) return;
 
                 const { data: { user } } = await supabase.auth.getUser();
 
                 if (user) {
-                    // Import and call recordTapStreak
                     const { recordTapStreak } = await import('@/lib/tapStreak');
                     const result = await recordTapStreak(transformationId, user.id, finalStreak);
 
                     if (result.success && result.newRecord) {
-                        // New record! Show celebration
                         setPersonalBest(true);
                         triggerHaptic([100, 50, 100, 50, 100]);
                         setTimeout(() => setPersonalBest(false), 2000);
@@ -273,11 +263,11 @@ export default function EnhancedComparisonSlider({
                 }
             }
 
-            // Reset streak
             currentStreak.current = 0;
             setTapStreak(0);
             setTimeout(() => setShowStreakIndicator(false), 300);
         }, 800);
+        END DISABLED BLOCK */
     };
 
     const handlePointerMove = (e: React.PointerEvent) => {

@@ -3,74 +3,21 @@
 import { useState, useEffect } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 import { getUserProfile, upsertUserProfile, isUsernameAvailable } from '@/lib/profile';
-import { Upload, Check, X, Loader, Lock, Unlock } from 'lucide-react';
+import { Upload, Check, X, Loader } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
-
-interface UnlockedSecret {
-    transformationId: string;
-    characterName?: string;
-    secretImage?: string;
-}
 
 export default function ProfilePage() {
-    const [user,] = useState(() => {
-        const supabase = createSupabaseBrowserClient();
-        return supabase?.auth.getUser();
-    });
-
     const [username, setUsername] = useState('');
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [avatarPreview, setAvatarPreview] = useState('');
-    const [maxStreak, setMaxStreak] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-    const [unlockedSecrets, setUnlockedSecrets] = useState<UnlockedSecret[]>([]);
 
     useEffect(() => {
         loadProfile();
-        loadUnlockedSecrets();
     }, []);
-
-    const loadUnlockedSecrets = async () => {
-        // Get all unlocked secrets from localStorage
-        const secrets: UnlockedSecret[] = [];
-
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key?.startsWith('secret_') && localStorage.getItem(key) === 'true') {
-                const transformationId = key.replace('secret_', '');
-
-                // Try to get transformation details from Supabase
-                try {
-                    const supabase = createSupabaseBrowserClient();
-                    if (supabase) {
-                        const { data } = await supabase
-                            .from('transformations')
-                            .select('character_name, secret_image')
-                            .eq('id', transformationId)
-                            .single();
-
-                        if (data) {
-                            secrets.push({
-                                transformationId,
-                                characterName: data.character_name,
-                                secretImage: data.secret_image
-                            });
-                        } else {
-                            secrets.push({ transformationId });
-                        }
-                    }
-                } catch {
-                    secrets.push({ transformationId });
-                }
-            }
-        }
-
-        setUnlockedSecrets(secrets);
-    };
 
     const loadProfile = async () => {
         const supabase = createSupabaseBrowserClient();
@@ -89,7 +36,6 @@ export default function ProfilePage() {
         if (profile) {
             setUsername(profile.username);
             setAvatarPreview(profile.avatar_url || '');
-            setMaxStreak(profile.max_tap_streak);
             setUsernameStatus('available');
         }
 
@@ -151,7 +97,7 @@ export default function ProfilePage() {
             // Upload avatar if new file selected
             if (avatarFile) {
                 const fileName = `${authUser.id}-${Date.now()}.jpg`;
-                const { data, error } = await supabase.storage
+                const { error } = await supabase.storage
                     .from('avatars')
                     .upload(fileName, avatarFile, { upsert: true });
 
@@ -194,7 +140,7 @@ export default function ProfilePage() {
             <div className="max-w-2xl mx-auto">
                 <h1 className="text-4xl font-black uppercase mb-2">Your Profile</h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-8">
-                    Set up your username and avatar to compete for transformation ownership
+                    Set up your username and avatar
                 </p>
 
                 {message && (
@@ -205,95 +151,6 @@ export default function ProfilePage() {
                         {message.text}
                     </div>
                 )}
-
-                {/* Stats Card */}
-                <div className="mb-8 p-6 border-2 border-black dark:border-white bg-gradient-to-br from-purple-500/10 to-pink-500/10">
-                    <h3 className="text-xs uppercase font-bold mb-2 text-gray-600 dark:text-gray-400">
-                        Personal Best
-                    </h3>
-                    <div className="text-6xl font-black">
-                        🔥 {maxStreak} <span className="text-2xl">taps</span>
-                    </div>
-                </div>
-
-                {/* My Collections - Unlocked Secrets */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-black uppercase flex items-center gap-2">
-                            <Unlock size={20} />
-                            My Collections
-                        </h2>
-                        {unlockedSecrets.length > 0 && (
-                            <button
-                                onClick={() => {
-                                    // Clear all secret_* keys from localStorage
-                                    const keysToRemove: string[] = [];
-                                    for (let i = 0; i < localStorage.length; i++) {
-                                        const key = localStorage.key(i);
-                                        if (key?.startsWith('secret_')) {
-                                            keysToRemove.push(key);
-                                        }
-                                    }
-                                    keysToRemove.forEach(key => localStorage.removeItem(key));
-                                    setUnlockedSecrets([]);
-                                    setMessage({ type: 'success', text: 'Collections cleared! You can rediscover secrets now.' });
-                                }}
-                                className="text-xs px-3 py-1 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
-                            >
-                                🗑️ Reset
-                            </button>
-                        )}
-                    </div>
-
-
-                    {unlockedSecrets.length === 0 ? (
-                        <div className="p-8 border-2 border-dashed border-gray-300 dark:border-gray-700 text-center">
-                            <Lock className="mx-auto mb-3 text-gray-400" size={40} />
-                            <p className="text-gray-500 dark:text-gray-400 mb-2">
-                                No secrets unlocked yet
-                            </p>
-                            <p className="text-sm text-gray-400 dark:text-gray-500">
-                                Find hidden spots in transformations to unlock secret photos!
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                            {unlockedSecrets.map((secret) => (
-                                <Link
-                                    key={secret.transformationId}
-                                    href={`/anime-to-real/${secret.transformationId}`}
-                                    className="group relative aspect-square border-2 border-black dark:border-white overflow-hidden bg-gradient-to-br from-yellow-500/20 to-purple-500/20"
-                                >
-                                    {secret.secretImage ? (
-                                        <Image
-                                            src={secret.secretImage}
-                                            alt={secret.characterName || 'Secret'}
-                                            fill
-                                            className="object-cover group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-4xl">
-                                            🎁
-                                        </div>
-                                    )}
-
-                                    {/* Overlay with character name */}
-                                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                                        <p className="text-xs font-bold text-white truncate">
-                                            {secret.characterName || 'Secret Unlocked'}
-                                        </p>
-                                        <p className="text-[10px] text-yellow-400 flex items-center gap-1">
-                                            ✨ Unlocked
-                                        </p>
-                                    </div>
-
-                                    {/* Gold border glow on hover */}
-                                    <div className="absolute inset-0 border-4 border-yellow-400/0 group-hover:border-yellow-400/100 transition-colors pointer-events-none" />
-                                </Link>
-                            ))}
-                        </div>
-                    )}
-                </div>
 
                 {/* Avatar Upload */}
                 <div className="mb-6">
