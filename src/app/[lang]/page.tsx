@@ -6,11 +6,14 @@ import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import { Instagram, Twitter, Heart, ShoppingBag, Sparkles } from 'lucide-react';
-import { getTransformations } from '@/data/transformations';
+import { getTransformationsFromDB } from '@/lib/transformations-db'; // Updated import
 import FeaturedHero from '@/components/FeaturedHero';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
 import FeedSection from '@/components/FeedSection';
 import DesktopFilterBar from '@/components/DesktopFilterBar';
+
+// Ensure fresh data
+export const revalidate = 0;
 
 // Using a generic type for the icon since we are just rendering them
 const SocialIcon = ({ Icon }: { Icon: any }) => (
@@ -33,10 +36,11 @@ export default async function Home({ params, searchParams }: HomeProps) {
   // Filter from MobileTopNav tabs
   const initialFilter = resolvedSearchParams.filter as string | undefined;
 
-  // Get featured transformation for the hero
-  const transformations = getTransformations();
-  // Try to find one marked as "featured" in metadata, or default to Makima (hardcoded ID makima-1) or just the first one
-  const featuredTransformation = transformations.find(t => t.id === 'makima-1') || transformations[0];
+  // Get featured transformation for the hero from DB
+  const transformations = await getTransformationsFromDB();
+
+  // Try to find one marked as "featured" in metadata, or default to the first one
+  const featuredTransformation = transformations.find(t => t.metadata?.featured) || transformations[0];
 
   // Get dynamic settings for social media
   const { getSettings } = await import('@/data/settings');
