@@ -85,9 +85,12 @@ export default function Header({ lang, dict }: HeaderProps) {
                         </Link>
                     </nav>
 
-                    <div className="flex gap-6 mt-8">
-                        <LanguageSwitcher currentLang={lang} />
-                        <ThemeToggle />
+                    <div className="flex flex-col items-center gap-6 mt-8">
+                        <AuthButton lang={lang} />
+                        <div className="flex gap-6">
+                            <LanguageSwitcher currentLang={lang} />
+                            <ThemeToggle />
+                        </div>
                     </div>
                 </div>
             )}
