@@ -68,12 +68,6 @@ export default function EnhancedComparisonSlider({
     const directionDecidedRef = useRef<boolean>(false);
     const isHorizontalRef = useRef<boolean>(false);
 
-    // Debug: Log secret props
-    useEffect(() => {
-        console.log('🎮 Secret Props:', { secretImage, secretPosition, hasSecret: !!(secretImage && secretPosition) });
-    }, [secretImage, secretPosition]);
-
-
     // Spring animation for smooth movement
     const springPosition = useSpring(position, {
         stiffness: 300,
@@ -151,13 +145,6 @@ export default function EnhancedComparisonSlider({
 
     // Easter Egg: Secret Zone Detection
     useEffect(() => {
-        // Log every position change
-        if (secretPosition && secretImage) {
-            const tolerance = 10;
-            const inZone = Math.abs(position - secretPosition) <= tolerance;
-            console.log('🎮 Position:', position, 'Target:', secretPosition, 'InZone:', inZone, 'Dragging:', isDragging);
-        }
-
         if (!secretPosition || hasUnlocked || !secretImage) {
             return;
         }
@@ -167,13 +154,11 @@ export default function EnhancedComparisonSlider({
 
         if (inZone && !isInSecretZone && isDragging) {
             // Entered secret zone!
-            console.log('🎮 ⭐ ENTERED SECRET ZONE!');
             setIsInSecretZone(true);
             triggerHaptic([200, 100, 200]); // Strong vibration pattern
 
             // Start hold timer (1.5s)
             secretZoneTimer.current = setTimeout(() => {
-                console.log('🎮 🎉 SECRET UNLOCKED!');
                 setHasUnlocked(true);
                 setShowUnlockModal(true);
                 triggerHaptic([100, 50, 100, 50, 100]); // Unlock celebration
@@ -185,7 +170,6 @@ export default function EnhancedComparisonSlider({
             }, 1500);
         } else if (!inZone && isInSecretZone) {
             // Left secret zone
-            console.log('🎮 ❌ LEFT SECRET ZONE');
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
                 clearTimeout(secretZoneTimer.current);
