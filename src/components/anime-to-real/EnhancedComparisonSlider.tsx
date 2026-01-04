@@ -151,18 +151,29 @@ export default function EnhancedComparisonSlider({
 
     // Easter Egg: Secret Zone Detection
     useEffect(() => {
-        if (!secretPosition || hasUnlocked || !secretImage) return;
+        // Log every position change
+        if (secretPosition && secretImage) {
+            const tolerance = 10;
+            const inZone = Math.abs(position - secretPosition) <= tolerance;
+            console.log('🎮 Position:', position, 'Target:', secretPosition, 'InZone:', inZone, 'Dragging:', isDragging);
+        }
+
+        if (!secretPosition || hasUnlocked || !secretImage) {
+            return;
+        }
 
         const tolerance = 10; // ±10% range
         const inZone = Math.abs(position - secretPosition) <= tolerance;
 
         if (inZone && !isInSecretZone && isDragging) {
             // Entered secret zone!
+            console.log('🎮 ⭐ ENTERED SECRET ZONE!');
             setIsInSecretZone(true);
             triggerHaptic([200, 100, 200]); // Strong vibration pattern
 
             // Start hold timer (1.5s)
             secretZoneTimer.current = setTimeout(() => {
+                console.log('🎮 🎉 SECRET UNLOCKED!');
                 setHasUnlocked(true);
                 setShowUnlockModal(true);
                 triggerHaptic([100, 50, 100, 50, 100]); // Unlock celebration
@@ -174,6 +185,7 @@ export default function EnhancedComparisonSlider({
             }, 1500);
         } else if (!inZone && isInSecretZone) {
             // Left secret zone
+            console.log('🎮 ❌ LEFT SECRET ZONE');
             setIsInSecretZone(false);
             if (secretZoneTimer.current) {
                 clearTimeout(secretZoneTimer.current);
