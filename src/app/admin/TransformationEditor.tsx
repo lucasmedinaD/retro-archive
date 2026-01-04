@@ -128,20 +128,20 @@ export default function TransformationEditor({ transformation, isNew = false, on
             if (animeImage) {
                 const upload = await uploadImageToCloud(animeImage, 'transformations');
                 if (!upload.success) throw new Error('Anime image upload failed: ' + upload.error);
-                finalAnimeImage = upload.path!;
+                finalAnimeImage = upload.publicUrl!;
             }
 
             if (realImage) {
                 const upload = await uploadImageToCloud(realImage, 'transformations');
                 if (!upload.success) throw new Error('Real image upload failed: ' + upload.error);
-                finalRealImage = upload.path!;
+                finalRealImage = upload.publicUrl!;
             }
 
             // Upload secret image if selected
             if (secretImage) {
                 const upload = await uploadImageToCloud(secretImage, 'transformations');
                 if (!upload.success) throw new Error('Secret image upload failed: ' + upload.error);
-                finalSecretImage = upload.path!;
+                finalSecretImage = upload.publicUrl!;
             }
 
             // Get full product objects for selected IDs
