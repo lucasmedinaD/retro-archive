@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, X } from 'lucide-react';
 
 interface SearchBarProps {
@@ -15,14 +15,13 @@ export default function SearchBar({ onSearch, placeholder = 'Search...', classNa
     const [isFocused, setIsFocused] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // Debounce search
-    useEffect(() => {
-        const timer = setTimeout(() => {
+    // Handle Enter key to submit search
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
             onSearch(query);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [query, onSearch]);
+        }
+    };
 
     const handleClear = () => {
         setQuery('');
@@ -32,7 +31,7 @@ export default function SearchBar({ onSearch, placeholder = 'Search...', classNa
 
     // Keyboard shortcut: Ctrl/Cmd + K
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
+        const handleGlobalKeyDown = (e: KeyboardEvent) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 inputRef.current?.focus();
@@ -43,8 +42,8 @@ export default function SearchBar({ onSearch, placeholder = 'Search...', classNa
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        window.addEventListener('keydown', handleGlobalKeyDown);
+        return () => window.removeEventListener('keydown', handleGlobalKeyDown);
     }, [isFocused]);
 
     return (
@@ -64,6 +63,7 @@ export default function SearchBar({ onSearch, placeholder = 'Search...', classNa
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     placeholder={placeholder}
@@ -87,7 +87,7 @@ export default function SearchBar({ onSearch, placeholder = 'Search...', classNa
                 {/* Keyboard hint */}
                 <div className="hidden sm:flex items-center gap-1 text-gray-400 text-xs font-mono">
                     <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-[10px]">
-                        ⌘K
+                        Enter
                     </kbd>
                 </div>
             </div>
