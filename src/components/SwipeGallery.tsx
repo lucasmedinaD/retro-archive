@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { X, Heart, Share2, ChevronUp, ChevronDown, Volume2, VolumeX } from 'lucide-react';
+import { X, Heart, Share2, ChevronUp, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { TransformationExtended } from '@/types/transformations';
 import { likeTransformationAction } from '@/app/admin/actions/transformations';
+import EnhancedComparisonSlider from './anime-to-real/EnhancedComparisonSlider';
 
 interface SwipeGalleryProps {
     transformations: TransformationExtended[];
@@ -65,16 +65,24 @@ export default function SwipeGallery({
         }
     }, [currentIndex]);
 
-    // Touch handlers
+    // Touch handlers for navigation (on the outer container, not slider)
     const handleTouchStart = (e: React.TouchEvent) => {
+        // Only track touches outside the slider area
+        const target = e.target as HTMLElement;
+        if (target.closest('.slider-area')) return;
         touchStartY.current = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('.slider-area')) return;
         touchEndY.current = e.touches[0].clientY;
     };
 
-    const handleTouchEnd = () => {
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('.slider-area')) return;
+
         const diff = touchStartY.current - touchEndY.current;
         const threshold = 50;
 
@@ -138,119 +146,72 @@ export default function SwipeGallery({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black"
+            className="fixed inset-0 z-[100] bg-black flex flex-col"
             ref={containerRef}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
         >
-            {/* Close Button */}
-            <button
-                onClick={onClose}
-                className="absolute top-4 left-4 z-50 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white"
-            >
-                <X size={24} />
-            </button>
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 bg-gradient-to-b from-black to-transparent absolute top-0 left-0 right-0 z-50">
+                <button
+                    onClick={onClose}
+                    className="p-2 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-colors"
+                >
+                    <X size={24} />
+                </button>
 
-            {/* Counter */}
-            <div className="absolute top-4 right-4 z-50 px-3 py-1 bg-black/50 backdrop-blur-sm rounded-full text-white text-sm font-mono">
-                {currentIndex + 1} / {transformations.length}
+                <div className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm font-mono">
+                    {currentIndex + 1} / {transformations.length}
+                </div>
             </div>
 
             {/* Main Content */}
             <AnimatePresence mode="wait">
                 <motion.div
                     key={current.id}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -50 }}
-                    transition={{ duration: 0.3 }}
-                    className="h-full w-full flex flex-col"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex-1 flex flex-col justify-center px-4 pt-16 pb-8"
                 >
-                    {/* Image Container - Split View */}
-                    <div className="flex-1 relative">
-                        {/* Anime Image - Top Half */}
-                        <div className="absolute top-0 left-0 right-0 h-1/2 overflow-hidden">
-                            <Image
-                                src={current.animeImage}
-                                alt={`${current.characterName} Anime`}
-                                fill
-                                className="object-cover"
-                                priority
+                    {/* Character Info */}
+                    <div className="text-center mb-4">
+                        <h2 className="text-2xl font-black text-white uppercase">
+                            {current.characterName}
+                        </h2>
+                        {current.series && (
+                            <p className="text-white/60 font-mono text-sm">
+                                {current.series}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Slider - The actual comparison slider */}
+                    <div className="slider-area flex-1 flex items-center justify-center max-h-[60vh]">
+                        <div className="w-full max-w-md">
+                            <EnhancedComparisonSlider
+                                animeImage={current.animeImage}
+                                realImage={current.realImage}
+                                characterName={current.characterName}
+                                isLiked={isLiked}
+                                onLike={handleLike}
+                                onShare={handleShare}
+                                transformationId={current.id}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
-                            <span className="absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase">
-                                ANIME
-                            </span>
                         </div>
+                    </div>
 
-                        {/* Real Image - Bottom Half */}
-                        <div className="absolute bottom-0 left-0 right-0 h-1/2 overflow-hidden">
-                            <Image
-                                src={current.realImage}
-                                alt={`${current.characterName} Real`}
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
-                            <span className="absolute bottom-20 left-1/2 -translate-x-1/2 px-3 py-1 bg-green-600 text-white text-xs font-bold uppercase">
-                                REAL
-                            </span>
-                        </div>
-
-                        {/* Divider Line */}
-                        <div className="absolute top-1/2 left-0 right-0 h-1 bg-white z-10 transform -translate-y-1/2 shadow-lg" />
-
-                        {/* Character Info Overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                            <h2 className="text-3xl font-black text-white uppercase drop-shadow-lg">
-                                {current.characterName}
-                            </h2>
-                            {current.series && (
-                                <p className="text-white/80 font-mono text-sm mt-1">
-                                    {current.series}
-                                </p>
-                            )}
-                            <Link
-                                href={`/${lang}/anime-to-real/${current.id}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className="inline-block mt-3 px-4 py-2 bg-white text-black font-bold text-xs uppercase"
-                            >
-                                {lang === 'es' ? 'Ver detalle' : 'View detail'}
-                            </Link>
-                        </div>
-
-                        {/* Side Actions */}
-                        <div className="absolute right-4 bottom-32 z-30 flex flex-col gap-4">
-                            <button
-                                onClick={handleLike}
-                                disabled={isLiking}
-                                className="flex flex-col items-center"
-                            >
-                                <div className={`p-3 rounded-full ${isLiked ? 'bg-red-500' : 'bg-black/50 backdrop-blur-sm'}`}>
-                                    <Heart
-                                        size={28}
-                                        className={isLiked ? 'text-white fill-white' : 'text-white'}
-                                    />
-                                </div>
-                                <span className="text-white text-xs mt-1 font-bold">
-                                    {(current.likes || 0) + (isLiked && !likedIds.includes(current.id) ? 1 : 0)}
-                                </span>
-                            </button>
-
-                            <button
-                                onClick={handleShare}
-                                className="flex flex-col items-center"
-                            >
-                                <div className="p-3 rounded-full bg-black/50 backdrop-blur-sm">
-                                    <Share2 size={28} className="text-white" />
-                                </div>
-                                <span className="text-white text-xs mt-1 font-bold">
-                                    {lang === 'es' ? 'Compartir' : 'Share'}
-                                </span>
-                            </button>
-                        </div>
+                    {/* Detail Link */}
+                    <div className="text-center mt-4">
+                        <Link
+                            href={`/${lang}/anime-to-real/${current.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-block px-6 py-2 bg-white text-black font-bold text-sm uppercase hover:bg-gray-200 transition-colors"
+                        >
+                            {lang === 'es' ? 'Ver detalle completo' : 'View full detail'}
+                        </Link>
                     </div>
                 </motion.div>
             </AnimatePresence>
@@ -262,7 +223,7 @@ export default function SwipeGallery({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-x-0 bottom-8 flex flex-col items-center z-40"
+                        className="absolute inset-x-0 bottom-8 flex flex-col items-center z-40 pointer-events-none"
                     >
                         <motion.div
                             animate={{ y: [0, 10, 0] }}
@@ -271,7 +232,7 @@ export default function SwipeGallery({
                         >
                             <ChevronUp size={24} />
                             <span className="text-xs font-mono">
-                                {lang === 'es' ? 'Desliza para navegar' : 'Swipe to navigate'}
+                                {lang === 'es' ? 'Desliza arriba/abajo' : 'Swipe up/down'}
                             </span>
                             <ChevronDown size={24} />
                         </motion.div>
@@ -280,22 +241,20 @@ export default function SwipeGallery({
             </AnimatePresence>
 
             {/* Desktop Navigation Buttons */}
-            <div className="hidden md:flex absolute inset-y-0 left-4 items-center z-40">
+            <div className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 flex-col gap-2 z-40">
                 <button
                     onClick={goPrev}
                     disabled={currentIndex === 0}
                     className="p-3 bg-white/10 backdrop-blur-sm rounded-full text-white disabled:opacity-30 hover:bg-white/20 transition-colors"
                 >
-                    <ChevronUp size={32} />
+                    <ChevronUp size={28} />
                 </button>
-            </div>
-            <div className="hidden md:flex absolute inset-y-0 right-20 items-center z-40">
                 <button
                     onClick={goNext}
                     disabled={currentIndex === transformations.length - 1}
                     className="p-3 bg-white/10 backdrop-blur-sm rounded-full text-white disabled:opacity-30 hover:bg-white/20 transition-colors"
                 >
-                    <ChevronDown size={32} />
+                    <ChevronDown size={28} />
                 </button>
             </div>
         </motion.div>

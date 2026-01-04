@@ -51,7 +51,7 @@ export function GalleryTriggerButton({
                         transition={{ delay: 1.5 }}
                         className="fixed bottom-24 right-20 z-40 md:bottom-8 bg-black text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap pointer-events-none"
                     >
-                        {lang === 'es' ? '¡Modo TikTok! 🔥' : 'TikTok Mode! 🔥'}
+                        {lang === 'es' ? '¡Galería inmersiva! ✨' : 'Immersive gallery! ✨'}
                         <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-l-6 border-transparent border-l-black" />
                     </motion.div>
                 )}
