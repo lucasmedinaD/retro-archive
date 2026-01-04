@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
 import { ArrowLeft } from 'lucide-react';
@@ -16,14 +16,16 @@ export default function SearchPage() {
     // Get all transformations
     const allTransformations = getTransformations();
 
-    // Filter transformations based on search
-    const filteredTransformations = searchQuery
-        ? allTransformations.filter(t =>
+    // Filter transformations based on search - use useMemo to ensure updates
+    const filteredTransformations = useMemo(() => {
+        if (!searchQuery) return allTransformations;
+
+        return allTransformations.filter(t =>
             t.characterName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (t.series && t.series.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (t.tags && t.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
-        )
-        : allTransformations; // Show all when no search query
+        );
+    }, [searchQuery, allTransformations]);
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black dark:bg-[#111111] dark:text-[#f4f4f0] pb-24">
