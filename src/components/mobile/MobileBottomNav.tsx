@@ -175,6 +175,15 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
                                 {lang === 'es' ? 'Mis Favoritos' : 'My Favorites'}
                             </Link>
 
+                            <Link
+                                href={`/${lang}/requests`}
+                                onClick={() => setIsProfileMenuOpen(false)}
+                                className="flex items-center gap-4 w-full p-4 bg-gray-50 dark:bg-white/5 rounded-xl font-bold"
+                            >
+                                <span className="text-xl">🎯</span>
+                                {lang === 'es' ? 'Peticiones' : 'Requests'}
+                            </Link>
+
                             <button
                                 onClick={() => {
                                     signOut();
