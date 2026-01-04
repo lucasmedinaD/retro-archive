@@ -3,8 +3,15 @@
 import { useState, useEffect } from 'react';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
 import { getUserProfile, upsertUserProfile, isUsernameAvailable } from '@/lib/profile';
-import { Upload, Check, X, Loader } from 'lucide-react';
+import { Upload, Check, X, Loader, Lock, Unlock } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+
+interface UnlockedSecret {
+    transformationId: string;
+    characterName?: string;
+    secretImage?: string;
+}
 
 export default function ProfilePage() {
     const [user,] = useState(() => {
@@ -20,10 +27,50 @@ export default function ProfilePage() {
     const [isSaving, setIsSaving] = useState(false);
     const [usernameStatus, setUsernameStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+    const [unlockedSecrets, setUnlockedSecrets] = useState<UnlockedSecret[]>([]);
 
     useEffect(() => {
         loadProfile();
+        loadUnlockedSecrets();
     }, []);
+
+    const loadUnlockedSecrets = async () => {
+        // Get all unlocked secrets from localStorage
+        const secrets: UnlockedSecret[] = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key?.startsWith('secret_') && localStorage.getItem(key) === 'true') {
+                const transformationId = key.replace('secret_', '');
+
+                // Try to get transformation details from Supabase
+                try {
+                    const supabase = createSupabaseBrowserClient();
+                    if (supabase) {
+                        const { data } = await supabase
+                            .from('transformations')
+                            .select('character_name, secret_image')
+                            .eq('id', transformationId)
+                            .single();
+
+                        if (data) {
+                            secrets.push({
+                                transformationId,
+                                characterName: data.character_name,
+                                secretImage: data.secret_image
+                            });
+                        } else {
+                            secrets.push({ transformationId });
+                        }
+                    }
+                } catch {
+                    secrets.push({ transformationId });
+                }
+            }
+        }
+
+        setUnlockedSecrets(secrets);
+    };
 
     const loadProfile = async () => {
         const supabase = createSupabaseBrowserClient();
@@ -152,8 +199,8 @@ export default function ProfilePage() {
 
                 {message && (
                     <div className={`mb-6 p-4 border-2 ${message.type === 'success'
-                            ? 'bg-green-500/10 border-green-500 text-green-700 dark:text-green-400'
-                            : 'bg-red-500/10 border-red-500 text-red-700 dark:text-red-400'
+                        ? 'bg-green-500/10 border-green-500 text-green-700 dark:text-green-400'
+                        : 'bg-red-500/10 border-red-500 text-red-700 dark:text-red-400'
                         }`}>
                         {message.text}
                     </div>
@@ -167,6 +214,62 @@ export default function ProfilePage() {
                     <div className="text-6xl font-black">
                         🔥 {maxStreak} <span className="text-2xl">taps</span>
                     </div>
+                </div>
+
+                {/* My Collections - Unlocked Secrets */}
+                <div className="mb-8">
+                    <h2 className="text-xl font-black uppercase mb-4 flex items-center gap-2">
+                        <Unlock size={20} />
+                        My Collections
+                    </h2>
+
+                    {unlockedSecrets.length === 0 ? (
+                        <div className="p-8 border-2 border-dashed border-gray-300 dark:border-gray-700 text-center">
+                            <Lock className="mx-auto mb-3 text-gray-400" size={40} />
+                            <p className="text-gray-500 dark:text-gray-400 mb-2">
+                                No secrets unlocked yet
+                            </p>
+                            <p className="text-sm text-gray-400 dark:text-gray-500">
+                                Find hidden spots in transformations to unlock secret photos!
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            {unlockedSecrets.map((secret) => (
+                                <Link
+                                    key={secret.transformationId}
+                                    href={`/anime-to-real/${secret.transformationId}`}
+                                    className="group relative aspect-square border-2 border-black dark:border-white overflow-hidden bg-gradient-to-br from-yellow-500/20 to-purple-500/20"
+                                >
+                                    {secret.secretImage ? (
+                                        <Image
+                                            src={secret.secretImage}
+                                            alt={secret.characterName || 'Secret'}
+                                            fill
+                                            className="object-cover group-hover:scale-110 transition-transform duration-300"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-4xl">
+                                            🎁
+                                        </div>
+                                    )}
+
+                                    {/* Overlay with character name */}
+                                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                                        <p className="text-xs font-bold text-white truncate">
+                                            {secret.characterName || 'Secret Unlocked'}
+                                        </p>
+                                        <p className="text-[10px] text-yellow-400 flex items-center gap-1">
+                                            ✨ Unlocked
+                                        </p>
+                                    </div>
+
+                                    {/* Gold border glow on hover */}
+                                    <div className="absolute inset-0 border-4 border-yellow-400/0 group-hover:border-yellow-400/100 transition-colors pointer-events-none" />
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Avatar Upload */}

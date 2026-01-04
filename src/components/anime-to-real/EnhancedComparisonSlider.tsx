@@ -323,8 +323,7 @@ export default function EnhancedComparisonSlider({
             {/* Slider Container - touch-pan-y allows vertical scroll, captures horizontal */}
             <motion.div
                 ref={containerRef}
-                className={`relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-pan-y ${isInSecretZone ? 'animate-shake' : ''
-                    }`}
+                className={`relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-pan-y ${isInSecretZone && !hasUnlocked ? 'animate-shake' : ''}`}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -341,7 +340,7 @@ export default function EnhancedComparisonSlider({
                     className="relative block w-full h-auto object-cover pointer-events-none"
                     draggable={false}
                     animate={{
-                        filter: isInSecretZone
+                        filter: (isInSecretZone && !hasUnlocked)
                             ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
                             : (isDragging ? 'saturate(1.2)' : 'saturate(1)')
                     }}
@@ -356,10 +355,10 @@ export default function EnhancedComparisonSlider({
                     <motion.img
                         src={animeImage}
                         alt={`${characterName} - Anime`}
-                        className={`w-full h-full object-cover ${isInSecretZone ? 'animate-shake' : ''}`}
+                        className={`w-full h-full object-cover ${isInSecretZone && !hasUnlocked ? 'animate-shake' : ''}`}
                         draggable={false}
                         animate={{
-                            filter: isInSecretZone
+                            filter: (isInSecretZone && !hasUnlocked)
                                 ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
                                 : (isDragging ? 'saturate(1.2)' : 'saturate(1)')
                         }}
