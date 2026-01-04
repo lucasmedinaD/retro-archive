@@ -3,6 +3,7 @@ import { getTransformations } from '@/data/transformations';
 import Header from '@/components/Header';
 import TransformationDetail from '@/components/anime-to-real/TransformationDetail';
 import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
+import CommentSection from '@/components/comments/CommentSection';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Footer from '@/components/Footer';
@@ -58,6 +59,10 @@ export default async function TransformationDetailPage({ params }: PageProps) {
                 dict={dict}
                 lang={lang}
             />
+
+            {/* Comments Section */}
+            <CommentSection transformationId={transformation.id} lang={lang} />
+
 
             {/* Support Section */}
             <section className="max-w-[90rem] mx-auto px-6 mt-12">
