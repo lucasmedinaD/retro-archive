@@ -33,30 +33,26 @@ export default function MiniAutoHero({ transformation, lang }: MiniAutoHeroProps
 
     return (
         <div className="mb-6 md:mb-8">
-            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] max-w-4xl mx-auto rounded-lg overflow-hidden border-2 border-black dark:border-white shadow-lg">
-                {/* Background: Real Image */}
-                <Image
-                    src={transformation.realImage}
-                    alt="Real"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 896px"
-                    className="object-cover"
-                    priority
-                />
+            <div className="relative w-full max-w-4xl mx-auto rounded-lg overflow-hidden border-2 border-black dark:border-white shadow-lg">
+                {/* Background: Real Image (defines height) */}
+                <div className="relative w-full">
+                    <img
+                        src={transformation.realImage}
+                        alt="Real"
+                        className="w-full h-auto block"
+                    />
+                </div>
 
                 {/* Foreground: Anime - Clipped */}
                 <motion.div
-                    className="absolute inset-0 z-10 overflow-hidden"
+                    className="absolute inset-0 z-10 overflow-hidden bg-white dark:bg-black"
                     animate={{ clipPath: `inset(0 ${100 - sliderX}% 0 0)` }}
                     transition={{ type: "spring", stiffness: 80, damping: 20 }}
                 >
-                    <Image
+                    <img
                         src={transformation.animeImage}
                         alt="Anime"
-                        fill
-                        sizes="(max-width: 768px) 100vw, 896px"
-                        className="object-cover"
-                        priority
+                        className="w-full h-full object-cover sm:object-contain"
                     />
 
                     {/* Anime Label */}
