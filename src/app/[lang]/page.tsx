@@ -7,7 +7,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import { Instagram, Twitter, Heart, ShoppingBag, Sparkles } from 'lucide-react';
 import { getTransformationsFromDB } from '@/lib/transformations-db'; // Updated import
-import RandomHero from '@/components/RandomHero';
+// RandomHero removed - now feed uses original aspect ratio
 import MobileTopNav from '@/components/mobile/MobileTopNav';
 import FeedSection from '@/components/FeedSection';
 import DesktopFilterBar from '@/components/DesktopFilterBar';
@@ -60,15 +60,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
       <Header lang={lang} dict={dict} />
       <MobileTopNav lang={lang} dict={dict} />
 
-      {/* Random Hero - Shows different transformation each page load */}
-      {randomTransformation && (
-        <div className="hidden md:block">
-          <RandomHero
-            transformation={randomTransformation}
-            lang={lang}
-          />
-        </div>
-      )}
+      {/* Hero removed - feed cards now use original aspect ratio */}
 
 
 

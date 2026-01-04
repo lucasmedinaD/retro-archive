@@ -144,14 +144,14 @@ function TransformationCard({
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    {/* Image with Next.js Optimization */}
-                    <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                    {/* Image with original aspect ratio */}
+                    <div className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-900">
                         <Image
                             src={isHovered ? transformation.realImage : transformation.animeImage}
                             alt={transformation.characterName}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            width={400}
+                            height={600}
+                            className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
                             onLoad={() => setImageLoaded(true)}
                         />
 
