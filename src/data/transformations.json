@@ -134,6 +134,26 @@
       },
       "likes": 0,
       "id": "transform-1767485783632"
+    },
+    {
+      "characterName": "Mikasa Ackerman",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-mikasa-ackerman.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-mikasa-ackerman.jpg",
+      "series": "Shingeki no Kyojin",
+      "category": "2.5d",
+      "tags": [
+        "Mikasa Ackerman",
+        "Attack on Titan",
+        "Shingeki no Kyojin",
+        "Survey Corps",
+        "Eren Yeager"
+      ],
+      "description": {
+        "en": "Mikasa Ackerman is the female lead in the Attack on Titan manga and anime. As an elite Survey Corps soldier of the Ackerman bloodline, she possesses superhuman combat prowess. Her character arc focuses on her unwavering bond with Eren Yeager and her difficult journey toward personal autonomy amidst a brutal global war.",
+        "es": "Mikasa Ackerman es la coprotagonista de Shingeki no Kyojin. Como soldado de élite del Cuerpo de Exploración y descendiente del linaje Ackerman, posee habilidades físicas sobrehumanas. Su arco central gira en torno a su devoción absoluta hacia Eren Yeager, luchando por protegerlo mientras enfrenta el trágico e inevitable destino de su mundo."
+      },
+      "likes": 0,
+      "id": "transform-1767487085290"
     }
   ]
 }
