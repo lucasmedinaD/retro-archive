@@ -23,7 +23,7 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
     const { favorites, isLoaded } = useFavorites();
     const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
     const [likedTransformations, setLikedTransformations] = useState<Transformation[]>([]);
-    const [activeTab, setActiveTab] = useState<TabType>('designs');
+    const [activeTab, setActiveTab] = useState<TabType>('transformations');
 
     useEffect(() => {
         if (isLoaded) {
@@ -43,16 +43,16 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
 
     const tabs = [
         {
-            id: 'designs' as TabType,
-            label: lang === 'es' ? 'DISEÑOS GUARDADOS' : 'SAVED DESIGNS',
-            count: favoriteProducts.length,
-            icon: Package
-        },
-        {
             id: 'transformations' as TabType,
             label: lang === 'es' ? 'TRANSFORMACIONES' : 'TRANSFORMATIONS',
             count: likedTransformations.length,
             icon: Sparkles
+        },
+        {
+            id: 'designs' as TabType,
+            label: lang === 'es' ? 'DISEÑOS GUARDADOS' : 'SAVED DESIGNS',
+            count: favoriteProducts.length,
+            icon: Package
         },
     ];
 
@@ -105,8 +105,8 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`flex items-center gap-2 px-4 py-3 font-bold text-xs uppercase tracking-wider transition-colors ${activeTab === tab.id
-                                            ? 'bg-black text-white dark:bg-white dark:text-black'
-                                            : 'hover:bg-black/10 dark:hover:bg-white/10'
+                                        ? 'bg-black text-white dark:bg-white dark:text-black'
+                                        : 'hover:bg-black/10 dark:hover:bg-white/10'
                                         }`}
                                 >
                                     <tab.icon size={16} />
@@ -118,34 +118,6 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
                             ))}
                         </div>
 
-                        {/* Designs Tab Content */}
-                        {activeTab === 'designs' && (
-                            <>
-                                {favoriteProducts.length === 0 ? (
-                                    <div className="text-center py-16 border border-dashed border-black/30 dark:border-white/30">
-                                        <Package size={48} className="mx-auto mb-4 text-gray-300 dark:text-gray-600" />
-                                        <p className="font-mono text-sm text-gray-500">
-                                            {lang === 'es' ? 'No tenés diseños guardados aún' : 'No saved designs yet'}
-                                        </p>
-                                        <Link href={`/${lang}#catalog`} className="inline-block mt-4 text-accent font-bold text-sm hover:underline">
-                                            {lang === 'es' ? 'Explorar diseños →' : 'Explore designs →'}
-                                        </Link>
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                        {favoriteProducts.map((product) => (
-                                            <ProductCard
-                                                key={product.id}
-                                                product={product}
-                                                lang={lang}
-                                                label={dict.catalog.get_it}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        )}
-
                         {/* Transformations Tab Content */}
                         {activeTab === 'transformations' && (
                             <>
@@ -155,7 +127,7 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
                                         <p className="font-mono text-sm text-gray-500">
                                             {lang === 'es' ? 'No le diste like a ninguna transformación' : 'No liked transformations yet'}
                                         </p>
-                                        <Link href={`/${lang}/anime-to-real`} className="inline-block mt-4 text-accent font-bold text-sm hover:underline">
+                                        <Link href={`/${lang}`} className="inline-block mt-4 text-accent font-bold text-sm hover:underline">
                                             {lang === 'es' ? 'Explorar transformaciones →' : 'Explore transformations →'}
                                         </Link>
                                     </div>
@@ -184,6 +156,34 @@ export default function FavoritesClient({ lang, dict, allProducts, allTransforma
                                                     </div>
                                                 </div>
                                             </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* Designs Tab Content */}
+                        {activeTab === 'designs' && (
+                            <>
+                                {favoriteProducts.length === 0 ? (
+                                    <div className="text-center py-16 border border-dashed border-black/30 dark:border-white/30">
+                                        <Package size={48} className="mx-auto mb-4 text-gray-300 dark:text-gray-600" />
+                                        <p className="font-mono text-sm text-gray-500">
+                                            {lang === 'es' ? 'No tenés diseños guardados aún' : 'No saved designs yet'}
+                                        </p>
+                                        <Link href={`/${lang}/shop`} className="inline-block mt-4 text-accent font-bold text-sm hover:underline">
+                                            {lang === 'es' ? 'Explorar diseños →' : 'Explore designs →'}
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {favoriteProducts.map((product) => (
+                                            <ProductCard
+                                                key={product.id}
+                                                product={product}
+                                                lang={lang}
+                                                label={dict.catalog.get_it}
+                                            />
                                         ))}
                                     </div>
                                 )}

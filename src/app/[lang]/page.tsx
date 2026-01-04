@@ -5,8 +5,7 @@ import { getDictionary } from '@/get-dictionary';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
-import NewsletterForm from '@/components/NewsletterForm';
-import { Instagram, Twitter } from 'lucide-react';
+import { Instagram, Twitter, Heart, ShoppingBag, Sparkles } from 'lucide-react';
 import { getTransformations } from '@/data/transformations';
 import FeaturedHero from '@/components/FeaturedHero';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
@@ -97,24 +96,64 @@ export default async function Home({ params, searchParams }: HomeProps) {
         <ProductGrid lang={lang} dict={dict} products={getProducts(lang)} />
       </section>
 
-      {/* Newsletter Section */}
-      <section className="border-t border-black dark:border-white py-12 px-6 bg-[#f4f4f0] dark:bg-[#111111]">
-        <NewsletterForm dict={dict} />
+      {/* Support Message */}
+      <section className="border-t border-black/10 dark:border-white/10 py-12 px-6 bg-gradient-to-b from-[#f4f4f0] to-white dark:from-[#111] dark:to-black">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-bold mb-4">
+            <Heart size={16} className="text-red-500" />
+            {lang === 'es' ? 'PROYECTO INDIE' : 'INDIE PROJECT'}
+          </div>
+          <h3 className="text-2xl font-black mb-3">
+            {lang === 'es' ? 'Tu apoyo hace esto posible' : 'Your support makes this possible'}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-6">
+            {lang === 'es'
+              ? 'Retro Archive es un proyecto personal hecho con amor por un fan del anime. Cada compra en nuestra tienda ayuda directamente a mantener el sitio y agregar más transformaciones, personajes y funciones.'
+              : 'Retro Archive is a personal project made with love by an anime fan. Every purchase in our store directly helps maintain the site and add more transformations, characters and features.'}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href={`/${lang}/shop`}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold uppercase text-sm rounded-full hover:scale-105 transition-transform"
+            >
+              <ShoppingBag size={16} />
+              {lang === 'es' ? 'Ver diseños' : 'See designs'}
+            </Link>
+            <a
+              href="https://buymeacoffee.com/sosacrash"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#FFDD00] text-black font-bold uppercase text-sm rounded-full hover:scale-105 transition-transform"
+            >
+              <Sparkles size={16} />
+              {lang === 'es' ? 'Invítame un café' : 'Buy me a coffee'}
+            </a>
+          </div>
+        </div>
       </section>
 
-      <footer className="border-t border-black dark:border-white bg-white dark:bg-black py-8 px-6">
-        <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-center md:text-left">
-            <h4 className="font-black text-2xl mb-4">RETRO<span className="text-accent">.ARCHIVE</span></h4>
-            <div className="flex justify-center md:justify-start gap-4 mb-4">
+      <footer className="border-t border-black/10 dark:border-white/10 bg-white dark:bg-black py-8 px-6">
+        <div className="max-w-[90rem] mx-auto">
+          {/* Main Footer Content */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-6">
+            <div className="text-center md:text-left">
+              <h4 className="font-black text-xl mb-2">RETRO<span className="text-red-500">.ARCHIVE</span></h4>
+              <p className="font-mono text-xs text-gray-500 max-w-xs">
+                {lang === 'es'
+                  ? '✨ Transformaciones Anime to Real • Diseños exclusivos'
+                  : '✨ Anime to Real Transformations • Exclusive designs'}
+              </p>
+            </div>
+            <div className="flex gap-4">
               {settings.socialMedia.instagram && (
                 <a
                   href={settings.socialMedia.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
+                  className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
                 >
-                  <SocialIcon Icon={Instagram} />
+                  <Instagram size={18} />
                 </a>
               )}
               {settings.socialMedia.twitter && (
@@ -123,29 +162,30 @@ export default async function Home({ params, searchParams }: HomeProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Twitter"
+                  className="p-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
                 >
-                  <SocialIcon Icon={Twitter} />
+                  <Twitter size={18} />
                 </a>
               )}
             </div>
-            <p className="font-mono text-xs max-w-xs text-gray-500">
-              {dict.footer.description}
-            </p>
-            <div className="flex gap-4 mt-3 justify-center md:justify-start font-mono text-xs">
-              <Link href={`/${lang}#catalog`} className="hover:underline text-gray-600 dark:text-gray-400">
-                {lang === 'es' ? 'Suministros' : 'Blueprints'}
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex flex-wrap justify-center gap-4 font-mono text-xs text-gray-500">
+              <Link href={`/${lang}/shop`} className="hover:text-black dark:hover:text-white transition-colors">
+                {lang === 'es' ? 'Tienda' : 'Shop'}
               </Link>
-              <Link href={`/${lang}/legal/privacy`} className="hover:underline text-gray-600 dark:text-gray-400">
+              <Link href={`/${lang}/legal/privacy`} className="hover:text-black dark:hover:text-white transition-colors">
                 {lang === 'es' ? 'Privacidad' : 'Privacy'}
               </Link>
-              <Link href={`/${lang}/legal/terms`} className="hover:underline text-gray-600 dark:text-gray-400">
+              <Link href={`/${lang}/legal/terms`} className="hover:text-black dark:hover:text-white transition-colors">
                 {lang === 'es' ? 'Términos' : 'Terms'}
               </Link>
             </div>
-          </div>
-          <div className="font-mono text-xs text-center md:text-right">
-            <p>© 2024</p>
-            <p>{dict.footer.rights}</p>
+            <p className="font-mono text-xs text-gray-400">
+              © 2024 Retro Archive • {lang === 'es' ? 'Hecho con' : 'Made with'} ❤️
+            </p>
           </div>
         </div>
       </footer>
