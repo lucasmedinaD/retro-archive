@@ -22,7 +22,7 @@ export function getSupabaseAdmin() {
 export const STORAGE_BUCKET = 'assets';
 
 // Valid folders for organizing uploads
-export const VALID_FOLDERS = ['products', 'transformations', 'slider-demos'] as const;
+export const VALID_FOLDERS = ['products', 'transformations', 'slider-demos', 'amazon-products'] as const;
 export type ValidFolder = typeof VALID_FOLDERS[number];
 
 // Get public URL for a file
