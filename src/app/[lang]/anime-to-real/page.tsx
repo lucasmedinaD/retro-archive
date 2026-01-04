@@ -9,6 +9,8 @@ interface PageProps {
     params: Promise<{ lang: 'en' | 'es' }>;
 }
 
+export const revalidate = 0; // Ensure fresh data on every request
+
 export default async function AnimeToRealPage({ params }: PageProps) {
     const { lang } = await params;
     const dict = await getDictionary(lang);

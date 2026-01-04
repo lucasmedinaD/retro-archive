@@ -12,22 +12,12 @@ interface PageProps {
     params: Promise<{ lang: 'en' | 'es'; id: string }>;
 }
 
-export async function generateStaticParams() {
-    const transformations = await getTransformationsFromDB();
-    const langs = ['en', 'es'];
+// Force dynamic rendering for new items to appear immediately
+export const revalidate = 0;
+export const dynamicParams = true; // Allow new paths not known at build time
 
-    const params = [];
-    for (const lang of langs) {
-        for (const transformation of transformations) {
-            params.push({
-                lang,
-                id: transformation.id
-            });
-        }
-    }
-
-    return params;
-}
+// Remove generateStaticParams to avoid build-time fetching issues if env vars missing
+// and to allow purely on-demand rendering.
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps) {
