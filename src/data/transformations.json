@@ -154,6 +154,26 @@
       },
       "likes": 1,
       "id": "transform-1767487085290"
+    },
+    {
+      "characterName": "Momo Ayase",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-momo-ayase.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-momo-ayase.jpg",
+      "series": "Dandadan",
+      "category": "2.5d",
+      "tags": [
+        "Momo Ayase",
+        "Dandadan",
+        "Okarun",
+        "Dandadan manga",
+        "Anime waifu"
+      ],
+      "description": {
+        "en": "Momo Ayase is the main female protagonist of the Dandadan manga and anime series. A high school student and capable spirit medium, she possesses psychokinetic abilities inherited from her grandmother, Seiko. Partnering with the occult-obsessed Okarun, Momo battles hostile aliens and spirits to restore his body while navigating supernatural threats and their developing romantic relationship.",
+        "es": "Momo Ayase es la protagonista femenina principal del manga y anime Dandadan. Es una estudiante de secundaria y médium espiritual con poderosas habilidades psicoquinéticas, nieta de la famosa Santa Dodonpa. Junto a su compañero Okarun (Ken Takakura), lucha contra alienígenas y yokais para resolver misterios ocultos, recuperar las partes del cuerpo de Okarun y proteger la Tierra de amenazas sobrenaturales."
+      },
+      "likes": 0,
+      "id": "transform-1767488231298"
     }
   ]
 }
