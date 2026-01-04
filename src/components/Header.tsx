@@ -47,8 +47,8 @@ export default function Header({ lang, dict }: HeaderProps) {
                 </nav>
 
                 <div className="flex gap-4 items-center z-50">
+                    <AuthButton lang={lang} />
                     <div className="hidden md:flex gap-4 items-center">
-                        <AuthButton lang={lang} />
                         <LanguageSwitcher currentLang={lang} />
                         <ThemeToggle />
                     </div>
@@ -70,7 +70,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                     </nav>
 
                     <div className="flex flex-col items-center gap-6 mt-8">
-                        <AuthButton lang={lang} />
+                        {/* AuthButton moved to header */}
                         <div className="flex gap-6">
                             <LanguageSwitcher currentLang={lang} />
                             <ThemeToggle />
