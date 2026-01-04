@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useFavorites } from '@/hooks/useFavorites';
+import AuthButton from '@/components/AuthButton';
 
 interface HeaderProps {
     lang: 'en' | 'es';
@@ -55,6 +56,7 @@ export default function Header({ lang, dict }: HeaderProps) {
 
                 <div className="flex gap-4 items-center z-50">
                     <div className="hidden md:flex gap-4 items-center">
+                        <AuthButton lang={lang} />
                         <LanguageSwitcher currentLang={lang} />
                         <ThemeToggle />
                     </div>
