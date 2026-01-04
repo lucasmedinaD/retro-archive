@@ -113,6 +113,8 @@ export default function TransformationDetail({
                         funFact={transformation.metadata?.funFact}
                         transformationId={transformation.id}
                         dict={dict}
+                        secretImage={transformation.secretImage}
+                        secretPosition={transformation.secretPosition}
                     />
                 </div>
 

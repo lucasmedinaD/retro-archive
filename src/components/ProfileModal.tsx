@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { X, User as UserIcon } from 'lucide-react';
 import Image from 'next/image';
-import { getTransformations } from '@/data/transformations';
 import Cropper from 'react-easy-crop';
 
 interface ProfileModalProps {
@@ -54,18 +53,39 @@ export default function ProfileModal({ isOpen, onClose, lang }: ProfileModalProp
     const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
     const [selectedAvatar, setSelectedAvatar] = useState(user?.user_metadata?.avatar_url || '');
     const [isSaving, setIsSaving] = useState(false);
+    const [avatarOptions, setAvatarOptions] = useState<any[]>([]);
 
     // Cropper State
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
 
-    // Get avatar options from existing transformations
-    const avatarOptions = getTransformations().map(t => ({
-        id: t.id,
-        url: t.animeImage,
-        name: t.characterName
-    }));
+    // Fetch avatar options from Supabase DB
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const fetchAvatars = async () => {
+            const { createSupabaseBrowserClient } = await import('@/lib/supabase-browser');
+            const supabase = createSupabaseBrowserClient();
+
+            if (!supabase) return;
+
+            const { data } = await supabase
+                .from('transformations')
+                .select('id, anime_image, character_name')
+                .limit(20);
+
+            if (data) {
+                setAvatarOptions(data.map((t: any) => ({
+                    id: t.id,
+                    url: t.anime_image,
+                    name: t.character_name
+                })));
+            }
+        };
+
+        fetchAvatars();
+    }, [isOpen]);
 
     const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: any) => {
         setCroppedAreaPixels(croppedAreaPixels);

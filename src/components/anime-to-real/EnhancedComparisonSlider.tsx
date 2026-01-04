@@ -3,6 +3,7 @@
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Download, Share2, Heart, Sparkles } from 'lucide-react';
+import SecretUnlockModal from '../SecretUnlockModal';
 
 interface EnhancedComparisonSliderProps {
     animeImage: string;
@@ -16,6 +17,9 @@ interface EnhancedComparisonSliderProps {
     funFact?: string;
     transformationId?: string;
     dict?: any;
+    // Easter Egg: Secret Photo Unlock
+    secretImage?: string;
+    secretPosition?: number;
 }
 
 export default function EnhancedComparisonSlider({
@@ -29,7 +33,9 @@ export default function EnhancedComparisonSlider({
     isLiked: externalIsLiked = false,
     funFact,
     transformationId,
-    dict
+    dict,
+    secretImage,
+    secretPosition
 }: EnhancedComparisonSliderProps) {
     const [position, setPosition] = useState(initialPosition);
     const [isLiked, setIsLiked] = useState(externalIsLiked);
@@ -40,6 +46,19 @@ export default function EnhancedComparisonSlider({
     const [hasReachedEdge, setHasReachedEdge] = useState({ left: false, right: false });
     const containerRef = useRef<HTMLDivElement>(null);
     const lastHapticPosition = useRef<number | null>(null);
+
+    // Easter Egg: Secret Detection State
+    const [isInSecretZone, setIsInSecretZone] = useState(false);
+    const [hasUnlocked, setHasUnlocked] = useState(false);
+    const [showUnlockModal, setShowUnlockModal] = useState(false);
+    const secretZoneTimer = useRef<NodeJS.Timeout | null>(null);
+
+    // Tap-Streak Competition State
+    const [tapStreak, setTapStreak] = useState(0);
+    const [showStreakIndicator, setShowStreakIndicator] = useState(false);
+    const [personalBest, setPersonalBest] = useState(false);
+    const tapStreakTimer = useRef<NodeJS.Timeout | null>(null);
+    const currentStreak = useRef<number>(0);
 
     // Double-tap detection
     const lastTapRef = useRef<number>(0);
@@ -124,6 +143,57 @@ export default function EnhancedComparisonSlider({
         if (isDragging) checkEdges();
     }, [position, isDragging, hasReachedEdge, triggerHaptic, funFact]);
 
+    // Easter Egg: Secret Zone Detection
+    useEffect(() => {
+        if (!secretPosition || hasUnlocked || !secretImage) return;
+
+        const tolerance = 10; // ±10% range
+        const inZone = Math.abs(position - secretPosition) <= tolerance;
+
+        if (inZone && !isInSecretZone && isDragging) {
+            // Entered secret zone!
+            setIsInSecretZone(true);
+            triggerHaptic([200, 100, 200]); // Strong vibration pattern
+
+            // Start hold timer (1.5s)
+            secretZoneTimer.current = setTimeout(() => {
+                setHasUnlocked(true);
+                setShowUnlockModal(true);
+                triggerHaptic([100, 50, 100, 50, 100]); // Unlock celebration
+
+                // Save to localStorage
+                if (transformationId) {
+                    localStorage.setItem(`secret_${transformationId}`, 'true');
+                }
+            }, 1500);
+        } else if (!inZone && isInSecretZone) {
+            // Left secret zone
+            setIsInSecretZone(false);
+            if (secretZoneTimer.current) {
+                clearTimeout(secretZoneTimer.current);
+                secretZoneTimer.current = null;
+            }
+        }
+
+        // Cleanup timer on unmount
+        return () => {
+            if (secretZoneTimer.current) {
+                clearTimeout(secretZoneTimer.current);
+            }
+        };
+    }, [position, secretPosition, isInSecretZone, hasUnlocked, isDragging, transformationId, secretImage, triggerHaptic]);
+
+    // Check localStorage for already unlocked secrets on mount
+    useEffect(() => {
+        if (transformationId && secretImage) {
+            const unlocked = localStorage.getItem(`secret_${transformationId}`) === 'true';
+            if (unlocked) {
+                setHasUnlocked(true);
+            }
+        }
+    }, [transformationId, secretImage]);
+
+
     // --- UNIFIED POINTER EVENTS with direction detection ---
     const handlePointerDown = (e: React.PointerEvent) => {
         isDraggingRef.current = false;
@@ -196,7 +266,8 @@ export default function EnhancedComparisonSlider({
             {/* Slider Container - touch-pan-y allows vertical scroll, captures horizontal */}
             <motion.div
                 ref={containerRef}
-                className="relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-pan-y"
+                className={`relative w-full max-w-2xl mx-auto select-none bg-gray-900 cursor-ew-resize overflow-hidden z-10 touch-pan-y ${isInSecretZone ? 'animate-shake' : ''
+                    }`}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -213,7 +284,9 @@ export default function EnhancedComparisonSlider({
                     className="relative block w-full h-auto object-cover pointer-events-none"
                     draggable={false}
                     animate={{
-                        filter: isDragging ? 'saturate(1.2)' : 'saturate(1)'
+                        filter: isInSecretZone
+                            ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
+                            : (isDragging ? 'saturate(1.2)' : 'saturate(1)')
                     }}
                     transition={{ duration: 0.3 }}
                 />
@@ -226,10 +299,12 @@ export default function EnhancedComparisonSlider({
                     <motion.img
                         src={animeImage}
                         alt={`${characterName} - Anime`}
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full object-cover ${isInSecretZone ? 'animate-shake' : ''}`}
                         draggable={false}
                         animate={{
-                            filter: isDragging ? 'saturate(1.2)' : 'saturate(1)'
+                            filter: isInSecretZone
+                                ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
+                                : (isDragging ? 'saturate(1.2)' : 'saturate(1)')
                         }}
                         transition={{ duration: 0.3 }}
                     />
@@ -411,6 +486,16 @@ export default function EnhancedComparisonSlider({
                     <span>v2.6.0</span>
                 </div>
             </motion.div>
+
+            {/* Secret Unlock Modal */}
+            {secretImage && (
+                <SecretUnlockModal
+                    isOpen={showUnlockModal}
+                    onClose={() => setShowUnlockModal(false)}
+                    secretImage={secretImage}
+                    characterName={characterName}
+                />
+            )}
         </div>
     );
 }

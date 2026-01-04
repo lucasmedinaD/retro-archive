@@ -44,5 +44,9 @@ export interface TransformationExtended {
     outfit?: Product[];
     amazonProducts?: AmazonProduct[]; // Amazon affiliate products
     metadata?: TransformationMetadata;
+
+    // Easter Egg: Secret Photo Unlock
+    secretImage?: string; // Optional bonus image URL
+    secretPosition?: number; // Slider position (0-100) where secret is triggered
 }
 

@@ -5,8 +5,6 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { checkRateLimit, recordFailedAttempt, clearAttempts } from '@/lib/rateLimiter';
 
-const PASS = process.env.ADMIN_PASSWORD;
-
 export async function loginAction(formData: FormData) {
     const password = formData.get('password');
     const headersList = await headers();
@@ -21,6 +19,9 @@ export async function loginAction(formData: FormData) {
             error: `🚫 SECURITY LOCKOUT: Too many failed attempts. Try again in ${lockedMinutes} minutes.`
         };
     }
+
+    // Read password from env at runtime (not at module load)
+    const PASS = process.env.ADMIN_PASSWORD;
 
     // Check if password is configured
     if (!PASS) {

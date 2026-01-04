@@ -59,6 +59,8 @@ function mapDBToTransformation(rows: any[]): TransformationExtended[] {
         artist: row.metadata?.artist,
         outfit: row.metadata?.outfit,
         amazonProducts: row.amazon_products,
-        metadata: row.metadata
+        metadata: row.metadata,
+        secretImage: row.secret_image,
+        secretPosition: row.secret_position
     }));
 }

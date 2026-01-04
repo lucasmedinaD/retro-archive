@@ -82,13 +82,24 @@ export default async function Home({ params, searchParams }: HomeProps) {
       {/* Main Transformation Feed (The Addiction Hook) */}
       <DesktopFilterBar lang={lang} />
       <section className="max-w-[90rem] mx-auto px-6 py-8 md:py-12 border-b border-black dark:border-white">
-        <FeedSection
-          featuredTransformation={featuredTransformation || transformations[0]}
-          transformations={transformations}
-          lang={lang}
-          dict={dict}
-          initialFilter={initialFilter}
-        />
+        {transformations.length > 0 ? (
+          <FeedSection
+            featuredTransformation={featuredTransformation!}
+            transformations={transformations}
+            lang={lang}
+            dict={dict}
+            initialFilter={initialFilter}
+          />
+        ) : (
+          <div className="text-center py-24">
+            <h2 className="text-3xl font-bold mb-4">📦 {lang === 'es' ? 'Base de Datos Vacía' : 'Empty Database'}</h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              {lang === 'es'
+                ? 'No hay transformaciones aún. Sube contenido desde el Admin Panel.'
+                : 'No transformations yet. Upload content from the Admin Panel.'}
+            </p>
+          </div>
+        )}
       </section>
 
       {/* Secondary Product Grid */}

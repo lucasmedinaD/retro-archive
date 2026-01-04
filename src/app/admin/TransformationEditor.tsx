@@ -53,7 +53,12 @@ export default function TransformationEditor({ transformation, isNew = false, on
     // Cropper State
     const [cropModalOpen, setCropModalOpen] = useState(false);
     const [cropImageSrc, setCropImageSrc] = useState<string>('');
-    const [cropTarget, setCropTarget] = useState<'anime' | 'real' | null>(null);
+    const [cropTarget, setCropTarget] = useState<'anime' | 'real' | 'secret' | null>(null);
+
+    // Easter Egg: Secret Photo State
+    const [secretImage, setSecretImage] = useState<File | null>(null);
+    const [secretPreview, setSecretPreview] = useState(transformation.secretImage || '');
+    const [secretPosition, setSecretPosition] = useState<number>(transformation.secretPosition || 50);
 
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
@@ -69,7 +74,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
         loadCatalog();
     }, []);
 
-    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>, target: 'anime' | 'real') => {
+    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>, target: 'anime' | 'real' | 'secret') => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
@@ -93,9 +98,12 @@ export default function TransformationEditor({ transformation, isNew = false, on
         if (cropTarget === 'anime') {
             setAnimeImage(file);
             setAnimePreview(previewUrl);
-        } else {
+        } else if (cropTarget === 'real') {
             setRealImage(file);
             setRealPreview(previewUrl);
+        } else if (cropTarget === 'secret') {
+            setSecretImage(file);
+            setSecretPreview(previewUrl);
         }
 
         setCropModalOpen(false);
@@ -114,6 +122,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
         try {
             let finalAnimeImage = transformation.animeImage;
             let finalRealImage = transformation.realImage;
+            let finalSecretImage = transformation.secretImage;
 
             // Upload new images if selected
             if (animeImage) {
@@ -126,6 +135,13 @@ export default function TransformationEditor({ transformation, isNew = false, on
                 const upload = await uploadImageToCloud(realImage, 'transformations');
                 if (!upload.success) throw new Error('Real image upload failed: ' + upload.error);
                 finalRealImage = upload.path!;
+            }
+
+            // Upload secret image if selected
+            if (secretImage) {
+                const upload = await uploadImageToCloud(secretImage, 'transformations');
+                if (!upload.success) throw new Error('Secret image upload failed: ' + upload.error);
+                finalSecretImage = upload.path!;
             }
 
             // Get full product objects for selected IDs
@@ -153,6 +169,8 @@ export default function TransformationEditor({ transformation, isNew = false, on
                 } : undefined,
                 outfit: selectedProducts.length > 0 ? selectedProducts : undefined,
                 amazonProducts: amazonProducts.length > 0 ? amazonProducts : undefined,
+                secretImage: finalSecretImage,
+                secretPosition: secretPosition || undefined
             };
 
             onSave(updatedTransformation);
@@ -508,6 +526,68 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                     ))}
                                 </div>
                             )}
+                        </div>
+                    </div>
+
+                    {/* Easter Egg: Secret Photo Unlock (Optional) */}
+                    <div className="border-2 border-yellow-500/30 bg-yellow-500/5 p-4">
+                        <h3 className="text-sm font-bold uppercase mb-4 text-yellow-400 flex items-center gap-2">
+                            🎮 Easter Egg: Secret Photo Unlock (Optional)
+                        </h3>
+                        <p className="text-xs text-gray-400 mb-4">
+                            Upload a secret bonus photo and set the slider position where it unlocks. Users must find it!
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Secret Photo Upload */}
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-yellow-400">
+                                    Secret Bonus Photo
+                                </label>
+                                <div className="border border-yellow-500/30 p-4 text-center bg-black/50">
+                                    {secretPreview && (
+                                        <div className="relative aspect-[4/5] w-full max-w-xs mx-auto mb-2">
+                                            <Image src={secretPreview} alt="Secret" fill className="object-cover" />
+                                        </div>
+                                    )}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageSelect(e, 'secret')}
+                                        className="hidden"
+                                        id="edit-secret-upload"
+                                    />
+                                    <label
+                                        htmlFor="edit-secret-upload"
+                                        className="inline-block px-4 py-2 bg-black border border-yellow-500/50 text-xs uppercase cursor-pointer hover:bg-yellow-500 hover:text-black hover:border-yellow-500 transition-colors"
+                                    >
+                                        {secretImage ? '✓ Secret Photo Selected' : 'Upload Secret'}
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Secret Position Slider */}
+                            <div>
+                                <label className="block text-xs uppercase mb-2 text-yellow-400">
+                                    Secret Trigger Position (0-100%)
+                                </label>
+                                <div className="border border-yellow-500/30 p-4 bg-black/50">
+                                    <div className="text-center mb-4">
+                                        <span className="text-4xl font-black text-yellow-400">{secretPosition}%</span>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={secretPosition}
+                                        onChange={(e) => setSecretPosition(Number(e.target.value))}
+                                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-2 text-center">
+                                        Where should the slider be to trigger the unlock? (±10% tolerance)
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
