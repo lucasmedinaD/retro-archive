@@ -8,6 +8,7 @@ import { uploadImageToCloud } from '@/lib/uploadHelper';
 import { getProducts, Product } from '@/data/products';
 import { AmazonProduct } from '@/types/transformations';
 import { fetchAmazonProductsAction, StoredAmazonProduct } from './actions/amazonProducts';
+import ImageCropperModal from '@/components/ImageCropperModal';
 
 interface TransformationEditorProps {
     transformation: TransformationData;
@@ -49,6 +50,11 @@ export default function TransformationEditor({ transformation, isNew = false, on
     const [amazonImagePreview, setAmazonImagePreview] = useState<string>('');
     const [catalogProducts, setCatalogProducts] = useState<StoredAmazonProduct[]>([]);
 
+    // Cropper State
+    const [cropModalOpen, setCropModalOpen] = useState(false);
+    const [cropImageSrc, setCropImageSrc] = useState<string>('');
+    const [cropTarget, setCropTarget] = useState<'anime' | 'real' | null>(null);
+
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
 
@@ -63,24 +69,38 @@ export default function TransformationEditor({ transformation, isNew = false, on
         loadCatalog();
     }, []);
 
-    const handleAnimeImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>, target: 'anime' | 'real') => {
         const file = e.target.files?.[0];
         if (file) {
-            setAnimeImage(file);
             const reader = new FileReader();
-            reader.onloadend = () => setAnimePreview(reader.result as string);
+            reader.onload = () => {
+                setCropImageSrc(reader.result as string);
+                setCropTarget(target);
+                setCropModalOpen(true);
+            };
             reader.readAsDataURL(file);
         }
+        // Reset input
+        e.target.value = '';
     };
 
-    const handleRealImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
+    const handleCropComplete = (croppedBlob: Blob) => {
+        if (!cropTarget) return;
+
+        const file = new File([croppedBlob], `${cropTarget}-cropped.jpg`, { type: 'image/jpeg' });
+        const previewUrl = URL.createObjectURL(croppedBlob);
+
+        if (cropTarget === 'anime') {
+            setAnimeImage(file);
+            setAnimePreview(previewUrl);
+        } else {
             setRealImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => setRealPreview(reader.result as string);
-            reader.readAsDataURL(file);
+            setRealPreview(previewUrl);
         }
+
+        setCropModalOpen(false);
+        setCropImageSrc('');
+        setCropTarget(null);
     };
 
     const handleSubmit = async () => {
@@ -273,7 +293,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={handleAnimeImageChange}
+                                    onChange={(e) => handleImageSelect(e, 'anime')}
                                     className="hidden"
                                     id="edit-anime-upload"
                                 />
@@ -298,7 +318,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={handleRealImageChange}
+                                    onChange={(e) => handleImageSelect(e, 'real')}
                                     className="hidden"
                                     id="edit-real-upload"
                                 />
@@ -531,6 +551,15 @@ export default function TransformationEditor({ transformation, isNew = false, on
                     </button>
                 </div>
             </div>
+
+            {/* Cropper Modal */}
+            <ImageCropperModal
+                isOpen={cropModalOpen}
+                onClose={() => setCropModalOpen(false)}
+                imageSrc={cropImageSrc}
+                aspect={4 / 5}
+                onCropComplete={handleCropComplete}
+            />
         </div>
     );
 }
