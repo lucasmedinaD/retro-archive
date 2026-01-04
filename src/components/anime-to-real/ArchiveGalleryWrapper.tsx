@@ -30,15 +30,9 @@ export default function ArchiveGalleryWrapper({ transformations, lang, dict, ini
         return transformations.filter(t => t.series && t.series.toLowerCase() === normalizedFilter);
     }, [transformations, selectedSeries]);
 
-    const showingLabel = lang === 'es' ? 'Mostrando' : 'Showing';
-    const ofLabel = lang === 'es' ? 'de' : 'of';
-
     return (
         <>
-            {/* Results Counter */}
-            <div className="mb-6 font-mono text-sm text-gray-600 dark:text-gray-400">
-                {showingLabel} {filteredTransformations.length} {ofLabel} {transformations.length}
-            </div>
+            {/* REMOVED: Results counter - adds visual noise */}
 
             <InspirationFeed
                 transformations={filteredTransformations}

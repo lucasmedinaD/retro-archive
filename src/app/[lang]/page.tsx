@@ -59,7 +59,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
       <Header lang={lang} dict={dict} />
       <MobileTopNav lang={lang} dict={dict} />
 
-      {/* Dynamic Featured Hero - Desktop Only */}
+      {/* REMOVED: FeaturedHero - Design focus is now on the feed itself
       <div className="hidden md:block">
         {featuredTransformation ? (
           <FeaturedHero
@@ -68,12 +68,12 @@ export default async function Home({ params, searchParams }: HomeProps) {
             lang={lang}
           />
         ) : (
-          // Fallback if no transformations exist (shouldn't happen)
           <section className="border-b border-black dark:border-white py-24 text-center">
             <h1 className="text-4xl font-bold">SYSTEM OFFLINE</h1>
           </section>
         )}
       </div>
+      */}
 
 
 
