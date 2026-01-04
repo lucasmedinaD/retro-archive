@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogIn, LogOut, User, ChevronDown, Settings } from 'lucide-react';
+import { LogIn, LogOut, User, ChevronDown, Settings, Heart } from 'lucide-react';
 import Image from 'next/image';
 import ProfileModal from './ProfileModal';
+import Link from 'next/link';
 
 interface AuthButtonProps {
     lang: 'en' | 'es';
@@ -88,6 +89,14 @@ export default function AuthButton({ lang }: AuthButtonProps) {
                             <Settings size={16} />
                             {lang === 'es' ? 'Editar Perfil' : 'Edit Profile'}
                         </button>
+                        <Link
+                            href={`/${lang}/favorites`}
+                            onClick={() => setIsOpen(false)}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 rounded-md transition-colors"
+                        >
+                            <Heart size={16} />
+                            {lang === 'es' ? 'Mis Favoritos' : 'My Favorites'}
+                        </Link>
                         <button
                             onClick={() => {
                                 signOut();

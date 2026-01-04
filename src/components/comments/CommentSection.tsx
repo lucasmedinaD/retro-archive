@@ -20,21 +20,53 @@ export default function CommentSection({ transformationId, lang }: CommentSectio
         const supabase = createSupabaseBrowserClient();
         if (!supabase) return;
 
-        const { data, error } = await supabase
+        // 1. Fetch comments with profiles and total likes count
+        const { data: commentsData, error: commentsError } = await supabase
             .from('comments')
             .select(`
                 *,
                 profiles (
                     full_name,
                     avatar_url
-                )
+                ),
+                likes_count:comment_likes(count)
             `)
             .eq('transformation_id', transformationId)
             .order('created_at', { ascending: false });
 
-        if (!error && data) {
-            setComments(data as unknown as Comment[]);
+        if (commentsError || !commentsData) {
+            console.error('Error fetching comments:', commentsError);
+            setIsLoading(false);
+            return;
         }
+
+        // 2. If user is logged in, fetch their likes to see which they liked
+        let userLikesSet = new Set<string>();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user) {
+            const commentIds = commentsData.map(c => c.id);
+            if (commentIds.length > 0) {
+                const { data: userLikes } = await supabase
+                    .from('comment_likes')
+                    .select('comment_id')
+                    .eq('user_id', user.id)
+                    .in('comment_id', commentIds);
+
+                if (userLikes) {
+                    userLikes.forEach(l => userLikesSet.add(l.comment_id));
+                }
+            }
+        }
+
+        // 3. Merge data
+        const formattedComments: Comment[] = commentsData.map(c => ({
+            ...c,
+            likes_count: c.likes_count?.[0]?.count || 0,
+            user_has_liked: userLikesSet.has(c.id)
+        }));
+
+        setComments(formattedComments);
         setIsLoading(false);
     }, [transformationId]);
 
@@ -89,6 +121,7 @@ export default function CommentSection({ transformationId, lang }: CommentSectio
                     comments={comments}
                     lang={lang}
                     onDelete={(id) => setComments(prev => prev.filter(c => c.id !== id))}
+                    onReplyPosted={fetchComments}
                 />
             )}
         </section>

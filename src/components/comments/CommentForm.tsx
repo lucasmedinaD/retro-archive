@@ -9,9 +9,11 @@ interface CommentFormProps {
     transformationId: string;
     lang: 'en' | 'es';
     onCommentPosted: () => void;
+    parentId?: string;
+    autoFocus?: boolean;
 }
 
-export default function CommentForm({ transformationId, lang, onCommentPosted }: CommentFormProps) {
+export default function CommentForm({ transformationId, lang, onCommentPosted, parentId, autoFocus }: CommentFormProps) {
     const { user, signInWithGoogle } = useAuth();
     const [content, setContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +35,8 @@ export default function CommentForm({ transformationId, lang, onCommentPosted }:
                 .insert({
                     transformation_id: transformationId,
                     user_id: user.id,
-                    content: content.trim()
+                    content: content.trim(),
+                    parent_id: parentId || null
                 });
 
             if (error) throw error;
@@ -89,6 +92,7 @@ export default function CommentForm({ transformationId, lang, onCommentPosted }:
                         placeholder={lang === 'es' ? 'Escribe un comentario...' : 'Write a comment...'}
                         className="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-zinc-900 focus:ring-2 focus:ring-black dark:focus:ring-white outline-none transition-all resize-none min-h-[100px]"
                         disabled={isSubmitting}
+                        autoFocus={autoFocus}
                     />
 
                     {error && (

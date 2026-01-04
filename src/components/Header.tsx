@@ -44,14 +44,6 @@ export default function Header({ lang, dict }: HeaderProps) {
                     <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.index}</Link>
                     <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.anime_to_real}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
-                    <Link href={`/${lang}/favorites`} className={`${linkClass(`/${lang}/favorites`)} relative`}>
-                        {dict.nav.favorites}
-                        {favorites.length > 0 && (
-                            <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
-                                {favorites.length}
-                            </span>
-                        )}
-                    </Link>
                 </nav>
 
                 <div className="flex gap-4 items-center z-50">
@@ -75,14 +67,6 @@ export default function Header({ lang, dict }: HeaderProps) {
                         <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.index}</Link>
                         <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.anime_to_real}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
-                        <Link href={`/${lang}/favorites`} onClick={toggleMenu} className={`${isActive(`/${lang}/favorites`) ? 'text-accent' : 'hover:text-accent'} relative`}>
-                            {dict.nav.favorites}
-                            {favorites.length > 0 && (
-                                <span className="absolute -top-2 -right-6 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
-                                    {favorites.length}
-                                </span>
-                            )}
-                        </Link>
                     </nav>
 
                     <div className="flex flex-col items-center gap-6 mt-8">
