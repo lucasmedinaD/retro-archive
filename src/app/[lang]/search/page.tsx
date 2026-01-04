@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -10,22 +10,37 @@ import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
 
 export default function SearchPage() {
     const params = useParams();
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const lang = (params.lang as 'en' | 'es') || 'en';
-    const [searchQuery, setSearchQuery] = useState('');
+
+    // Get query from URL params
+    const urlQuery = searchParams.get('q') || '';
+    const [inputValue, setInputValue] = useState(urlQuery);
 
     // Get all transformations
     const allTransformations = getTransformations();
 
-    // Filter transformations based on search - use useMemo to ensure updates
+    // Filter transformations based on URL query
     const filteredTransformations = useMemo(() => {
-        if (!searchQuery) return allTransformations;
+        if (!urlQuery) return allTransformations;
 
         return allTransformations.filter(t =>
-            t.characterName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (t.series && t.series.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (t.tags && t.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+            t.characterName.toLowerCase().includes(urlQuery.toLowerCase()) ||
+            (t.series && t.series.toLowerCase().includes(urlQuery.toLowerCase())) ||
+            (t.tags && t.tags.some(tag => tag.toLowerCase().includes(urlQuery.toLowerCase())))
         );
-    }, [searchQuery, allTransformations]);
+    }, [urlQuery, allTransformations]);
+
+    // Handle search submission
+    const handleSearch = (query: string) => {
+        setInputValue(query);
+        if (query.trim()) {
+            router.push(`/${lang}/search?q=${encodeURIComponent(query)}`);
+        } else {
+            router.push(`/${lang}/search`);
+        }
+    };
 
     return (
         <main className="min-h-screen bg-[#f4f4f0] text-black dark:bg-[#111111] dark:text-[#f4f4f0] pb-24">
@@ -36,7 +51,7 @@ export default function SearchPage() {
                 </Link>
                 <div className="flex-1">
                     <SearchBar
-                        onSearch={(query) => setSearchQuery(query)}
+                        onSearch={handleSearch}
                         placeholder={lang === 'es' ? 'Buscar transformación...' : 'Search transformation...'}
                         className="w-full"
                         autoFocus={true}
@@ -49,25 +64,25 @@ export default function SearchPage() {
                 <div className="hidden md:block mb-8">
                     <h1 className="text-4xl font-black mb-6">{lang === 'es' ? 'BUSCAR TRANSFORMACIONES' : 'SEARCH TRANSFORMATIONS'}</h1>
                     <SearchBar
-                        onSearch={(query) => setSearchQuery(query)}
-                        placeholder={lang === 'es' ? 'Buscar personaje o serie...' : 'Search character or series...'}
-                        className="w-full max-w-xl"
+                        onSearch={handleSearch}
+                        placeholder={lang === 'es' ? 'Buscar por personaje, serie o tags...' : 'Search by character, series or tags...'}
+                        className="max-w-2xl"
                     />
                 </div>
 
-                {/* Trending Tags */}
+                {/* Trending Series Pills */}
                 <div className="mb-8">
-                    <h3 className="text-xs font-mono uppercase text-gray-500 mb-4">
+                    <p className="text-xs font-mono text-gray-500 mb-3 uppercase tracking-wider">
                         {lang === 'es' ? 'Tendencias' : 'Trending'}
-                    </h3>
+                    </p>
                     <div className="flex flex-wrap gap-2">
-                        {['Chainsaw Man', 'Jujutsu Kaisen', 'Bocchi The Rock', 'Dandadan'].map(tag => (
+                        {['Chainsaw Man', 'Jujutsu Kaisen', 'Bocchi The Rock', 'Dandadan'].map(series => (
                             <button
-                                key={tag}
-                                onClick={() => setSearchQuery(tag)}
-                                className="px-3 py-1 bg-black/5 dark:bg-white/5 rounded-full text-sm font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                                key={series}
+                                onClick={() => handleSearch(series)}
+                                className="px-4 py-2 bg-white dark:bg-black border border-black dark:border-white text-sm font-medium hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
                             >
-                                {tag}
+                                {series}
                             </button>
                         ))}
                     </div>
@@ -75,11 +90,11 @@ export default function SearchPage() {
 
                 {/* Results */}
                 <div>
-                    {searchQuery && (
+                    {urlQuery && (
                         <p className="text-sm font-mono mb-4 text-gray-600 dark:text-gray-400">
                             {lang === 'es'
-                                ? `${filteredTransformations.length} resultados para "${searchQuery}"`
-                                : `${filteredTransformations.length} results for "${searchQuery}"`
+                                ? `${filteredTransformations.length} resultados para "${urlQuery}"`
+                                : `${filteredTransformations.length} results for "${urlQuery}"`
                             }
                         </p>
                     )}
@@ -92,10 +107,28 @@ export default function SearchPage() {
                             isLoading={false}
                             dict={{}}
                         />
+                    ) : urlQuery ? (
+                        <div className="text-center py-20 max-w-md mx-auto">
+                            <p className="text-2xl font-black mb-4">
+                                {lang === 'es' ? '¡Todavía no!' : 'Not yet!'}
+                            </p>
+                            <p className="text-gray-600 dark:text-gray-400 mb-6">
+                                {lang === 'es'
+                                    ? `No encontramos "${urlQuery}" aún, pero estamos agregando nuevos personajes constantemente. ¡Vuelve pronto!`
+                                    : `We haven't found "${urlQuery}" yet, but we're constantly adding new characters. Check back soon!`
+                                }
+                            </p>
+                            <Link
+                                href={`/${lang}`}
+                                className="inline-block px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold hover:opacity-80 transition-opacity"
+                            >
+                                {lang === 'es' ? 'Ver todas las transformaciones' : 'View all transformations'}
+                            </Link>
+                        </div>
                     ) : (
                         <div className="text-center py-20">
                             <p className="text-gray-500 font-mono">
-                                {lang === 'es' ? 'No se encontraron transformaciones' : 'No transformations found'}
+                                {lang === 'es' ? 'Escribe algo para buscar' : 'Type something to search'}
                             </p>
                         </div>
                     )}
