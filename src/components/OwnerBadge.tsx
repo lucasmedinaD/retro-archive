@@ -24,11 +24,17 @@ export default function OwnerBadge({ transformationId, className = '' }: OwnerBa
     }, [transformationId]);
 
     const loadOwner = async () => {
+        if (!transformationId) {
+            setIsLoading(false);
+            return;
+        }
+
         try {
             const data = await getTransformationOwner(transformationId);
             setOwner(data);
         } catch (err) {
             console.error('Failed to load owner:', err);
+            setOwner(null);
         } finally {
             setIsLoading(false);
         }
@@ -38,8 +44,8 @@ export default function OwnerBadge({ transformationId, className = '' }: OwnerBa
         return null; // Don't show anything while loading
     }
 
-    if (!owner) {
-        return null; // No owner yet
+    if (!owner || !owner.username) {
+        return null; // No owner yet or no username
     }
 
     return (
