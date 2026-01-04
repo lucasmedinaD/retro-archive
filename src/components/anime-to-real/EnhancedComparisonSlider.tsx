@@ -68,6 +68,12 @@ export default function EnhancedComparisonSlider({
     const directionDecidedRef = useRef<boolean>(false);
     const isHorizontalRef = useRef<boolean>(false);
 
+    // Debug: Log secret props
+    useEffect(() => {
+        console.log('🎮 Secret Props:', { secretImage, secretPosition, hasSecret: !!(secretImage && secretPosition) });
+    }, [secretImage, secretPosition]);
+
+
     // Spring animation for smooth movement
     const springPosition = useSpring(position, {
         stiffness: 300,
@@ -529,8 +535,8 @@ export default function EnhancedComparisonSlider({
                         className="absolute top-4 right-4 z-40 pointer-events-none"
                     >
                         <div className={`px-4 py-2 rounded-full font-black text-lg backdrop-blur-md border-2 ${personalBest
-                                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 border-yellow-400 animate-pulse'
-                                : 'bg-black/80 border-purple-500'
+                            ? 'bg-gradient-to-r from-yellow-500 to-orange-500 border-yellow-400 animate-pulse'
+                            : 'bg-black/80 border-purple-500'
                             }`}>
                             <span className="text-white flex items-center gap-2">
                                 {personalBest && '🔥'} {tapStreak} TAP{tapStreak !== 1 ? 'S' : ''}
