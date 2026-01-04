@@ -194,6 +194,26 @@
       },
       "likes": 0,
       "id": "transform-1767489218852"
+    },
+    {
+      "characterName": "Miku Nakano",
+      "animeImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/anime-miku-nakano.jpg",
+      "realImage": "https://nwgcpldvvxmklosolyku.supabase.co/storage/v1/object/public/assets/transformations/real-miku-nakano.jpg",
+      "series": "Go-Toubun no Hanayome",
+      "category": "2.5d",
+      "tags": [
+        "Miku Nakano",
+        "The Quintessential Quintuplets",
+        "Go-Toubun no Hanayome",
+        "Nakano Sisters",
+        "Anime Waifu"
+      ],
+      "description": {
+        "en": "Miku Nakano (the third quintuplet) is a main heroine in The Quintessential Quintuplets (Go-Tōbun no Hanayome) manga and anime series. Known for her headphones and shy personality, she is a Sengoku period history enthusiast who harbors strong romantic feelings for her tutor, Fuutarou Uesugi. Her narrative arc focuses on building self-confidence and mastering culinary skills to earnestly confess her love and win Fuutarou's heart.",
+        "es": "Miku Nakano (la tercera hermana) es una de las protagonistas principales en el manga y anime The Quintessential Quintuplets (Go-Tōbun no Hanayome). Inicialmente tímida y reservada, esta estudiante amante de la historia japonesa desarrolla un profundo vínculo romántico con su tutor, Fuutarou Uesugi. Su arco se centra en superar su baja autoestima y perfeccionar sus habilidades culinarias para competir por el amor de Fuutarou contra sus propias hermanas."
+      },
+      "likes": 0,
+      "id": "transform-1767490595247"
     }
   ]
 }
