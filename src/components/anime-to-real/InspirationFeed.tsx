@@ -146,13 +146,13 @@ function TransformationCard({
                 >
                     {/* Image with original aspect ratio */}
                     <div className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-900">
-                        <Image
+                        {/* Using img tag for true natural aspect ratio */}
+                        <img
                             src={isHovered ? transformation.realImage : transformation.animeImage}
                             alt={transformation.characterName}
-                            width={400}
-                            height={600}
-                            className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
                             onLoad={() => setImageLoaded(true)}
+                            loading="lazy"
                         />
 
                         {/* Overlay */}
