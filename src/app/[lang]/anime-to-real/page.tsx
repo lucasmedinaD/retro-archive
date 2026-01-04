@@ -1,5 +1,5 @@
 import { getDictionary } from '@/get-dictionary';
-import { getTransformations } from '@/data/transformations';
+import { getTransformationsFromDB } from '@/lib/transformations-db';
 import Header from '@/components/Header';
 import ArchiveGalleryWrapper from '@/components/anime-to-real/ArchiveGalleryWrapper';
 import CharacterRequestSection from '@/components/CharacterRequestSection';
@@ -12,7 +12,7 @@ interface PageProps {
 export default async function AnimeToRealPage({ params }: PageProps) {
     const { lang } = await params;
     const dict = await getDictionary(lang);
-    const transformations = getTransformations();
+    const transformations = await getTransformationsFromDB();
 
     // Get dynamic settings for social media
     const { getSettings } = await import('@/data/settings');

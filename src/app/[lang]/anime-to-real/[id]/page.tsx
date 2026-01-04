@@ -1,5 +1,5 @@
 import { getDictionary } from '@/get-dictionary';
-import { getTransformations } from '@/data/transformations';
+import { getTransformationsFromDB, getTransformationByIdFromDB } from '@/lib/transformations-db';
 import Header from '@/components/Header';
 import TransformationDetail from '@/components/anime-to-real/TransformationDetail';
 import InspirationFeed from '@/components/anime-to-real/InspirationFeed';
@@ -8,19 +8,72 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Footer from '@/components/Footer';
 
-
-
 interface PageProps {
     params: Promise<{ lang: 'en' | 'es'; id: string }>;
+}
+
+export async function generateStaticParams() {
+    const transformations = await getTransformationsFromDB();
+    const langs = ['en', 'es'];
+
+    const params = [];
+    for (const lang of langs) {
+        for (const transformation of transformations) {
+            params.push({
+                lang,
+                id: transformation.id
+            });
+        }
+    }
+
+    return params;
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PageProps) {
+    const { lang, id } = await params;
+
+    // We fetch a single one for metadata efficienty
+    const transformation = await getTransformationByIdFromDB(id);
+
+    if (!transformation) {
+        return {
+            title: 'Transformation Not Found'
+        };
+    }
+
+    const description = transformation.description?.[lang] ||
+        `Realistic ${transformation.characterName} AI interpretation from ${transformation.series || 'anime'}. Nano Banana Pro generated visualization. Archival Entry: ${transformation.id}.`;
+
+    const titlePrefix = lang === 'es' ? 'Simulación Realista' : 'Realistic Simulation';
+
+    return {
+        title: `${titlePrefix}: ${transformation.characterName} | Retro Archive Lab`,
+        description,
+        openGraph: {
+            title: `${transformation.characterName} - AI Reality Study`,
+            description,
+            images: [transformation.realImage],
+            type: 'article'
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${transformation.characterName} - AI Reality Study`,
+            description,
+            images: [transformation.realImage]
+        }
+    };
 }
 
 export default async function TransformationDetailPage({ params }: PageProps) {
     const { lang, id } = await params;
     const dict = await getDictionary(lang);
-    const transformations = getTransformations();
 
-    // Find the transformation
-    const transformation = transformations.find(t => t.id === id);
+    // Get primary transformation
+    const transformation = await getTransformationByIdFromDB(id);
+
+    // Get all for related items (could be optimized later to fetch only related)
+    const allTransformations = await getTransformationsFromDB();
 
     if (!transformation) {
         notFound();
@@ -86,7 +139,7 @@ export default async function TransformationDetailPage({ params }: PageProps) {
 
             {/* Related Transformations - Same Series Only */}
             {(() => {
-                const relatedTransformations = transformations
+                const relatedTransformations = allTransformations
                     .filter(t => t.id !== id && t.series === transformation.series)
                     .slice(0, 6);
 
@@ -139,57 +192,4 @@ export default async function TransformationDetailPage({ params }: PageProps) {
             <Footer lang={lang} settings={settings} />
         </main>
     );
-}
-
-// Generate static params for all transformations
-export async function generateStaticParams() {
-    const transformations = getTransformations();
-    const langs = ['en', 'es'];
-
-    const params = [];
-    for (const lang of langs) {
-        for (const transformation of transformations) {
-            params.push({
-                lang,
-                id: transformation.id
-            });
-        }
-    }
-
-    return params;
-}
-
-// Generate metadata for SEO
-export async function generateMetadata({ params }: PageProps) {
-    const { lang, id } = await params;
-    const transformations = getTransformations();
-    const transformation = transformations.find(t => t.id === id);
-
-    if (!transformation) {
-        return {
-            title: 'Transformation Not Found'
-        };
-    }
-
-    const description = transformation.description?.[lang] ||
-        `Realistic ${transformation.characterName} AI interpretation from ${transformation.series || 'anime'}. Nano Banana Pro generated visualization. Archival Entry: ${transformation.id}.`;
-
-    const titlePrefix = lang === 'es' ? 'Simulación Realista' : 'Realistic Simulation';
-
-    return {
-        title: `${titlePrefix}: ${transformation.characterName} | Retro Archive Lab`,
-        description,
-        openGraph: {
-            title: `${transformation.characterName} - AI Reality Study`,
-            description,
-            images: [transformation.realImage],
-            type: 'article'
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: `${transformation.characterName} - AI Reality Study`,
-            description,
-            images: [transformation.realImage]
-        }
-    };
 }

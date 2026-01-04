@@ -44,6 +44,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                 <nav className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-wide">
                     <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.index}</Link>
                     <Link href={`/${lang}`} className={linkClass(`/${lang}`)}>{dict.nav.anime_to_real}</Link>
+                    <Link href={`/${lang}/requests`} className={linkClass(`/${lang}/requests`)}>{lang === 'es' ? 'Peticiones' : 'Requests'}</Link>
                     <Link href={`/${lang}#catalog`} className="hover:underline decoration-2 underline-offset-4">{dict.nav.apparel}</Link>
                 </nav>
 
@@ -68,6 +69,7 @@ export default function Header({ lang, dict }: HeaderProps) {
                     <nav className="flex flex-col items-center gap-6 text-2xl font-black uppercase tracking-widest">
                         <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.index}</Link>
                         <Link href={`/${lang}`} onClick={toggleMenu} className={isActive(`/${lang}`) ? 'text-accent' : 'hover:text-accent'}>{dict.nav.anime_to_real}</Link>
+                        <Link href={`/${lang}/requests`} onClick={toggleMenu} className={isActive(`/${lang}/requests`) ? 'text-accent' : 'hover:text-accent'}>{lang === 'es' ? 'Peticiones' : 'Requests'}</Link>
                         <Link href={`/${lang}#catalog`} onClick={toggleMenu} className="hover:text-accent">{dict.nav.apparel}</Link>
                     </nav>
 
