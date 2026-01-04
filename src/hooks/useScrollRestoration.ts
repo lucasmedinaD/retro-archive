@@ -1,100 +1,92 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
-const STORAGE_KEY = 'scroll-positions';
+const STORAGE_KEY = 'scroll-positions-v2';
 
 /**
- * Hook to save and restore scroll position when navigating
- * Uses sessionStorage to persist positions across page navigations
+ * Simple scroll restoration that:
+ * 1. Saves scroll position BEFORE navigation via click handler
+ * 2. Restores position when returning to a page
  */
 export function useScrollRestoration() {
     const pathname = usePathname();
-    const isRestoringRef = useRef(false);
-    const hasRestoredRef = useRef(false);
-    const isNavigatingRef = useRef(false);  // New: prevent saves during navigation
+    const isRestoredRef = useRef(false);
+    const lastSavedPathRef = useRef<string | null>(null);
 
-    // Get stored positions from sessionStorage
-    const getStoredPositions = useCallback((): Record<string, number> => {
-        if (typeof window === 'undefined') return {};
-        try {
-            const stored = sessionStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : {};
-        } catch {
-            return {};
-        }
-    }, []);
-
-    // Save position to sessionStorage
-    const savePosition = useCallback((path: string, position: number) => {
-        if (typeof window === 'undefined') return;
-        if (isNavigatingRef.current) return; // Don't save during navigation
-        try {
-            const positions = getStoredPositions();
-            positions[path] = position;
-            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
-        } catch {
-            // Ignore storage errors
-        }
-    }, [getStoredPositions]);
-
+    // Restore scroll on mount/pathname change
     useEffect(() => {
-        // Restore scroll position on mount
-        if (!hasRestoredRef.current) {
-            const positions = getStoredPositions();
-            const savedPosition = positions[pathname];
-
-            if (savedPosition !== undefined && savedPosition > 0) {
-                isRestoringRef.current = true;
-
-                // Wait for content to render before scrolling
-                requestAnimationFrame(() => {
-                    window.scrollTo(0, savedPosition);
-
-                    setTimeout(() => {
-                        isRestoringRef.current = false;
-                        hasRestoredRef.current = true;
-                    }, 150);
-                });
-            } else {
-                hasRestoredRef.current = true;
-            }
+        // Disable browser's automatic scroll restoration
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
         }
 
-        // Save position when clicking any link (before navigation)
+        // Only restore if we haven't already for this mount
+        if (isRestoredRef.current) return;
+
+        const restore = () => {
+            try {
+                const stored = sessionStorage.getItem(STORAGE_KEY);
+                if (!stored) return;
+
+                const positions: Record<string, number> = JSON.parse(stored);
+                const savedY = positions[pathname];
+
+                if (savedY !== undefined && savedY > 0) {
+                    // Use multiple attempts for dynamic content
+                    window.scrollTo(0, savedY);
+
+                    // Retry after images load
+                    setTimeout(() => window.scrollTo(0, savedY), 100);
+                    setTimeout(() => window.scrollTo(0, savedY), 300);
+                }
+            } catch { }
+
+            isRestoredRef.current = true;
+        };
+
+        // Restore after a brief delay to let content render
+        requestAnimationFrame(restore);
+    }, [pathname]);
+
+    // Reset restored flag when pathname changes
+    useEffect(() => {
+        isRestoredRef.current = false;
+        lastSavedPathRef.current = null;
+    }, [pathname]);
+
+    // Global click handler to save position BEFORE navigation
+    useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
             const link = target.closest('a');
-            if (link && !isRestoringRef.current && !isNavigatingRef.current) {
-                // IMMEDIATELY save current scroll position
-                const currentScroll = window.scrollY;
 
-                // Mark as navigating to prevent further saves
-                isNavigatingRef.current = true;
+            // Only handle internal links
+            if (!link) return;
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('mailto:')) return;
 
-                // Save the position at the moment of click
-                const positions = getStoredPositions();
-                positions[pathname] = currentScroll;
-                try {
-                    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
-                } catch { }
-            }
+            // Don't save again if we just saved for this path
+            if (lastSavedPathRef.current === pathname) return;
+
+            // Save current scroll position for current page
+            const scrollY = window.scrollY;
+
+            try {
+                const stored = sessionStorage.getItem(STORAGE_KEY);
+                const positions: Record<string, number> = stored ? JSON.parse(stored) : {};
+                positions[pathname] = scrollY;
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
+                lastSavedPathRef.current = pathname;
+            } catch { }
         };
 
-        // Use capture phase to catch click BEFORE any scroll happens
-        document.addEventListener('click', handleClick, true);
+        // Capture phase to run before navigation
+        document.addEventListener('click', handleClick, { capture: true });
 
         return () => {
-            document.removeEventListener('click', handleClick, true);
-            // Reset navigation flag on unmount
-            isNavigatingRef.current = false;
+            document.removeEventListener('click', handleClick, { capture: true });
         };
-    }, [pathname, getStoredPositions, savePosition]);
-
-    // Reset flags when pathname changes (new page loaded)
-    useEffect(() => {
-        hasRestoredRef.current = false;
-        isNavigatingRef.current = false;
     }, [pathname]);
 }
