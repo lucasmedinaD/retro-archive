@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import ShareButtons from '@/components/ShareButtons';
 import ImageZoom from '@/components/ImageZoom';
 import BuyButton from '@/components/BuyButton';
+import ScarcityLabel from '@/components/ScarcityLabel';
 import { ProductSchema } from '@/components/SchemaScript';
 import Footer from '@/components/Footer';
 
@@ -110,51 +111,83 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </Link>
             </div>
 
-            {/* Product Detail */}
-            <section className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row gap-12">
-                {/* Image with Zoom */}
-                <div className="flex-1 w-full">
-                    <ImageZoom
-                        src={product.image}
-                        alt={product.name}
-                    />
+            {/* Product Detail - Matching TransformationDetail Layout */}
+            <section className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
+                {/* Image Section (2/3 width) */}
+                <div className="lg:col-span-2 space-y-4">
+                    <div className="border-2 border-black dark:border-white bg-white dark:bg-[#111] overflow-hidden">
+                        <ImageZoom
+                            src={product.image}
+                            alt={product.name}
+                        />
+                    </div>
                 </div>
 
-                {/* Info */}
-                <div className="flex-1 flex flex-col justify-center">
+                {/* Sidebar Info (1/3 width) */}
+                <div className="flex flex-col">
                     <div className="mb-2">
-                        <span className="bg-black dark:bg-white text-white dark:text-black font-mono text-xs px-2 py-1 uppercase">{product.category || 'PRODUCT'}</span>
+                        <p className="font-mono text-xs text-accent mb-1 tracking-widest">
+                            REF-{product.id.slice(-6).toUpperCase()}
+                        </p>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[0.9] mb-4 tracking-tighter">
+                            {product.name || product.name_en || product.name_es || 'Untitled Product'}
+                        </h1>
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">{product.name || product.name_en || product.name_es || 'Untitled Product'}</h1>
 
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        <span className="bg-black dark:bg-white text-white dark:text-black font-mono text-xs px-2 py-1 uppercase font-bold">
+                            {product.category || 'PRODUCT'}
+                        </span>
+                        {product.tags?.slice(0, 3).map(tag => (
+                            <span key={tag} className="border border-black/20 dark:border-white/20 text-gray-500 font-mono text-xs px-2 py-1 uppercase">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
 
-                    <p className="font-mono text-gray-600 dark:text-gray-400 mb-6 leading-relaxed max-w-md">
-                        {product.description || product.description_en || product.description_es || 'No description available.'}
-                    </p>
-
-                    <ShareButtons
-                        url={`/${lang}/product/${product.id}`}
-                        title={product.name}
-                        description={product.description}
-                    />
-
-                    <BuyButton
-                        productId={product.id}
-                        productName={product.name}
-                        buyUrl={product.buyUrl}
-                        platform="redbubble"
-                        label={dict.product_detail.buy_redbubble}
-                        className="w-full md:w-auto text-center bg-accent text-white px-8 py-5 font-bold text-lg uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black border-2 border-black dark:border-white transition-all shadow-[4px_4px_0px_#111111] dark:shadow-[4px_4px_0px_#f4f4f0] transform hover:-translate-y-1 mt-6 inline-block"
-                    />
-
-                    {/* CRO: Security text and product variants */}
-                    <div className="mt-4 space-y-2">
-                        <p className="font-mono text-[10px] text-gray-500">
-                            ✓ {lang === 'es' ? 'Envío seguro vía Redbubble.' : 'Secure fulfillment via Redbubble.'}
+                    <div className="border-l-2 border-black dark:border-white pl-4 mb-6">
+                        <p className="font-mono text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                            {product.description || product.description_en || product.description_es || 'No description available.'}
                         </p>
-                        <p className="font-mono text-[11px] text-gray-600 dark:text-gray-400">
-                            🎨 {lang === 'es' ? 'También en: Stickers • Hoodies • Tazas • Posters y +60 más' : 'Also on: Stickers • Hoodies • Mugs • Posters and 60+ more'}
-                        </p>
+                    </div>
+
+                    <div className="mt-auto space-y-6">
+                        {/* Price / Stats Box */}
+                        <div className="border-2 border-black dark:border-white p-4">
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <p className="text-xs font-mono uppercase text-gray-500 mb-1">
+                                        {lang === 'es' ? 'Precio Estimado' : 'Estimated Price'}
+                                    </p>
+                                    <p className="text-3xl font-black">
+                                        {product.price || '$20.00'}
+                                    </p>
+                                </div>
+                                <div className="text-right">
+                                    <ScarcityLabel productId={product.id} showProbability={1} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <BuyButton
+                            productId={product.id}
+                            productName={product.name}
+                            buyUrl={product.buyUrl}
+                            platform="redbubble"
+                            label={dict.product_detail.buy_redbubble}
+                            className="w-full text-center bg-[#ff4444] text-white px-8 py-4 font-black text-xl uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black border-2 border-black dark:border-white transition-all shadow-[6px_6px_0px_#000] dark:shadow-[6px_6px_0px_#fff] transform hover:-translate-y-1"
+                        />
+
+                        <div className="flex justify-between items-center text-[10px] font-mono text-gray-400 uppercase">
+                            <span>✓ Secure Fulfillment</span>
+                            <span>✓ Global Shipping</span>
+                        </div>
+
+                        <ShareButtons
+                            url={`/${lang}/product/${product.id}`}
+                            title={product.name}
+                            description={product.description}
+                        />
                     </div>
                 </div>
             </section>
@@ -166,7 +199,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     {related.map(p => (
                         <Link key={p.id} href={`/${lang}/product/${p.id}`} className="block group border border-black dark:border-white bg-white dark:bg-[#111111]">
                             <div className="relative aspect-square border-b border-black dark:border-white overflow-hidden">
-                                <Image src={p.image} alt={p.name} fill className="object-cover grayscale group-hover:grayscale-0 transition-all" />
+                                <Image src={p.image} alt={p.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
                             </div>
                             <div className="p-4">
                                 <h4 className="font-bold uppercase text-sm">{p.name}</h4>

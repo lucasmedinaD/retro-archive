@@ -63,33 +63,7 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
 
     return (
         <div>
-            {/* View Toggle */}
-            <div className="flex justify-end mb-4">
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setViewMode('grid')}
-                        className={`w-8 h-8 border flex items-center justify-center transition-colors ${viewMode === 'grid'
-                            ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                            : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                            }`}
-                        aria-label="Grid view"
-                    >
-                        ■
-                    </button>
-                    <button
-                        onClick={() => setViewMode('list')}
-                        className={`w-8 h-8 border flex items-center justify-center transition-colors font-mono text-xs ${viewMode === 'list'
-                            ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                            : 'border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black'
-                            }`}
-                        aria-label="List view"
-                    >
-                        ≡
-                    </button>
-                </div>
-            </div>
-
-            {/* Search Bar */}
+            {/* Search Bar - Minimalist */}
             <div className="mb-8">
                 <div className="relative">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -98,40 +72,34 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                         value={searchTerm}
                         onChange={(e) => {
                             setSearchTerm(e.target.value);
-                            setVisibleCount(ITEMS_PER_PAGE); // Reset pagination on search
+                            setVisibleCount(ITEMS_PER_PAGE);
                         }}
-                        placeholder={dict.search?.placeholder || 'Search products...'}
-                        className="w-full pl-12 pr-12 py-4 border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white font-mono text-sm uppercase placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                        placeholder={dict.search?.placeholder || 'BUSCAR DISEÑOS ...'}
+                        className="w-full pl-12 pr-12 py-4 border-2 border-black dark:border-white bg-[#f4f4f0] dark:bg-[#111] text-black dark:text-white font-mono text-sm uppercase placeholder:text-gray-400 focus:outline-none focus:border-accent transition-colors"
                     />
                     {searchTerm && (
                         <button
                             onClick={clearSearch}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
-                            aria-label="Clear search"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded"
                         >
                             <X size={20} />
                         </button>
                     )}
                 </div>
-                {searchTerm && (
-                    <p className="mt-2 text-xs font-mono text-gray-600 dark:text-gray-400">
-                        {filteredProducts.length} {filteredProducts.length === 1 ? dict.search?.results_count_singular : dict.search?.results_count_plural}
-                    </p>
-                )}
             </div>
 
-            {/* Filter Bar */}
-            <div className="flex flex-wrap gap-4 mb-8 border-b border-black dark:border-white pb-4">
+            {/* Filter Bar - Brutalist Tags */}
+            <div className="flex flex-wrap gap-4 mb-8 border-b-2 border-black dark:border-white pb-6">
                 {categories.map((cat) => (
                     <button
                         key={cat.key}
                         onClick={() => {
                             setFilter(cat.key);
-                            setVisibleCount(ITEMS_PER_PAGE); // Reset pagination on filter change
+                            setVisibleCount(ITEMS_PER_PAGE);
                         }}
-                        className={`text-xs font-bold font-mono uppercase px-3 py-1 border transition-all ${filter === cat.key
-                            ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                            : 'bg-transparent text-gray-500 hover:text-black dark:hover:text-white border-transparent hover:border-black dark:hover:border-white'
+                        className={`text-xs font-black font-mono uppercase px-3 py-1 transition-all ${filter === cat.key
+                            ? 'bg-black text-white dark:bg-white dark:text-black'
+                            : 'bg-transparent text-gray-500 hover:text-black dark:hover:text-white hover:bg-black/5'
                             }`}
                     >
                         [ {cat.label} ]
@@ -139,11 +107,8 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                 ))}
             </div>
 
-            {/* Grid/List */}
-            <div className={viewMode === 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
-                : 'flex flex-col gap-4'
-            }>
+            {/* Grid - Matching InspirationFeed spacing */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-6">
                 {visibleProducts.map((product, index) => (
                     <ProductCard
                         key={product.id}
@@ -151,6 +116,7 @@ export default function ProductGrid({ lang, dict, products }: ProductGridProps) 
                         lang={lang}
                         label={dict.catalog.get_it}
                         index={index}
+                        dict={dict}
                     />
                 ))}
                 {filteredProducts.length === 0 && (

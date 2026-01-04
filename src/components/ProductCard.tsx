@@ -15,9 +15,10 @@ interface ProductCardProps {
     lang: 'en' | 'es';
     label: string;
     index?: number;
+    dict?: any;
 }
 
-export default function ProductCard({ product, lang, label, index = 0 }: ProductCardProps) {
+export default function ProductCard({ product, lang, label, index = 0, dict }: ProductCardProps) {
     const { isFavorite, toggleFavorite, isLoaded } = useFavorites();
     const [isTouched, setIsTouched] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -64,97 +65,74 @@ export default function ProductCard({ product, lang, label, index = 0 }: Product
             <Link
                 href={`/${lang}/product/${product.id}`}
                 onClick={handleProductClick}
-                className={`group relative border-2 border-black dark:border-white bg-white dark:bg-[#111111] flex flex-col h-full transition-all duration-300 block ${isHovered
-                        ? 'shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_#f4f4f0]'
-                        : ''
-                    }`}
+                className={`group relative border-2 border-black dark:border-white bg-white dark:bg-black overflow-hidden hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:-translate-y-1 block`}
             >
-                {/* Category Tag */}
-                <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
-                    <motion.span
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={isInView ? { x: 0, opacity: 1 } : {}}
-                        transition={{ delay: index * 0.1 + 0.2 }}
-                        className="bg-black dark:bg-white text-white dark:text-black text-[10px] font-mono px-2 py-1 uppercase tracking-tighter"
-                    >
+                {/* Category Tag - Absolute like TransformationCard */}
+                <div className="absolute top-2 left-2 z-10 flex flex-col gap-1 pointer-events-none">
+                    <span className="bg-black dark:bg-white text-white dark:text-black text-[10px] font-bold px-2 py-1 uppercase">
                         {product.category}
-                    </motion.span>
-                    <ScarcityLabel productId={product.id} showProbability={0.3} />
+                    </span>
+                    <ScarcityLabel productId={product.id} showProbability={0.3} dict={dict} />
                 </div>
 
                 {/* Favorite Button */}
                 {isLoaded && (
-                    <motion.button
-                        whileHover={{ scale: 1.15 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={handleFavoriteClick}
-                        className="absolute top-2 right-2 z-10 p-2 bg-white dark:bg-black border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent link click
+                            handleFavoriteClick(e);
+                        }}
+                        className="absolute top-2 right-2 z-10 p-2 hover:scale-110 transition-transform"
                         aria-label="Toggle favorite"
                     >
                         <Heart
-                            size={16}
-                            fill={isFavorite(product.id) ? 'currentColor' : 'none'}
-                            className={isFavorite(product.id) ? 'text-red-500' : ''}
+                            size={20}
+                            fill={isFavorite(product.id) ? 'red' : 'rgba(0,0,0,0.5)'}
+                            className={isFavorite(product.id) ? 'text-red-500' : 'text-white drop-shadow-md'}
                         />
-                    </motion.button>
+                    </button>
                 )}
 
-                {/* Image Container */}
-                <div
-                    className="relative aspect-square w-full overflow-hidden border-b-2 border-black dark:border-white md:aspect-[3/4]"
-                    onTouchStart={handleImageTouch}
-                >
+                {/* Image Container - Using aspect-[3/4] standard for products but cleaner */}
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100 dark:bg-gray-900 border-b-2 border-black dark:border-white">
                     <Image
                         src={product.image || '/mockups/placeholder.jpg'}
                         alt={product.name}
                         fill
-                        className={`object-cover transition-all duration-500 ${isTouched || isHovered ? 'grayscale-0 scale-110' : 'grayscale scale-100'
-                            }`}
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         unoptimized
                     />
 
-                    {/* Overlay on hover */}
-                    <motion.div
-                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: isHovered ? 1 : 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <div className="absolute bottom-4 left-4 right-4">
-                            <p className="text-white text-xs font-mono uppercase opacity-80">
-                                {lang === 'es' ? 'Ver detalles' : 'View details'} →
-                            </p>
-                        </div>
-                    </motion.div>
+                    {/* Minimal Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <span className="text-white font-mono text-xs uppercase font-bold tracking-wider">
+                            {label} →
+                        </span>
+                    </div>
                 </div>
 
-                {/* Info & Action */}
-                <div className="p-4 flex flex-col justify-between flex-grow">
-                    <div className="mb-4">
-                        <h3 className="text-lg font-bold uppercase tracking-tight leading-tight mb-1 text-black dark:text-white line-clamp-2">
-                            {lang === 'es' && product.name_es ? product.name_es : (product.name_en || product.name)}
-                        </h3>
-                        <p className="text-xs font-mono text-gray-500">REF: {product.id.toUpperCase()}</p>
-                        {product.tags && product.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-2">
-                                {product.tags.slice(0, 3).map((tag, i) => (
-                                    <span key={i} className="text-[10px] px-1.5 py-0.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 font-mono">
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
+                {/* Info Footer - Matches TransformationCard Cleanliness */}
+                <div className="p-3 bg-white dark:bg-black">
+                    <div className="flex justify-between items-start gap-2">
+                        <div className="flex-1 min-w-0">
+                            <h3 className="text-sm font-black uppercase leading-tight truncate">
+                                {lang === 'es' && product.name_es ? product.name_es : (product.name_en || product.name)}
+                            </h3>
+                            <p className="text-xs font-mono text-gray-500 mt-1">
+                                {product.price || '$20.00'}
+                            </p>
+                        </div>
                     </div>
-
-                    <div className="flex items-end justify-between border-t-2 border-black dark:border-white pt-3">
-                        <span className="text-sm font-bold font-mono text-black dark:text-white">***</span>
-                        <motion.span
-                            whileHover={{ scale: 1.05 }}
-                            className="bg-black text-white dark:bg-white dark:text-black px-4 py-2 text-xs font-bold uppercase tracking-wider border-2 border-black dark:border-white transition-all"
-                        >
-                            {label} →
-                        </motion.span>
-                    </div>
+                    {/* Tags - Optional, keeping minimal */}
+                    {product.tags && product.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                            {product.tags.slice(0, 2).map(tag => (
+                                <span key={tag} className="text-[9px] text-gray-400 font-mono uppercase">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </Link>
         </motion.div>
