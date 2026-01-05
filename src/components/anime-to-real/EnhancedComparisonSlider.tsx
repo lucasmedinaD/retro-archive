@@ -50,6 +50,7 @@ export default function EnhancedComparisonSlider({
     const [showFunFact, setShowFunFact] = useState(false);
     const [showHeartBurst, setShowHeartBurst] = useState(false);
     const [hasReachedEdge, setHasReachedEdge] = useState({ left: false, right: false });
+    const [hasRevealedMystery, setHasRevealedMystery] = useState(false); // Mystery Veil state
     const containerRef = useRef<HTMLDivElement>(null);
     const lastHapticPosition = useRef<number | null>(null);
 
@@ -130,6 +131,19 @@ export default function EnhancedComparisonSlider({
 
     // 3. Progress Bar Width
     const progressBarWidth = useTransform(springPosition, v => `${v}%`);
+
+    // 4. Mystery Veil Blur - decreases as slider moves right (revealing more real image)
+    // At position 0-50%: max blur (8px), at 100%: no blur (0px)
+    const mysteryBlur = useTransform(springPosition, [0, 50, 95, 100], [10, 6, 1, 0]);
+
+    // Check for mystery reveal celebration
+    useEffect(() => {
+        if (position >= 95 && !hasRevealedMystery) {
+            setHasRevealedMystery(true);
+            triggerSparkle();
+            triggerHaptic([30, 50, 30]);
+        }
+    }, [position, hasRevealedMystery, triggerHaptic]);
 
     const updatePosition = useCallback((clientX: number) => {
         if (!containerRef.current || isZoomed) return;
@@ -398,16 +412,18 @@ export default function EnhancedComparisonSlider({
                                     }}
                                     transition={{ duration: 0.2 }}
                                 >
-                                    {/* Background Image (Real) */}
+                                    {/* Background Image (Real) - with Mystery Veil blur */}
                                     <motion.img
                                         src={realImage}
                                         alt={`${characterName} - Real`}
                                         className="relative block w-full h-auto object-cover pointer-events-none"
                                         draggable={false}
-                                        animate={{
-                                            filter: (isInSecretZone && !hasUnlocked)
-                                                ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
-                                                : (isDragging ? 'saturate(1.2)' : 'saturate(1)')
+                                        style={{
+                                            filter: useTransform(mysteryBlur, v =>
+                                                (isInSecretZone && !hasUnlocked)
+                                                    ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
+                                                    : `blur(${v}px) saturate(${isDragging ? 1.2 : 1})`
+                                            )
                                         }}
                                         transition={{ duration: 0.3 }}
                                     />
