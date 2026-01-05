@@ -1,4 +1,6 @@
 import MobileLayoutWrapper from '@/components/mobile/MobileLayoutWrapper';
+import OnboardingModal from '@/components/OnboardingModal';
+import { Suspense } from 'react';
 
 export default async function LangLayout({
     children,
@@ -13,6 +15,9 @@ export default async function LangLayout({
         <>
             {children}
             <MobileLayoutWrapper lang={lang} />
+            <Suspense fallback={null}>
+                <OnboardingModal lang={lang} />
+            </Suspense>
         </>
     );
 }
