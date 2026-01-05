@@ -10,10 +10,20 @@ export async function middleware(request: NextRequest) {
     const response = await updateSession(request);
 
     // 2. Language Layout Logic
-    if (pathname === '/') {
+    // 2. Language Layout Logic
+    const pathnameIsMissingLocale = ['/en', '/es'].every(
+        (locale) => !pathname.startsWith(`${locale}/`) && pathname !== locale
+    );
+
+    if (pathnameIsMissingLocale && !pathname.startsWith('/admin') && pathname !== '/admin') {
         const acceptLanguage = request.headers.get('accept-language') || '';
         const preferredLang = acceptLanguage.toLowerCase().includes('es') ? 'es' : 'en';
-        return NextResponse.redirect(new URL(`/${preferredLang}`, request.url));
+
+        // Preserve query search params
+        const newUrl = new URL(`/${preferredLang}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url);
+        newUrl.search = request.nextUrl.search;
+
+        return NextResponse.redirect(newUrl);
     }
 
     // 3. Admin Routes Protection
