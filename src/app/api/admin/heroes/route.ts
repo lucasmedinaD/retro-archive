@@ -2,10 +2,15 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export const dynamic = 'force-dynamic';
+
+// Helper to get admin client
+function getAdminClient() {
+    return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+}
 
 // Check admin auth
 async function isAdmin(request: NextRequest): Promise<boolean> {
@@ -20,7 +25,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await getAdminClient()
         .from('heroes')
         .select('*')
         .order('featured', { ascending: false })
@@ -46,7 +51,7 @@ export async function PATCH(request: NextRequest) {
     if (featured !== undefined) updates.featured = featured;
     if (is_anonymous !== undefined) updates.is_anonymous = is_anonymous;
 
-    const { error } = await supabaseAdmin
+    const { error } = await getAdminClient()
         .from('heroes')
         .update(updates)
         .eq('id', heroId);
@@ -67,7 +72,7 @@ export async function DELETE(request: NextRequest) {
     const body = await request.json();
     const { heroId } = body;
 
-    const { error } = await supabaseAdmin
+    const { error } = await getAdminClient()
         .from('heroes')
         .delete()
         .eq('id', heroId);

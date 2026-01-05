@@ -2,10 +2,15 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export const dynamic = 'force-dynamic';
+
+// Helper to get admin client
+function getAdminClient() {
+    return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+}
 
 // Check admin auth
 async function isAdmin(request: NextRequest): Promise<boolean> {
@@ -20,7 +25,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await getAdminClient()
         .from('hero_claims')
         .select('*')
         .order('created_at', { ascending: false });
@@ -40,10 +45,11 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { action, claimId, name, email } = body;
+    const supabase = getAdminClient();
 
     if (action === 'approve') {
         // 1. Create hero
-        const { error: heroError } = await supabaseAdmin
+        const { error: heroError } = await supabase
             .from('heroes')
             .insert({
                 name,
@@ -57,7 +63,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 2. Update claim status
-        await supabaseAdmin
+        await supabase
             .from('hero_claims')
             .update({ status: 'approved' })
             .eq('id', claimId);
@@ -66,7 +72,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'reject') {
-        await supabaseAdmin
+        await supabase
             .from('hero_claims')
             .update({ status: 'rejected' })
             .eq('id', claimId);
