@@ -187,14 +187,6 @@ export default function TransformationDetail({
                         />
                     </div>
 
-                    {/* Rating System */}
-                    <div className="mb-6">
-                        <label className="block font-mono text-xs uppercase text-gray-500 mb-2">
-                            {lang === 'es' ? 'Ranking de la Comunidad' : 'Community Ranking'}
-                        </label>
-                        <RatingSystem transformationId={transformation.id} lang={lang} />
-                    </div>
-
                     {/* Category Rating System */}
                     <div className="mb-6">
                         <CategoryRatingSystem transformationId={transformation.id} lang={lang} />

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useSpring, useTransform } from 'framer-motion';
+import { motion, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Download, Share2, Heart, Sparkles, ZoomIn, ZoomOut, Maximize2, Minimize2, Flame, Gem, Zap } from 'lucide-react';
 import SecretUnlockModal from '../SecretUnlockModal';
@@ -51,6 +51,8 @@ export default function EnhancedComparisonSlider({
     const [showHeartBurst, setShowHeartBurst] = useState(false);
     const [hasReachedEdge, setHasReachedEdge] = useState({ left: false, right: false });
     const [hasRevealedMystery, setHasRevealedMystery] = useState(false); // Mystery Veil state
+    const [showReactionPicker, setShowReactionPicker] = useState(false); // Facebook-style reaction picker
+    const longPressTimer = useRef<NodeJS.Timeout | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const lastHapticPosition = useRef<number | null>(null);
 
@@ -566,43 +568,77 @@ export default function EnhancedComparisonSlider({
             >
                 <div className="flex gap-3 pointer-events-auto">
                     {onLike && (
-                        <div className="flex gap-2">
-                            <motion.button
-                                onClick={handleLike}
-                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg"
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <Heart size={20} className={`transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-800 dark:text-white'}`} />
-                            </motion.button>
+                        <div className="relative">
+                            {/* Reaction Picker Popup - appears on long press */}
+                            <AnimatePresence>
+                                {showReactionPicker && (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                                        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 flex gap-1 bg-white dark:bg-gray-900 p-2 rounded-full shadow-2xl border-2 border-black dark:border-white"
+                                    >
+                                        <motion.button
+                                            onClick={() => { handleLike(); setShowReactionPicker(false); }}
+                                            className={`p-2 rounded-full transition-colors ${isLiked ? 'bg-red-500 text-white' : 'hover:bg-red-100'}`}
+                                            whileHover={{ scale: 1.2 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <Heart size={22} className={isLiked ? 'fill-white' : 'text-red-500'} />
+                                        </motion.button>
+                                        <motion.button
+                                            onClick={() => { handleReaction('fire'); setShowReactionPicker(false); }}
+                                            className={`p-2 rounded-full transition-colors ${userReactions.includes('fire') ? 'bg-orange-500 text-white' : 'hover:bg-orange-100'}`}
+                                            whileHover={{ scale: 1.2 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <Flame size={22} className={userReactions.includes('fire') ? 'fill-white' : 'text-orange-500'} />
+                                        </motion.button>
+                                        <motion.button
+                                            onClick={() => { handleReaction('mindblown'); setShowReactionPicker(false); }}
+                                            className={`p-2 rounded-full transition-colors ${userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' : 'hover:bg-yellow-100'}`}
+                                            whileHover={{ scale: 1.2 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <Zap size={22} className={userReactions.includes('mindblown') ? 'fill-white' : 'text-yellow-500'} />
+                                        </motion.button>
+                                        <motion.button
+                                            onClick={() => { handleReaction('diamond'); setShowReactionPicker(false); }}
+                                            className={`p-2 rounded-full transition-colors ${userReactions.includes('diamond') ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'}`}
+                                            whileHover={{ scale: 1.2 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <Gem size={22} className={userReactions.includes('diamond') ? 'fill-white' : 'text-blue-500'} />
+                                        </motion.button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
-                            {/* New Reactions */}
+                            {/* Main Reaction Button - shows current reaction or heart */}
                             <motion.button
-                                onClick={() => handleReaction('fire')}
-                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('fire') ? 'bg-orange-500 text-white' : 'bg-white/90 dark:bg-gray-900/90 text-orange-500 hover:bg-orange-50'}`}
+                                onPointerDown={() => {
+                                    longPressTimer.current = setTimeout(() => setShowReactionPicker(true), 500);
+                                }}
+                                onPointerUp={() => {
+                                    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+                                    if (!showReactionPicker) handleLike();
+                                }}
+                                onPointerLeave={() => {
+                                    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+                                }}
+                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('fire') ? 'bg-orange-500 text-white' :
+                                    userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' :
+                                        userReactions.includes('diamond') ? 'bg-blue-500 text-white' :
+                                            isLiked ? 'bg-red-500 text-white' :
+                                                'bg-white/90 dark:bg-gray-900/90'
+                                    }`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
-                                aria-label="Fire Reaction"
                             >
-                                <Flame size={20} className={userReactions.includes('fire') ? 'fill-white' : ''} />
-                            </motion.button>
-                            <motion.button
-                                onClick={() => handleReaction('mindblown')}
-                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' : 'bg-white/90 dark:bg-gray-900/90 text-yellow-500 hover:bg-yellow-50'}`}
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                aria-label="Mindblown Reaction"
-                            >
-                                <Zap size={20} className={userReactions.includes('mindblown') ? 'fill-white' : ''} />
-                            </motion.button>
-                            <motion.button
-                                onClick={() => handleReaction('diamond')}
-                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('diamond') ? 'bg-blue-500 text-white' : 'bg-white/90 dark:bg-gray-900/90 text-blue-400 hover:bg-blue-50'}`}
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                aria-label="Diamond Reaction"
-                            >
-                                <Gem size={20} className={userReactions.includes('diamond') ? 'fill-white' : ''} />
+                                {userReactions.includes('fire') ? <Flame size={20} className="fill-white" /> :
+                                    userReactions.includes('mindblown') ? <Zap size={20} className="fill-white" /> :
+                                        userReactions.includes('diamond') ? <Gem size={20} className="fill-white" /> :
+                                            <Heart size={20} className={isLiked ? 'fill-white text-white' : 'text-gray-800 dark:text-white'} />}
                             </motion.button>
                         </div>
                     )}
