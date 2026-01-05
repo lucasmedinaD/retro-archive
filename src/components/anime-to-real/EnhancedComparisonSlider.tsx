@@ -255,6 +255,7 @@ export default function EnhancedComparisonSlider({
                 maxScale={4}
                 centerOnInit
                 doubleClick={{ disabled: true }}
+                panning={{ disabled: !isZoomed }}
                 onTransformed={(ref: any) => {
                     // Safe access to scale
                     const scale = ref?.state?.scale ?? 1;
