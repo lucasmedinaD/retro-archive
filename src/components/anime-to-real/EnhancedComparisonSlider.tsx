@@ -241,7 +241,9 @@ export default function EnhancedComparisonSlider({
                 centerOnInit
                 doubleClick={{ disabled: true }}
                 onTransformed={(ref: any) => {
-                    if (ref.state.scale > 1.01) {
+                    // Safe access to scale
+                    const scale = ref?.state?.scale ?? 1;
+                    if (scale > 1.01) {
                         if (!isZoomed) setIsZoomed(true);
                     } else {
                         if (isZoomed) setIsZoomed(false);
