@@ -116,6 +116,18 @@ export default function EnhancedComparisonSlider({
     // Clip path for anime image overlay - MUST be at top level, not in JSX
     const clipPath = useTransform(springPosition, v => `inset(0 ${100 - v}% 0 0)`);
 
+    // Animation Transfers (Must be at top level to avoid hook violations)
+    // 1. Slider Line Position
+    const sliderLeftPos = useTransform(springPosition, v => `${v}%`);
+
+    // 2. Handle Glow Effect
+    const handleGlow = useTransform(glowIntensity, v =>
+        `0 0 ${20 * v}px ${8 * v}px rgba(255,255,255,${0.5 * v}), 0 0 ${40 * v}px ${16 * v}px rgba(168,85,247,${0.3 * v})`
+    );
+
+    // 3. Progress Bar Width
+    const progressBarWidth = useTransform(springPosition, v => `${v}%`);
+
     const updatePosition = useCallback((clientX: number) => {
         if (!containerRef.current || isZoomed) return;
         const rect = containerRef.current.getBoundingClientRect();
@@ -364,14 +376,12 @@ export default function EnhancedComparisonSlider({
                                     {!isZoomed && (
                                         <motion.div
                                             className="absolute top-0 bottom-0 w-0.5 pointer-events-none z-20"
-                                            style={{ left: useTransform(springPosition, v => `${v}%`), x: '-50%' }}
+                                            style={{ left: sliderLeftPos, x: '-50%' }}
                                         >
                                             <motion.div
                                                 className="absolute inset-y-0 w-1 bg-white"
                                                 style={{
-                                                    boxShadow: useTransform(glowIntensity, v =>
-                                                        `0 0 ${20 * v}px ${8 * v}px rgba(255,255,255,${0.5 * v}), 0 0 ${40 * v}px ${16 * v}px rgba(168,85,247,${0.3 * v})`
-                                                    )
+                                                    boxShadow: handleGlow
                                                 }}
                                             />
                                             <motion.div
@@ -444,7 +454,7 @@ export default function EnhancedComparisonSlider({
                         <div className="h-1 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
                             <motion.div
                                 className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"
-                                style={{ width: useTransform(springPosition, v => `${v}%`) }}
+                                style={{ width: progressBarWidth }}
                             />
                         </div>
                     </div>
