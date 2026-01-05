@@ -45,6 +45,7 @@ export default function EnhancedComparisonSlider({
     const [isDragging, setIsDragging] = useState(false);
     const [isZoomed, setIsZoomed] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false); // [NEW] Fullscreen State
+    const [userReactions, setUserReactions] = useState<string[]>([]); // [NEW] Track active reactions
     const [showSparkle, setShowSparkle] = useState(false);
     const [showFunFact, setShowFunFact] = useState(false);
     const [showHeartBurst, setShowHeartBurst] = useState(false);
@@ -265,15 +266,29 @@ export default function EnhancedComparisonSlider({
         }
     };
 
+    useEffect(() => {
+        if (typeof window !== 'undefined' && transformationId) {
+            const savedReactions = JSON.parse(localStorage.getItem(`reactions_${transformationId}`) || '[]');
+            setUserReactions(savedReactions);
+        }
+    }, [transformationId]);
+
     const handleReaction = (type: InteractionType) => {
+        if (!transformationId) return;
+
+        // Check if already reacted
+        if (userReactions.includes(type)) return;
+
         triggerHaptic([20, 20, 20]);
         triggerSparkle();
-        if (transformationId) {
-            recordInteraction(transformationId, type);
-        }
-        // Visual feedback
-        const emoji = type === 'fire' ? '🔥' : type === 'mindblown' ? '🤯' : '💎';
-        // TODO: Show floating emoji feedback -> Simplified for now: just sparkle
+
+        // Optimistic update
+        const newReactions = [...userReactions, type];
+        setUserReactions(newReactions);
+        localStorage.setItem(`reactions_${transformationId}`, JSON.stringify(newReactions));
+
+        // Server Action
+        recordInteraction(transformationId, type);
     };
 
     useEffect(() => {
@@ -540,30 +555,30 @@ export default function EnhancedComparisonSlider({
                             {/* New Reactions */}
                             <motion.button
                                 onClick={() => handleReaction('fire')}
-                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg text-orange-500"
+                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('fire') ? 'bg-orange-500 text-white' : 'bg-white/90 dark:bg-gray-900/90 text-orange-500 hover:bg-orange-50'}`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                                 aria-label="Fire Reaction"
                             >
-                                <Flame size={20} />
+                                <Flame size={20} className={userReactions.includes('fire') ? 'fill-white' : ''} />
                             </motion.button>
                             <motion.button
                                 onClick={() => handleReaction('mindblown')}
-                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg text-yellow-500"
+                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' : 'bg-white/90 dark:bg-gray-900/90 text-yellow-500 hover:bg-yellow-50'}`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                                 aria-label="Mindblown Reaction"
                             >
-                                <Zap size={20} />
+                                <Zap size={20} className={userReactions.includes('mindblown') ? 'fill-white' : ''} />
                             </motion.button>
                             <motion.button
                                 onClick={() => handleReaction('diamond')}
-                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg text-blue-400"
+                                className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('diamond') ? 'bg-blue-500 text-white' : 'bg-white/90 dark:bg-gray-900/90 text-blue-400 hover:bg-blue-50'}`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
                                 aria-label="Diamond Reaction"
                             >
-                                <Gem size={20} />
+                                <Gem size={20} className={userReactions.includes('diamond') ? 'fill-white' : ''} />
                             </motion.button>
                         </div>
                     )}
