@@ -59,7 +59,7 @@ export default function TransformationCard({
                 </div>
             )}
 
-            <div onClick={() => !isAllowed && signInWithGoogle()} className={!isAllowed ? 'cursor-pointer' : ''}>
+            <div onClick={() => !isAllowed && !user && signInWithGoogle()} className={!isAllowed ? 'cursor-pointer' : ''}>
                 <Link
                     href={isAllowed ? `/${lang || 'en'}/anime-to-real/${transformation.id}` : '#'}
                     onClick={(e) => !isAllowed && e.preventDefault()}
