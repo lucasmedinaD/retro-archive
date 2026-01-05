@@ -306,17 +306,21 @@ export default function TransformationEditor({ transformation, isNew = false, on
                     </div>
                     {/* NSFW Setting */}
                     <div className="border border-red-500/30 bg-red-500/5 p-4 mb-4">
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <div className="flex items-center gap-3">
                             <input
+                                id="nsfw-checkbox"
                                 type="checkbox"
                                 checked={isNsfw}
                                 onChange={(e) => setIsNsfw(e.target.checked)}
+                                className="w-5 h-5 cursor-pointer accent-red-500"
                             />
-                            <span className="text-red-400 font-bold uppercase">Mark as NSFW / Spicy (+18)</span>
-                        </label>
-                        <p className="text-xs text-red-500/70 mt-1 ml-7">
+                            <label htmlFor="nsfw-checkbox" className="text-red-400 font-bold uppercase cursor-pointer select-none">
+                                Mark as NSFW / Spicy (+18)
+                            </label>
+                        </div>
+                        <div className="text-xs text-red-500/70 mt-1 ml-8">
                             Content will be blurred for non-logged-in users.
-                        </p>
+                        </div>
                     </div>
 
 
