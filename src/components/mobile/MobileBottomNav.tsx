@@ -186,6 +186,17 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
 
                             <button
                                 onClick={() => {
+                                    setIsProfileMenuOpen(false);
+                                    onDonateClick();
+                                }}
+                                className="flex items-center gap-4 w-full p-4 bg-yellow-50 dark:bg-yellow-900/10 text-yellow-600 dark:text-yellow-500 rounded-xl font-bold"
+                            >
+                                <Coffee size={20} />
+                                {lang === 'es' ? 'Apoyar' : 'Support'}
+                            </button>
+
+                            <button
+                                onClick={() => {
                                     signOut();
                                     setIsProfileMenuOpen(false);
                                 }}
