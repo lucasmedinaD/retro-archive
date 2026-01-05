@@ -20,10 +20,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://retro-archive.art'),
   title: {
     template: '%s | RETRO.ARCHIVE',
-    default: 'RETRO.ARCHIVE - Minimalist Anime Merchandise'
+    default: 'RETRO.ARCHIVE - Anime to Real Transformations & AI Art'
   },
-  description: 'Curated collection of minimalist anime-inspired designs. Brutalist aesthetic streetwear, pixel art, and digital artifacts.',
-  keywords: ['anime merchandise', 'minimalist design', 'pixel art', 'retro aesthetic', 'brutalist design', 'anime streetwear', 'digital art'],
+  description: 'Explore realistic AI transformations of your favorite anime characters. Compare anime vs real life versions with our interactive slider. Minimalist aesthetics & curated designs.',
+  keywords: ['anime to real', 'ai art', 'realistic anime', 'anime transformation', 'midjourney anime', 'stable diffusion anime', 'semireal anime', 'anime merchandise', 'minimalist design'],
   authors: [{ name: 'Lucas Medina', url: 'https://instagram.com/lucasmedinad' }],
   creator: 'Lucas Medina',
   publisher: 'Retro Archive',
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
     alternateLocale: ['es_ES'],
     url: '/',
     siteName: 'RETRO.ARCHIVE',
-    title: 'RETRO.ARCHIVE - Minimalist Anime Merchandise',
-    description: 'Curated collection of minimalist anime-inspired designs. Brutalist aesthetic streetwear and digital artifacts.',
+    title: 'RETRO.ARCHIVE - Anime to Real Transformations',
+    description: 'Explore realistic AI transformations of your favorite anime characters. Compare anime vs real life versions with our interactive slider.',
     images: [
       {
         url: '/og-image.png',
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'RETRO.ARCHIVE',
-    description: 'Minimalist anime merchandise with brutalist aesthetics',
+    description: 'Explore realistic AI transformations of your favorite anime characters.',
     creator: '@lucasmedinad',
     images: ['/og-image.png'],
   },
