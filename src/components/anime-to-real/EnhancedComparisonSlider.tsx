@@ -132,10 +132,8 @@ export default function EnhancedComparisonSlider({
     // 3. Progress Bar Width
     const progressBarWidth = useTransform(springPosition, v => `${v}%`);
 
-    // 4. Mystery Veil Blur - decreases as slider moves right (revealing more real image)
-    // At position 0-50%: max blur (8px), at 100%: no blur (0px)
-    const mysteryBlur = useTransform(springPosition, [0, 50, 95, 100], [10, 6, 1, 0]);
-    const mysteryBlurFilter = useTransform(mysteryBlur, v => `blur(${v}px)`);
+    // 4. Mystery Veil - blur ON initially, OFF once user starts dragging
+    // Simple binary: starts blurred, clears on first interaction for better comparison
 
     const updatePosition = useCallback((clientX: number) => {
         if (!containerRef.current || isZoomed) return;
@@ -156,14 +154,14 @@ export default function EnhancedComparisonSlider({
         }
     }, []);
 
-    // Check for mystery reveal celebration (must be after triggerHaptic)
+    // Check for mystery reveal celebration when user first starts dragging
     useEffect(() => {
-        if (position >= 95 && !hasRevealedMystery) {
+        if (isDragging && !hasRevealedMystery) {
             setHasRevealedMystery(true);
             triggerSparkle();
-            triggerHaptic([30, 50, 30]);
+            triggerHaptic([20]);
         }
-    }, [position, hasRevealedMystery, triggerHaptic, triggerSparkle]);
+    }, [isDragging, hasRevealedMystery, triggerHaptic, triggerSparkle]);
 
     const handleDoubleTap = useCallback(() => {
         const now = Date.now();
@@ -419,11 +417,13 @@ export default function EnhancedComparisonSlider({
                                         alt={`${characterName} - Real`}
                                         className="relative block w-full h-auto object-cover pointer-events-none"
                                         draggable={false}
-                                        style={{
+                                        initial={{ filter: 'blur(8px)' }}
+                                        animate={{
                                             filter: (isInSecretZone && !hasUnlocked)
                                                 ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
-                                                : mysteryBlurFilter
+                                                : hasRevealedMystery ? 'blur(0px)' : 'blur(8px)'
                                         }}
+                                        transition={{ duration: 0.4 }}
                                     />
 
                                     {/* Foreground Image (Anime) - Clipped */}
