@@ -117,6 +117,7 @@ function mapDBToTransformation(rows: any[]): TransformationExtended[] {
         secretPosition: row.secret_position,
         era: row.era,
         style: row.style,
-        realismLevel: row.realism_level
+        realismLevel: row.realism_level,
+        is_nsfw: row.is_nsfw
     }));
 }
