@@ -27,7 +27,9 @@ function mapRowToTransformation(row: any): TransformationExtended {
         secretPosition: row.secret_position,
         era: row.era,
         style: row.style,
-        realismLevel: row.realism_level
+        style: row.style,
+        realismLevel: row.realism_level,
+        is_nsfw: row.is_nsfw
     };
 }
 
@@ -52,7 +54,9 @@ function mapTransformationToRow(data: TransformationExtended) {
         secret_position: data.secretPosition,
         era: data.era,
         style: data.style,
-        realism_level: data.realismLevel
+        style: data.style,
+        realism_level: data.realismLevel,
+        is_nsfw: data.is_nsfw
     };
 }
 
@@ -119,7 +123,9 @@ export async function updateTransformationAction(id: string, updates: Partial<Tr
         if (updates.amazonProducts) rowUpdates.amazon_products = updates.amazonProducts;
         if (updates.era) rowUpdates.era = updates.era;
         if (updates.style) rowUpdates.style = updates.style;
+        if (updates.style) rowUpdates.style = updates.style;
         if (updates.realismLevel) rowUpdates.realism_level = updates.realismLevel;
+        if (updates.is_nsfw !== undefined) rowUpdates.is_nsfw = updates.is_nsfw;
 
         // Metadata / Artist / Outfit merging
         if (updates.metadata || updates.artist || updates.outfit) {
