@@ -137,15 +137,6 @@ export default function EnhancedComparisonSlider({
     const mysteryBlur = useTransform(springPosition, [0, 50, 95, 100], [10, 6, 1, 0]);
     const mysteryBlurFilter = useTransform(mysteryBlur, v => `blur(${v}px)`);
 
-    // Check for mystery reveal celebration
-    useEffect(() => {
-        if (position >= 95 && !hasRevealedMystery) {
-            setHasRevealedMystery(true);
-            triggerSparkle();
-            triggerHaptic([30, 50, 30]);
-        }
-    }, [position, hasRevealedMystery, triggerHaptic]);
-
     const updatePosition = useCallback((clientX: number) => {
         if (!containerRef.current || isZoomed) return;
         const rect = containerRef.current.getBoundingClientRect();
@@ -164,6 +155,15 @@ export default function EnhancedComparisonSlider({
             navigator.vibrate(intensity);
         }
     }, []);
+
+    // Check for mystery reveal celebration (must be after triggerHaptic)
+    useEffect(() => {
+        if (position >= 95 && !hasRevealedMystery) {
+            setHasRevealedMystery(true);
+            triggerSparkle();
+            triggerHaptic([30, 50, 30]);
+        }
+    }, [position, hasRevealedMystery, triggerHaptic, triggerSparkle]);
 
     const handleDoubleTap = useCallback(() => {
         const now = Date.now();
