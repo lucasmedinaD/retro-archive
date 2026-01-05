@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
         (locale) => !pathname.startsWith(`${locale}/`) && pathname !== locale
     );
 
-    if (pathnameIsMissingLocale && !pathname.startsWith('/admin') && pathname !== '/admin' && !pathname.startsWith('/api')) {
+    if (pathnameIsMissingLocale && !pathname.startsWith('/admin') && pathname !== '/admin' && !pathname.startsWith('/api') && !pathname.startsWith('/auth')) {
         const acceptLanguage = request.headers.get('accept-language') || '';
         const preferredLang = acceptLanguage.toLowerCase().includes('es') ? 'es' : 'en';
 
