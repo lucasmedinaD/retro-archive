@@ -276,19 +276,29 @@ export default function EnhancedComparisonSlider({
     const handleReaction = (type: InteractionType) => {
         if (!transformationId) return;
 
-        // Check if already reacted
-        if (userReactions.includes(type)) return;
-
         triggerHaptic([20, 20, 20]);
         triggerSparkle();
 
-        // Optimistic update
-        const newReactions = [...userReactions, type];
+        // Single Selection Logic: 
+        // If clicking the same one, toggle it off? Or just keep it? 
+        // User said "select only one". Usually means specific selection.
+        // Let's toggle off if same, switch if different.
+
+        let newReactions: string[] = [];
+
+        if (userReactions.includes(type)) {
+            // Toggle off
+            newReactions = [];
+        } else {
+            // Switch to new one (replace entire array)
+            newReactions = [type];
+            // Only record to DB if adding (toggle off doesn't need DB delete for now, or maybe it should? 
+            // DB is append-only log, so we just log the new interaction. Toggling off is purely local UI for now)
+            recordInteraction(transformationId, type);
+        }
+
         setUserReactions(newReactions);
         localStorage.setItem(`reactions_${transformationId}`, JSON.stringify(newReactions));
-
-        // Server Action
-        recordInteraction(transformationId, type);
     };
 
     useEffect(() => {

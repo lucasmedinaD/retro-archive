@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, ShoppingBag, Heart, Coffee, User, Settings, LogOut } from 'lucide-react';
+import { Home, Search, ShoppingBag, Heart, Coffee, User, Settings, LogOut, Trophy } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import Image from 'next/image';
@@ -62,10 +62,10 @@ export default function MobileBottomNav({ lang, onDonateClick }: MobileBottomNav
             action: null
         },
         {
-            icon: Coffee,
-            label: lang === 'es' ? 'Apoyar' : 'Support',
-            path: null,
-            action: onDonateClick
+            icon: Trophy,
+            label: lang === 'es' ? 'Rankings' : 'Rankings',
+            path: `/${lang}/rankings`,
+            action: null
         }
     ];
 
