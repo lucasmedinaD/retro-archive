@@ -7,6 +7,7 @@ import CommentSection from '@/components/comments/CommentSection';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Footer from '@/components/Footer';
+import HeroesSection from '@/components/HeroesSection';
 
 interface PageProps {
     params: Promise<{ lang: 'en' | 'es'; id: string }>;
@@ -107,24 +108,9 @@ export default async function TransformationDetailPage({ params }: PageProps) {
             <CommentSection transformationId={transformation.id} lang={lang} />
 
 
-            {/* Support Section */}
+            {/* Heroes of the Tribe - Support Section */}
             <section className="max-w-[90rem] mx-auto px-6 mt-12">
-                <div className="border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 p-6 text-center">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        {lang === 'es'
-                            ? '☕ ¿Te gustó? Este proyecto es mantenido por una sola persona. Si querés apoyar:'
-                            : '☕ Enjoyed this? This project is maintained by one person. If you want to support:'
-                        }
-                    </p>
-                    <a
-                        href="https://buymeacoffee.com/sosacrash"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFDD00] text-black font-bold text-sm uppercase hover:bg-[#FFE433] transition-colors border-2 border-black"
-                    >
-                        ☕ Buy me a coffee
-                    </a>
-                </div>
+                <HeroesSection lang={lang} />
             </section>
 
             {/* Related Transformations - Same Series Only */}
