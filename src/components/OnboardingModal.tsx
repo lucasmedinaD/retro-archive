@@ -1,54 +1,53 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, User, Shield } from 'lucide-react';
+import { User, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
-import { useSearchParams, useRouter } from 'next/navigation';
 
 interface OnboardingModalProps {
     lang: 'en' | 'es';
 }
 
 export default function OnboardingModal({ lang }: OnboardingModalProps) {
-    const { user, toggleNsfw, showNsfw } = useAuth();
+    const { user, showNsfw } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [enableNsfw, setEnableNsfw] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const searchParams = useSearchParams();
-    const router = useRouter();
+    const [hasChecked, setHasChecked] = useState(false);
 
     useEffect(() => {
-        // Open modal if onboarding=true query param exists and user is logged in
-        const shouldOnboard = searchParams.get('onboarding') === 'true';
-        if (shouldOnboard && user) {
-            // Check if user already has username set
-            const checkProfile = async () => {
-                const supabase = createSupabaseBrowserClient();
-                if (!supabase) return;
+        // Check if we should show onboarding
+        if (!user || hasChecked) return;
 
-                const { data } = await supabase
+        const checkProfile = async () => {
+            const supabase = createSupabaseBrowserClient();
+            if (!supabase) return;
+
+            try {
+                const { data, error } = await supabase
                     .from('profiles')
                     .select('username')
                     .eq('id', user.id)
                     .single();
 
-                // Only show onboarding if username is not set
-                if (!data?.username) {
+                // Show onboarding if no profile OR no username set
+                if (error || !data || !data.username) {
                     setIsOpen(true);
                     // Pre-fill with Google name if available
                     if (user.user_metadata?.full_name) {
                         setUsername(user.user_metadata.full_name.split(' ')[0]);
                     }
-                } else {
-                    // Already onboarded, remove query param
-                    router.replace(`/${lang}`);
                 }
-            };
-            checkProfile();
-        }
-    }, [searchParams, user, lang, router]);
+            } catch (err) {
+                console.error('Error checking profile:', err);
+            }
+            setHasChecked(true);
+        };
+
+        checkProfile();
+    }, [user, hasChecked]);
 
     const handleSubmit = async () => {
         if (!user || !username.trim()) return;
@@ -70,14 +69,10 @@ export default function OnboardingModal({ lang }: OnboardingModalProps) {
 
             if (error) throw error;
 
-            // If NSFW was toggled, sync with context
-            if (enableNsfw !== showNsfw) {
-                await toggleNsfw();
-            }
-
-            // Close modal and clean URL
+            // Close modal
             setIsOpen(false);
-            router.replace(`/${lang}`);
+            // Force refresh to apply NSFW setting
+            window.location.reload();
         } catch (error) {
             console.error('Error saving profile:', error);
         } finally {
@@ -88,8 +83,8 @@ export default function OnboardingModal({ lang }: OnboardingModalProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="bg-white dark:bg-[#111] border-2 border-black dark:border-white w-full max-w-md">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+            <div className="bg-white dark:bg-[#111] border-2 border-black dark:border-white w-full max-w-md animate-in fade-in zoom-in duration-300">
                 {/* Header */}
                 <div className="p-6 border-b border-black/10 dark:border-white/10 text-center">
                     <h2 className="text-2xl font-black uppercase">
@@ -115,6 +110,7 @@ export default function OnboardingModal({ lang }: OnboardingModalProps) {
                             placeholder={lang === 'es' ? 'Tu nombre...' : 'Your name...'}
                             className="w-full px-4 py-3 border-2 border-black dark:border-white bg-transparent font-mono outline-none focus:bg-black/5 dark:focus:bg-white/5 transition-colors"
                             maxLength={30}
+                            autoFocus
                         />
                     </div>
 

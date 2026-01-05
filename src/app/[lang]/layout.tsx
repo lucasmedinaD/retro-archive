@@ -15,9 +15,7 @@ export default async function LangLayout({
         <>
             {children}
             <MobileLayoutWrapper lang={lang} />
-            <Suspense fallback={null}>
-                <OnboardingModal lang={lang} />
-            </Suspense>
+            <OnboardingModal lang={lang} />
         </>
     );
 }

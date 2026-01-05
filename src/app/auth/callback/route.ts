@@ -29,10 +29,9 @@ export async function GET(request: NextRequest) {
             // 2. Determine locale from referrer or default
             const referrer = request.headers.get('referer') || '';
             const locale = referrer.includes('/en') ? 'en' : 'es';
-            const redirectPath = next === '/' ? `/${locale}?onboarding=true` : `/${locale}${next}`;
 
             // 3. Create the redirect response
-            const response = NextResponse.redirect(`${origin}${redirectPath}`)
+            const response = NextResponse.redirect(`${origin}/${locale}`)
 
             // 3. Create another client specifically to set cookies on the response
             const supabaseResponse = createServerClient(
