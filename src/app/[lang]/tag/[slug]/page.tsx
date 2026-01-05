@@ -36,7 +36,9 @@ export default async function TagPage({ params }: TagPageProps) {
     // If the link uses encodeURIComponent, then decodeURIComponent is enough.
     // If we want "seo-friendly" slugs (chainsaw-man), we should map them.
     // For MVP: Let's assume the slug IS the search term for simplicity.
-    const tag = decodeURIComponent(slug);
+    // MobileTopNav replaces spaces with dashes for the URL.
+    // We must revert this to search the DB effectively.
+    const tag = decodeURIComponent(slug).replace(/-/g, ' ');
 
     const transformations = await getTransformationsByTag(tag);
 
