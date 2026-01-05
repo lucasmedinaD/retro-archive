@@ -113,6 +113,9 @@ export default function EnhancedComparisonSlider({
         damping: 20
     });
 
+    // Clip path for anime image overlay - MUST be at top level, not in JSX
+    const clipPath = useTransform(springPosition, v => `inset(0 ${100 - v}% 0 0)`);
+
     const updatePosition = useCallback((clientX: number) => {
         if (!containerRef.current || isZoomed) return;
         const rect = containerRef.current.getBoundingClientRect();
@@ -327,7 +330,7 @@ export default function EnhancedComparisonSlider({
                                     {/* Foreground Image (Anime) - Clipped */}
                                     <motion.div
                                         className="absolute inset-0 pointer-events-none"
-                                        style={{ clipPath: useTransform(springPosition, v => `inset(0 ${100 - v}% 0 0)`) }}
+                                        style={{ clipPath }}
                                     >
                                         <motion.img
                                             src={animeImage}
