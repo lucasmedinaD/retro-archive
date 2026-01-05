@@ -135,6 +135,7 @@ export default function EnhancedComparisonSlider({
     // 4. Mystery Veil Blur - decreases as slider moves right (revealing more real image)
     // At position 0-50%: max blur (8px), at 100%: no blur (0px)
     const mysteryBlur = useTransform(springPosition, [0, 50, 95, 100], [10, 6, 1, 0]);
+    const mysteryBlurFilter = useTransform(mysteryBlur, v => `blur(${v}px)`);
 
     // Check for mystery reveal celebration
     useEffect(() => {
@@ -419,13 +420,10 @@ export default function EnhancedComparisonSlider({
                                         className="relative block w-full h-auto object-cover pointer-events-none"
                                         draggable={false}
                                         style={{
-                                            filter: useTransform(mysteryBlur, v =>
-                                                (isInSecretZone && !hasUnlocked)
-                                                    ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
-                                                    : `blur(${v}px) saturate(${isDragging ? 1.2 : 1})`
-                                            )
+                                            filter: (isInSecretZone && !hasUnlocked)
+                                                ? 'saturate(1.2) invert(1) hue-rotate(180deg)'
+                                                : mysteryBlurFilter
                                         }}
-                                        transition={{ duration: 0.3 }}
                                     />
 
                                     {/* Foreground Image (Anime) - Clipped */}
