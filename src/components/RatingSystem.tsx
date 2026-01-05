@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Star } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createSupabaseBrowserClient } from '@/lib/supabase-browser';
@@ -18,7 +18,8 @@ export default function RatingSystem({ transformationId, lang }: RatingSystemPro
     const [hoverRating, setHoverRating] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const supabase = createSupabaseBrowserClient();
+    // Memoize supabase client to avoid recreating on every render
+    const supabase = useMemo(() => createSupabaseBrowserClient(), []);
 
     useEffect(() => {
         if (!supabase) {
