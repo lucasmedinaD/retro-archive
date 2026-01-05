@@ -2,9 +2,10 @@
 
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Download, Share2, Heart, Sparkles, ZoomIn, ZoomOut, Maximize2, Minimize2 } from 'lucide-react';
+import { Download, Share2, Heart, Sparkles, ZoomIn, ZoomOut, Maximize2, Minimize2, Flame, Gem, Zap } from 'lucide-react';
 import SecretUnlockModal from '../SecretUnlockModal';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { recordInteraction, InteractionType } from '@/lib/gamification-db';
 
 interface EnhancedComparisonSliderProps {
     animeImage: string;
@@ -258,6 +259,21 @@ export default function EnhancedComparisonSlider({
         setIsLiked(!isLiked);
         onLike?.();
         triggerHaptic([10, 50, 10]);
+        // Also record in gamification DB if ID exists
+        if (transformationId && !isLiked) {
+            recordInteraction(transformationId, 'like');
+        }
+    };
+
+    const handleReaction = (type: InteractionType) => {
+        triggerHaptic([20, 20, 20]);
+        triggerSparkle();
+        if (transformationId) {
+            recordInteraction(transformationId, type);
+        }
+        // Visual feedback
+        const emoji = type === 'fire' ? '🔥' : type === 'mindblown' ? '🤯' : '💎';
+        // TODO: Show floating emoji feedback -> Simplified for now: just sparkle
     };
 
     useEffect(() => {
@@ -511,14 +527,45 @@ export default function EnhancedComparisonSlider({
             >
                 <div className="flex gap-3 pointer-events-auto">
                     {onLike && (
-                        <motion.button
-                            onClick={handleLike}
-                            className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            <Heart size={20} className={`transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-800 dark:text-white'}`} />
-                        </motion.button>
+                        <div className="flex gap-2">
+                            <motion.button
+                                onClick={handleLike}
+                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                <Heart size={20} className={`transition-all ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-800 dark:text-white'}`} />
+                            </motion.button>
+
+                            {/* New Reactions */}
+                            <motion.button
+                                onClick={() => handleReaction('fire')}
+                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg text-orange-500"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                aria-label="Fire Reaction"
+                            >
+                                <Flame size={20} />
+                            </motion.button>
+                            <motion.button
+                                onClick={() => handleReaction('mindblown')}
+                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg text-yellow-500"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                aria-label="Mindblown Reaction"
+                            >
+                                <Zap size={20} />
+                            </motion.button>
+                            <motion.button
+                                onClick={() => handleReaction('diamond')}
+                                className="p-3 bg-white/90 dark:bg-gray-900/90 rounded-full shadow-lg text-blue-400"
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                aria-label="Diamond Reaction"
+                            >
+                                <Gem size={20} />
+                            </motion.button>
+                        </div>
                     )}
                     {onShare && (
                         <motion.button
