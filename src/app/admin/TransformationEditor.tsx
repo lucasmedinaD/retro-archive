@@ -60,6 +60,11 @@ export default function TransformationEditor({ transformation, isNew = false, on
     const [secretPreview, setSecretPreview] = useState(transformation.secretImage || '');
     const [secretPosition, setSecretPosition] = useState<number>(transformation.secretPosition || 50);
 
+    // Advanced Filters State
+    const [era, setEra] = useState<any>(transformation.era || '90s');
+    const [style, setStyle] = useState<any>(transformation.style || 'Standard');
+    const [realismLevel, setRealismLevel] = useState<any>(transformation.realismLevel || 'Photorealistic');
+
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
 
@@ -170,7 +175,10 @@ export default function TransformationEditor({ transformation, isNew = false, on
                 outfit: selectedProducts.length > 0 ? selectedProducts : undefined,
                 amazonProducts: amazonProducts.length > 0 ? amazonProducts : undefined,
                 secretImage: finalSecretImage,
-                secretPosition: secretPosition || undefined
+                secretPosition: secretPosition || undefined,
+                era,
+                style,
+                realismLevel
             };
 
             onSave(updatedTransformation);
@@ -246,6 +254,50 @@ export default function TransformationEditor({ transformation, isNew = false, on
                                 className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
                                 placeholder="e.g., protagonist, popular"
                             />
+                        </div>
+                    </div>
+
+                    {/* Advanced Filters */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-[#333] pt-4 mt-4">
+                        <div>
+                            <label className="block text-xs uppercase mb-2 text-gray-400">Era / Decade</label>
+                            <select
+                                value={era}
+                                onChange={(e) => setEra(e.target.value)}
+                                className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                            >
+                                <option value="80s">80s</option>
+                                <option value="90s">90s</option>
+                                <option value="00s">00s</option>
+                                <option value="Modern">Modern</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-xs uppercase mb-2 text-gray-400">Visual Style</label>
+                            <select
+                                value={style}
+                                onChange={(e) => setStyle(e.target.value)}
+                                className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                            >
+                                <option value="Standard">Standard</option>
+                                <option value="Cyberpunk">Cyberpunk</option>
+                                <option value="Dark Fantasy">Dark Fantasy</option>
+                                <option value="Ghibli-esque">Ghibli-esque</option>
+                                <option value="Urban">Urban</option>
+                                <option value="Sengoku">Sengoku</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-xs uppercase mb-2 text-gray-400">Realism Level</label>
+                            <select
+                                value={realismLevel}
+                                onChange={(e) => setRealismLevel(e.target.value)}
+                                className="w-full bg-black border border-[#333] p-3 text-white outline-none focus:border-accent transition-colors"
+                            >
+                                <option value="Photorealistic">Photorealistic</option>
+                                <option value="Cinematic 2.5D">Cinematic 2.5D</option>
+                                <option value="Stylized Realism">Stylized Realism</option>
+                            </select>
                         </div>
                     </div>
 

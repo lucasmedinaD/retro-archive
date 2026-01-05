@@ -49,5 +49,10 @@ export interface TransformationExtended {
     secretImage?: string; // Optional bonus image URL
     secretPosition?: number; // Slider position (0-100) where secret is triggered
     poi?: Array<{ label: string; x: number; y: number; scale: number }>; // Dynamic zoom points
+
+    // Advanced Filters
+    era?: '80s' | '90s' | '00s' | 'Modern';
+    style?: 'Cyberpunk' | 'Dark Fantasy' | 'Ghibli-esque' | 'Urban' | 'Sengoku' | 'Standard';
+    realismLevel?: 'Photorealistic' | 'Cinematic 2.5D' | 'Stylized Realism';
 }
 

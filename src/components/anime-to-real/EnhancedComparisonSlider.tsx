@@ -43,6 +43,7 @@ export default function EnhancedComparisonSlider({
     const [isLiked, setIsLiked] = useState(externalIsLiked);
     const [isDragging, setIsDragging] = useState(false);
     const [isZoomed, setIsZoomed] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false); // [NEW] Fullscreen State
     const [showSparkle, setShowSparkle] = useState(false);
     const [showFunFact, setShowFunFact] = useState(false);
     const [showHeartBurst, setShowHeartBurst] = useState(false);
@@ -164,6 +165,23 @@ export default function EnhancedComparisonSlider({
         lastTapRef.current = now;
     }, [isLiked, onLike, triggerHaptic, isZoomed]);
 
+    // Handle Esc key to exit fullscreen
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isFullscreen) {
+                setIsFullscreen(false);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isFullscreen]);
+
+    const toggleFullscreen = () => {
+        setIsFullscreen(!isFullscreen);
+        // Reset zoom when toggling to avoid layout jumps
+        if (isZoomed) setIsZoomed(false);
+    };
+
     // Check edges
     useEffect(() => {
         const checkEdges = () => {
@@ -247,7 +265,10 @@ export default function EnhancedComparisonSlider({
     }, [position, springPosition]);
 
     return (
-        <div className="relative rounded-xl overflow-hidden shadow-2xl bg-black group">
+        <div
+            className={`relative rounded-xl overflow-hidden shadow-2xl bg-black group transition-all duration-300 ${isFullscreen ? 'fixed inset-0 z-[100] h-screen w-screen rounded-none' : ''
+                }`}
+        >
             {/* Zoom Wrapper */}
             <TransformWrapper
                 initialScale={1}
@@ -284,6 +305,16 @@ export default function EnhancedComparisonSlider({
                             >
                                 <ZoomOut size={20} />
                             </button>
+
+                            {/* Fullscreen Toggle */}
+                            <button
+                                onClick={toggleFullscreen}
+                                className="bg-black/50 text-white p-2 rounded-full backdrop-blur-md border border-white/20 hover:bg-white/20"
+                                aria-label={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                            >
+                                {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+                            </button>
+
                             {isZoomed && (
                                 <button
                                     onClick={() => resetTransform()}

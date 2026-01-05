@@ -24,7 +24,10 @@ function mapRowToTransformation(row: any): TransformationExtended {
         amazonProducts: row.amazon_products,
         metadata: row.metadata,
         secretImage: row.secret_image,
-        secretPosition: row.secret_position
+        secretPosition: row.secret_position,
+        era: row.era,
+        style: row.style,
+        realismLevel: row.realism_level
     };
 }
 
@@ -46,7 +49,10 @@ function mapTransformationToRow(data: TransformationExtended) {
             outfit: data.outfit
         },
         secret_image: data.secretImage,
-        secret_position: data.secretPosition
+        secret_position: data.secretPosition,
+        era: data.era,
+        style: data.style,
+        realism_level: data.realismLevel
     };
 }
 
@@ -111,6 +117,9 @@ export async function updateTransformationAction(id: string, updates: Partial<Tr
         if (updates.tags) rowUpdates.tags = updates.tags;
         if (updates.description) rowUpdates.description = updates.description;
         if (updates.amazonProducts) rowUpdates.amazon_products = updates.amazonProducts;
+        if (updates.era) rowUpdates.era = updates.era;
+        if (updates.style) rowUpdates.style = updates.style;
+        if (updates.realismLevel) rowUpdates.realism_level = updates.realismLevel;
 
         // Metadata / Artist / Outfit merging
         if (updates.metadata || updates.artist || updates.outfit) {

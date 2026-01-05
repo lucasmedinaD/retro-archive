@@ -61,6 +61,9 @@ function mapDBToTransformation(rows: any[]): TransformationExtended[] {
         amazonProducts: row.amazon_products,
         metadata: row.metadata,
         secretImage: row.secret_image,
-        secretPosition: row.secret_position
+        secretPosition: row.secret_position,
+        era: row.era,
+        style: row.style,
+        realismLevel: row.realism_level
     }));
 }
