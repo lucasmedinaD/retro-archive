@@ -250,7 +250,7 @@ export default function EnhancedComparisonSlider({
                     }
                 }}
             >
-                {({ zoomIn, zoomOut, resetTransform, setTransform, state }) => (
+                {({ zoomIn, zoomOut, resetTransform, setTransform }) => (
                     <>
                         {/* Controls Overlay */}
                         <div className="absolute top-4 right-4 z-50 flex flex-col gap-2 pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -268,10 +268,10 @@ export default function EnhancedComparisonSlider({
                             >
                                 <ZoomOut size={20} />
                             </button>
-                            {state.scale > 1.1 && (
+                            {isZoomed && (
                                 <button
                                     onClick={() => resetTransform()}
-                                    className="bg-accent text-white p-2 rounded-full backdrop-blur-md shadow-lg transition-all duration-300 scale-100 opacity-100"
+                                    className="bg-accent text-white p-2 rounded-full backdrop-blur-md shadow-lg transition-all duration-300"
                                     aria-label="Reset Zoom"
                                 >
                                     <Minimize2 size={20} />
