@@ -16,6 +16,7 @@ import { likeTransformationAction } from '@/app/admin/actions/transformations';
 import AmazonAffiliateWidget from '@/components/AmazonAffiliateWidget';
 import RatingSystem from '@/components/RatingSystem';
 import CategoryRatingSystem from '@/components/CategoryRatingSystem';
+import ContextualOptIn from '@/components/ContextualOptIn';
 import OwnerBadge from '@/components/OwnerBadge';
 
 interface TransformationDetailProps {
@@ -198,6 +199,13 @@ export default function TransformationDetail({
                     <div className="mb-6">
                         <CategoryRatingSystem transformationId={transformation.id} lang={lang} />
                     </div>
+
+                    {/* Contextual Opt-In Notification */}
+                    {transformation.series && (
+                        <div className="mb-6">
+                            <ContextualOptIn seriesName={transformation.series} lang={lang} />
+                        </div>
+                    )}
 
                     {/* Stats */}
                     <div className="border-2 border-black dark:border-white p-4">
