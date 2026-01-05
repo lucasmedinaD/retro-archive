@@ -57,12 +57,14 @@ export default function OnboardingModal({ lang }: OnboardingModalProps) {
         if (!supabase) return;
 
         try {
-            // Update profile with username and NSFW preference
+            // Update profile with username and NSFW preference + Google data
             const { error } = await supabase
                 .from('profiles')
                 .upsert({
                     id: user.id,
                     username: username.trim(),
+                    full_name: user.user_metadata?.full_name || username.trim(),
+                    avatar_url: user.user_metadata?.avatar_url || null,
                     show_nsfw: enableNsfw,
                     updated_at: new Date().toISOString()
                 });
