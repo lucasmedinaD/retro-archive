@@ -194,7 +194,7 @@ export default function TransformationEditor({ transformation, isNew = false, on
     };
 
     return (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 overflow-y-auto">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 overflow-y-auto notranslate" translate="no">
             <div className="bg-[#0a0a0a] border-2 border-accent w-full max-w-4xl my-8">
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b border-accent">

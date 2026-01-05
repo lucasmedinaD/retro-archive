@@ -143,7 +143,7 @@ export default function TransformationsPage() {
                 )}
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 notranslate" translate="no">
                     {transformations.map((t) => (
                         <div
                             key={t.id}
@@ -164,13 +164,13 @@ export default function TransformationsPage() {
                             </div>
                             <div className="p-4">
                                 <h3 className="text-xl font-bold mb-1">{t.characterName}</h3>
-                                <p className="text-sm text-gray-400 mb-2 font-mono">{t.series}</p>
-                                <p className="text-xs text-gray-500 mb-2">
+                                <div className="text-sm text-gray-400 mb-2 font-mono">{t.series}</div>
+                                <div className="text-xs text-gray-500 mb-2">
                                     {t.category} • {t.tags?.join(', ')}
-                                </p>
-                                <p className="text-xs text-gray-600 mb-4 font-mono">
+                                </div>
+                                <div className="text-xs text-gray-600 mb-4 font-mono">
                                     ❤️ {t.likes || 0} likes
-                                </p>
+                                </div>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => {
