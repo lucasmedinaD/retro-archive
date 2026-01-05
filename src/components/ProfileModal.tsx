@@ -49,7 +49,7 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<string> 
 };
 
 export default function ProfileModal({ isOpen, onClose, lang }: ProfileModalProps) {
-    const { user, updateProfile } = useAuth();
+    const { user, updateProfile, showNsfw, toggleNsfw } = useAuth();
     const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
     const [selectedAvatar, setSelectedAvatar] = useState(user?.user_metadata?.avatar_url || '');
     const [isSaving, setIsSaving] = useState(false);
@@ -154,6 +154,33 @@ export default function ProfileModal({ isOpen, onClose, lang }: ProfileModalProp
                                 placeholder={lang === 'es' ? 'Tu nombre...' : 'Your name...'}
                             />
                             <UserIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                        </div>
+                    </div>
+
+                    {/* Content Preferences */}
+                    <div>
+                        <label className="block text-xs font-bold uppercase text-gray-500 mb-2">
+                            {lang === 'es' ? 'Preferencias de Contenido' : 'Content Preferences'}
+                        </label>
+                        <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-gray-800 rounded-xl">
+                            <div className="flex flex-col">
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">
+                                    {lang === 'es' ? 'Mostrar Contenido Spicy (+18)' : 'Show Spicy Content (+18)'}
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                    {lang === 'es' ? 'Ver transformaciones marcadas como NSFW' : 'View transformations marked as NSFW'}
+                                </span>
+                            </div>
+                            <button
+                                onClick={toggleNsfw}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${showNsfw ? 'bg-red-500' : 'bg-gray-300 dark:bg-gray-700'
+                                    }`}
+                            >
+                                <span
+                                    className={`${showNsfw ? 'translate-x-6' : 'translate-x-1'
+                                        } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                                />
+                            </button>
                         </div>
                     </div>
 
