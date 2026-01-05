@@ -27,6 +27,24 @@ export async function getTransformationsFromDB(): Promise<TransformationExtended
     return mapDBToTransformation(data);
 }
 
+export async function getPublicTransformationsFromDB(): Promise<TransformationExtended[]> {
+    if (!supabaseUrl || !supabaseAnonKey) return [];
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const { data, error } = await supabase
+        .from('transformations')
+        .select('*')
+        .eq('is_nsfw', false) // Explicitly exclude NSFW
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching public transformations:', error);
+        return [];
+    }
+
+    return mapDBToTransformation(data);
+}
+
 export async function getTransformationByIdFromDB(id: string): Promise<TransformationExtended | undefined> {
     if (!supabaseUrl || !supabaseAnonKey) return undefined;
     const supabase = createClient(supabaseUrl, supabaseAnonKey);

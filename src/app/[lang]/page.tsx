@@ -6,7 +6,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Header from '@/components/Header';
 import { Instagram, Twitter, Heart, ShoppingBag, Sparkles } from 'lucide-react';
-import { getTransformationsFromDB } from '@/lib/transformations-db'; // Updated import
+import { getPublicTransformationsFromDB } from '@/lib/transformations-db'; // Updated import
 import RandomHero from '@/components/RandomHero';
 import MobileTopNav from '@/components/mobile/MobileTopNav';
 import FeedSection from '@/components/FeedSection';
@@ -36,8 +36,8 @@ export default async function Home({ params, searchParams }: HomeProps) {
   // Filter from MobileTopNav tabs
   const initialFilter = resolvedSearchParams.filter as string | undefined;
 
-  // Get featured transformation for the hero from DB
-  const transformations = await getTransformationsFromDB();
+  // Get featured transformation for the hero from DB (Safe content only)
+  const transformations = await getPublicTransformationsFromDB();
 
   // Pick a random transformation for the hero (changes on each page load)
   const randomIndex = Math.floor(Math.random() * transformations.length);
