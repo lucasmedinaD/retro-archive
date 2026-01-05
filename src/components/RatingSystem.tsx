@@ -21,35 +21,43 @@ export default function RatingSystem({ transformationId, lang }: RatingSystemPro
     const supabase = createSupabaseBrowserClient();
 
     useEffect(() => {
-        if (!supabase) return;
+        if (!supabase) {
+            setIsLoading(false);
+            return;
+        }
 
         const fetchData = async () => {
-            // Get average rating
-            const { data: stats } = await supabase
-                .from('transformation_ratings')
-                .select('average_rating, vote_count')
-                .eq('transformation_id', transformationId)
-                .single();
-
-            if (stats) {
-                setAverageRating(stats.average_rating);
-                setTotalVotes(stats.vote_count);
-            }
-
-            // Get user rating if logged in
-            if (user) {
-                const { data: userVote } = await supabase
-                    .from('ratings')
-                    .select('rating')
+            try {
+                // Get average rating
+                const { data: stats, error: statsError } = await supabase
+                    .from('transformation_ratings')
+                    .select('average_rating, vote_count')
                     .eq('transformation_id', transformationId)
-                    .eq('user_id', user.id)
                     .single();
 
-                if (userVote) {
-                    setUserRating(userVote.rating);
+                if (!statsError && stats) {
+                    setAverageRating(stats.average_rating);
+                    setTotalVotes(stats.vote_count);
                 }
+
+                // Get user rating if logged in
+                if (user) {
+                    const { data: userVote, error: userError } = await supabase
+                        .from('ratings')
+                        .select('rating')
+                        .eq('transformation_id', transformationId)
+                        .eq('user_id', user.id)
+                        .single();
+
+                    if (!userError && userVote) {
+                        setUserRating(userVote.rating);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching ratings:', error);
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
 
         fetchData();
@@ -106,8 +114,8 @@ export default function RatingSystem({ transformationId, lang }: RatingSystemPro
                         <Star
                             size={28}
                             className={`transition-colors ${(hoverRating !== null ? star <= hoverRating : (userRating !== null && star <= userRating))
-                                    ? 'fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]'
-                                    : 'text-gray-300 dark:text-gray-600'
+                                ? 'fill-yellow-400 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]'
+                                : 'text-gray-300 dark:text-gray-600'
                                 }`}
                             strokeWidth={
                                 (hoverRating !== null ? star <= hoverRating : (userRating !== null && star <= userRating)) ? 0 : 2
