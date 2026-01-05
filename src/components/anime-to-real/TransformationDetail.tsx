@@ -15,6 +15,7 @@ import PinItButton from '@/components/PinItButton';
 import { likeTransformationAction } from '@/app/admin/actions/transformations';
 import AmazonAffiliateWidget from '@/components/AmazonAffiliateWidget';
 import RatingSystem from '@/components/RatingSystem';
+import CategoryRatingSystem from '@/components/CategoryRatingSystem';
 import OwnerBadge from '@/components/OwnerBadge';
 
 interface TransformationDetailProps {
@@ -191,6 +192,11 @@ export default function TransformationDetail({
                             {lang === 'es' ? 'Ranking de la Comunidad' : 'Community Ranking'}
                         </label>
                         <RatingSystem transformationId={transformation.id} lang={lang} />
+                    </div>
+
+                    {/* Category Rating System */}
+                    <div className="mb-6">
+                        <CategoryRatingSystem transformationId={transformation.id} lang={lang} />
                     </div>
 
                     {/* Stats */}
