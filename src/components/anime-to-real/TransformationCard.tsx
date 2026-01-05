@@ -29,7 +29,7 @@ export default function TransformationCard({
     const isInView = useInView(cardRef, { once: true, margin: "-50px" });
     const { isViewed } = useArchiveProgress();
     // NSFW Logic
-    const { user, showNsfw, signInWithGoogle } = useAuth();
+    const { user, showNsfw, signInWithGoogle, toggleNsfw } = useAuth();
     const isSpicy = transformation.is_nsfw;
     const isAllowed = !isSpicy || (user && showNsfw);
 
@@ -73,15 +73,26 @@ export default function TransformationCard({
                         <div className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-900">
                             {/* Gating Overlay */}
                             {!isAllowed && (
-                                <div className="absolute inset-0 z-10 backdrop-blur-xl bg-black/40 flex flex-col items-center justify-center p-6 text-center">
+                                <div className="absolute inset-0 z-10 backdrop-blur-lg bg-black/40 flex flex-col items-center justify-center p-6 text-center">
                                     <div className="bg-black/80 border border-red-500 p-4 transform transition-transform group-hover:scale-105">
-                                        <h3 className="text-red-500 font-black text-xl uppercase mb-2">Restricted Content</h3>
+                                        <h3 className="text-red-500 font-black text-xl uppercase mb-2">
+                                            {lang === 'es' ? 'Contenido Restringido' : 'Restricted Content'}
+                                        </h3>
                                         <p className="text-white text-xs mb-3 font-mono">
-                                            This transformation contains spicy material.
+                                            {lang === 'es' ? 'Esta transformación contiene material picante.' : 'This transformation contains spicy material.'}
                                         </p>
-                                        <button className="bg-red-600 text-white text-xs font-bold uppercase px-4 py-2 hover:bg-red-700 transition-colors w-full">
-                                            Login to View
-                                        </button>
+                                        {user ? (
+                                            <button
+                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleNsfw(); }}
+                                                className="bg-red-600 text-white text-xs font-bold uppercase px-4 py-2 hover:bg-red-700 transition-colors w-full"
+                                            >
+                                                {lang === 'es' ? 'Activar Contenido +18' : 'Activate +18 Content'}
+                                            </button>
+                                        ) : (
+                                            <button className="bg-red-600 text-white text-xs font-bold uppercase px-4 py-2 hover:bg-red-700 transition-colors w-full">
+                                                {lang === 'es' ? 'Iniciar Sesión para Ver' : 'Login to View'}
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             )}
@@ -90,7 +101,7 @@ export default function TransformationCard({
                             <img
                                 src={isHovered && isAllowed ? transformation.realImage : transformation.animeImage}
                                 alt={transformation.characterName}
-                                className={`w-full h-auto block transition-transform duration-500 group-hover:scale-105 ${!isAllowed ? 'blur-md brightness-50' : ''}`}
+                                className={`w-full h-auto block transition-transform duration-500 group-hover:scale-105 ${!isAllowed ? 'blur-sm brightness-75' : ''}`}
                                 onLoad={() => setImageLoaded(true)}
                                 loading={priority ? "eager" : "lazy"}
                             />
