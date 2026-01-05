@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Heart } from 'lucide-react';
 import { TransformationExtended } from '@/types/transformations';
 import { useArchiveProgress } from '@/hooks/useArchiveProgress';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface TransformationCardProps {
     transformation: TransformationExtended;
@@ -27,6 +28,10 @@ export default function TransformationCard({
     const cardRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(cardRef, { once: true, margin: "-50px" });
     const { isViewed } = useArchiveProgress();
+    // NSFW Logic
+    const { user, showNsfw, signInWithGoogle } = useAuth();
+    const isSpicy = transformation.is_nsfw;
+    const isAllowed = !isSpicy || (user && showNsfw);
 
     return (
         <motion.div
@@ -46,73 +51,103 @@ export default function TransformationCard({
                     {viewedText}
                 </div>
             )}
-            <Link href={`/${lang || 'en'}/anime-to-real/${transformation.id}`}>
-                <div
-                    className="group relative border-2 border-black dark:border-white overflow-hidden hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:-translate-y-1 cursor-pointer bg-white dark:bg-black"
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
+
+            {/* NSFW Badge (Only if allowed or public) */}
+            {isSpicy && (
+                <div className="absolute top-2 left-2 z-20 bg-red-600 text-white px-2 py-0.5 text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
+                    🔥 +18
+                </div>
+            )}
+
+            <div onClick={() => !isAllowed && signInWithGoogle()} className={!isAllowed ? 'cursor-pointer' : ''}>
+                <Link
+                    href={isAllowed ? `/${lang || 'en'}/anime-to-real/${transformation.id}` : '#'}
+                    onClick={(e) => !isAllowed && e.preventDefault()}
                 >
-                    {/* Image with original aspect ratio */}
-                    <div className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-900">
-                        {/* Using img tag for true natural aspect ratio */}
-                        <img
-                            src={isHovered ? transformation.realImage : transformation.animeImage}
-                            alt={transformation.characterName}
-                            className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-                            onLoad={() => setImageLoaded(true)}
-                            loading={priority ? "eager" : "lazy"}
-                        />
-
-                        {/* Overlay */}
-                        <div
-                            className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
-                                }`}
-                        >
-                            <div className="absolute bottom-0 left-0 right-0 p-4">
-                                <h3 className="text-white font-black text-lg mb-1">
-                                    {transformation.characterName}
-                                </h3>
-                                {transformation.series && (
-                                    <p className="text-white/80 text-xs font-mono">
-                                        {transformation.series}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Category Badge */}
-                        <div className="absolute top-2 right-2 bg-black text-white dark:bg-white dark:text-black px-2 py-1 text-[10px] font-bold uppercase">
-                            {transformation.category || '2.5D'}
-                        </div>
-                    </div>
-
-                    {/* Card Footer */}
-                    <div className="p-3 bg-white dark:bg-black border-t-2 border-black dark:border-white">
-                        <div className="flex justify-between items-center">
-                            <div className="flex-1">
-                                <h3 className="font-bold text-sm line-clamp-1">
-                                    {transformation.characterName}
-                                </h3>
-                                {transformation.series && (
-                                    <p className="text-xs font-mono text-gray-600 dark:text-gray-400 line-clamp-1">
-                                        {transformation.series}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Like Count */}
-                            {(transformation.likes ?? 0) > 0 && (
-                                <div className="flex items-center gap-1 text-sm">
-                                    <Heart size={14} className="fill-red-500 text-red-500" />
-                                    <span className="font-mono text-xs">
-                                        {transformation.likes}
-                                    </span>
+                    <div
+                        className="group relative border-2 border-black dark:border-white overflow-hidden hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:-translate-y-1 cursor-pointer bg-white dark:bg-black"
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        {/* Image Container */}
+                        <div className="relative w-full overflow-hidden bg-gray-100 dark:bg-gray-900">
+                            {/* Gating Overlay */}
+                            {!isAllowed && (
+                                <div className="absolute inset-0 z-10 backdrop-blur-xl bg-black/40 flex flex-col items-center justify-center p-6 text-center">
+                                    <div className="bg-black/80 border border-red-500 p-4 transform transition-transform group-hover:scale-105">
+                                        <h3 className="text-red-500 font-black text-xl uppercase mb-2">Restricted Content</h3>
+                                        <p className="text-white text-xs mb-3 font-mono">
+                                            This transformation contains spicy material.
+                                        </p>
+                                        <button className="bg-red-600 text-white text-xs font-bold uppercase px-4 py-2 hover:bg-red-700 transition-colors w-full">
+                                            Login to View
+                                        </button>
+                                    </div>
                                 </div>
                             )}
+
+                            {/* Using img tag for true natural aspect ratio */}
+                            <img
+                                src={isHovered && isAllowed ? transformation.realImage : transformation.animeImage}
+                                alt={transformation.characterName}
+                                className={`w-full h-auto block transition-transform duration-500 group-hover:scale-105 ${!isAllowed ? 'blur-md brightness-50' : ''}`}
+                                onLoad={() => setImageLoaded(true)}
+                                loading={priority ? "eager" : "lazy"}
+                            />
+
+                            {/* Overlay (Only if allowed) */}
+                            {isAllowed && (
+                                <div
+                                    className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'
+                                        }`}
+                                >
+                                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                                        <h3 className="text-white font-black text-lg mb-1">
+                                            {transformation.characterName}
+                                        </h3>
+                                        {transformation.series && (
+                                            <p className="text-white/80 text-xs font-mono">
+                                                {transformation.series}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Category Badge */}
+                            <div className="absolute top-2 right-2 bg-black text-white dark:bg-white dark:text-black px-2 py-1 text-[10px] font-bold uppercase">
+                                {transformation.category || '2.5D'}
+                            </div>
+                        </div>
+
+                        {/* Card Footer */}
+                        <div className="p-3 bg-white dark:bg-black border-t-2 border-black dark:border-white">
+                            <div className="flex justify-between items-center">
+                                <div className="flex-1">
+                                    <h3 className="font-bold text-sm line-clamp-1">
+                                        {transformation.characterName}
+                                    </h3>
+                                    {transformation.series && (
+                                        <p className="text-xs font-mono text-gray-600 dark:text-gray-400 line-clamp-1">
+                                            {transformation.series}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Like Count */}
+                                {(transformation.likes ?? 0) > 0 && (
+                                    <div className="flex items-center gap-1 text-sm">
+                                        <Heart size={14} className="fill-red-500 text-red-500" />
+                                        <span className="font-mono text-xs">
+                                            {transformation.likes}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Link>
+                </Link>
+            </div>
         </motion.div>
     );
 }

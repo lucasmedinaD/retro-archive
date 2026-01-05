@@ -11,6 +11,8 @@ interface AuthContextType {
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
     updateProfile: (updates: { full_name?: string; avatar_url?: string }) => Promise<void>;
+    showNsfw: boolean;
+    toggleNsfw: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [session, setSession] = useState<Session | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [showNsfw, setShowNsfw] = useState(false);
 
     // Memoize supabase client to avoid recreating on every render
     const supabase = useMemo(() => createSupabaseBrowserClient(), []);
@@ -35,6 +38,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const { data: { session } } = await supabase.auth.getSession();
             setSession(session);
             setUser(session?.user ?? null);
+
+            if (session?.user) {
+                // Fetch profile settings
+                const { data } = await supabase
+                    .from('profiles')
+                    .select('show_nsfw')
+                    .eq('id', session.user.id)
+                    .single();
+                if (data) setShowNsfw(data.show_nsfw);
+            }
+
             setIsLoading(false);
         };
 
@@ -95,6 +109,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const toggleNsfw = async () => {
+        if (!supabase || !user) return;
+
+        const newValue = !showNsfw;
+        // Optimistic update
+        setShowNsfw(newValue);
+
+        const { error } = await supabase
+            .from('profiles')
+            .upsert({ id: user.id, show_nsfw: newValue, updated_at: new Date().toISOString() });
+
+        if (error) {
+            console.error('Error updating NSFW preference:', error);
+            // Revert
+            setShowNsfw(!newValue);
+        }
+    };
+
     return (
         <AuthContext.Provider value={{
             user,
@@ -102,7 +134,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             isLoading,
             signInWithGoogle,
             signOut,
-            updateProfile
+            updateProfile,
+            showNsfw,
+            toggleNsfw
         }}>
             {children}
         </AuthContext.Provider>
@@ -119,7 +153,9 @@ export function useAuth() {
             isLoading: false,
             signInWithGoogle: async () => { },
             signOut: async () => { },
-            updateProfile: async () => { }
+            updateProfile: async () => { },
+            showNsfw: false,
+            toggleNsfw: async () => { }
         };
     }
     return context;

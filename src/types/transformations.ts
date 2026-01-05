@@ -54,5 +54,8 @@ export interface TransformationExtended {
     era?: '80s' | '90s' | '00s' | 'Modern';
     style?: 'Cyberpunk' | 'Dark Fantasy' | 'Ghibli-esque' | 'Urban' | 'Sengoku' | 'Standard';
     realismLevel?: 'Photorealistic' | 'Cinematic 2.5D' | 'Stylized Realism';
+
+    // Content Gating
+    is_nsfw?: boolean;
 }
 

@@ -65,6 +65,9 @@ export default function TransformationEditor({ transformation, isNew = false, on
     const [style, setStyle] = useState<any>(transformation.style || 'Standard');
     const [realismLevel, setRealismLevel] = useState<any>(transformation.realismLevel || 'Photorealistic');
 
+    // Content Gating
+    const [isNsfw, setIsNsfw] = useState(transformation.is_nsfw || false);
+
     // Get all available products
     const allProducts = getProducts('en'); // Use 'en' as default for admin
 
@@ -178,7 +181,8 @@ export default function TransformationEditor({ transformation, isNew = false, on
                 secretPosition: secretPosition || undefined,
                 era,
                 style,
-                realismLevel
+                realismLevel,
+                is_nsfw: isNsfw // Add new field
             };
 
             onSave(updatedTransformation);
@@ -300,6 +304,22 @@ export default function TransformationEditor({ transformation, isNew = false, on
                             </select>
                         </div>
                     </div>
+                    {/* NSFW Setting */}
+                    <div className="border border-red-500/30 bg-red-500/5 p-4 mb-4">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={isNsfw}
+                                onChange={(e) => setIsNsfw(e.target.checked)}
+                            />
+                            <span className="text-red-400 font-bold uppercase">Mark as NSFW / Spicy (+18)</span>
+                        </label>
+                        <p className="text-xs text-red-500/70 mt-1 ml-7">
+                            Content will be blurred for non-logged-in users.
+                        </p>
+                    </div>
+
+
 
                     {/* Artist Information */}
                     <div className="border-2 border-[#333] p-4">
