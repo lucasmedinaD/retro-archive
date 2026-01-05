@@ -44,6 +44,59 @@ export async function getTransformationByIdFromDB(id: string): Promise<Transform
     return mapDBToTransformation([data])[0];
 }
 
+export async function getTransformationsByTag(tag: string): Promise<TransformationExtended[]> {
+    if (!supabaseUrl || !supabaseAnonKey) return [];
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    // We search in both 'series' (exact match) and 'tags' array (contains)
+    // Supabase 'or' syntax: series.eq.Tag,tags.cs.{Tag}
+    // But 'tags' is text[] array. 'cs' means contains. 
+    // Ideally we want efficient search. 
+
+    // Let's implement robust search:
+    // 1. Exact match on Series (case insensitive if possible, but exact for DB)
+    // 2. Contains in Tags array
+
+    // Note: Supabase ILIKE is good for case insensitive. 
+    // tags.cs.{tag} expects exact case if I recall. 
+    // Let's rely on exact match for now or use text search if configured.
+    // Simple approach: Fetch matching Series or Tags.
+
+    // Using .or() with filter
+    // series.ilike.%tag%, tags.cs.{"tag"} 
+    // (cs is case sensitive usually).
+
+    // For now, let's assume the tag coming in is clean.
+    // Actually, widespread generic search (ilike) might be better for "tags" if they are strings.
+    // If 'tags' is JSONB or Array, query differs. 
+    // Assuming 'tags' is text[] based on mapDBToTransformation.
+
+    const { data, error } = await supabase
+        .from('transformations')
+        .select('*')
+        .or(`series.ilike.%${tag}%,tags.cs.{${tag}}`)
+        .order('created_at', { ascending: false });
+
+    // Fallback if the OR syntax fails or we want broader search: 
+    // Just search series for now as that's the main "Tag" showing in UI filter
+
+    if (error) {
+        // Fallback or retry? 
+        console.error('Error fetching by tag:', error);
+
+        // Simple fallback: just series
+        const { data: dataSeries } = await supabase
+            .from('transformations')
+            .select('*')
+            .ilike('series', `%${tag}%`)
+            .order('created_at', { ascending: false });
+
+        return mapDBToTransformation(dataSeries || []);
+    }
+
+    return mapDBToTransformation(data || []);
+}
+
 // Helper to map DB row to TS interface
 function mapDBToTransformation(rows: any[]): TransformationExtended[] {
     return rows.map(row => ({

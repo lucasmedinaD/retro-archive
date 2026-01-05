@@ -46,7 +46,7 @@ export default function TransformationCard({
                     {viewedText}
                 </div>
             )}
-            <Link href={`/${lang}/anime-to-real/${transformation.id}`}>
+            <Link href={`/${lang || 'en'}/anime-to-real/${transformation.id}`}>
                 <div
                     className="group relative border-2 border-black dark:border-white overflow-hidden hover:shadow-[6px_6px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_rgba(255,255,255,1)] transition-all duration-200 hover:-translate-y-1 cursor-pointer bg-white dark:bg-black"
                     onMouseEnter={() => setIsHovered(true)}

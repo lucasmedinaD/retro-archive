@@ -35,14 +35,25 @@ export default function MobileTopNav({ lang, dict }: MobileTopNavProps) {
             <div className="overflow-x-auto no-scrollbar py-3 px-4">
                 <div className="flex gap-2 whitespace-nowrap min-w-max">
                     {filters.map((filter) => {
-                        // Link stays on Home page with filter query param
+                        // SEO Link Construction: 
+                        // If tag is present, go to /tag/[slug]
+                        // If removed (All), go to /
+
+                        // NOTE: We need to handle active state differently now.
+                        // Active if pathname includes the tag.
+
+                        // Also, we need to make sure the tag is URL friendly.
+                        // For now, simple encodeURIComponent. Ideally slugify.
+                        const slug = filter.tag ? encodeURIComponent(filter.tag).replace(/%20/g, '-') : '';
+
                         const href = filter.tag
-                            ? `/${lang}?filter=${encodeURIComponent(filter.tag)}`
+                            ? `/${lang}/tag/${slug}`
                             : `/${lang}`;
 
+                        // Check active state
                         const isActive = filter.tag
-                            ? currentFilter === filter.tag
-                            : !currentFilter;
+                            ? pathname.includes(`/tag/${slug}`)
+                            : (pathname === `/${lang}` || pathname === '/');
 
                         return (
                             <Link
