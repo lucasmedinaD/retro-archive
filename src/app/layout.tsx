@@ -116,6 +116,20 @@ export default function RootLayout({
           {/* ExitIntentPopup temporarily disabled */}
           {/* <ExitIntentPopup /> */}
         </Providers>
+        {/* Service Worker Registration for PWA */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                    console.log('SW registration failed: ', err);
+                  });
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

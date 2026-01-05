@@ -52,7 +52,9 @@ export default function EnhancedComparisonSlider({
     const [hasReachedEdge, setHasReachedEdge] = useState({ left: false, right: false });
     const [hasRevealedMystery, setHasRevealedMystery] = useState(false); // Mystery Veil state
     const [showReactionPicker, setShowReactionPicker] = useState(false); // Facebook-style reaction picker
+    const [hoveredReaction, setHoveredReaction] = useState<string | null>(null); // Currently hovered reaction
     const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+    const reactionPickerRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const lastHapticPosition = useRef<number | null>(null);
 
@@ -573,43 +575,69 @@ export default function EnhancedComparisonSlider({
                             <AnimatePresence>
                                 {showReactionPicker && (
                                     <motion.div
+                                        ref={reactionPickerRef}
                                         initial={{ opacity: 0, scale: 0.8, y: 10 }}
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                                        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 flex gap-1 bg-white dark:bg-gray-900 p-2 rounded-full shadow-2xl border-2 border-black dark:border-white"
+                                        className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 flex gap-2 bg-white dark:bg-gray-900 px-3 py-2 rounded-full shadow-2xl border-2 border-black dark:border-white"
+                                        onPointerLeave={() => setHoveredReaction(null)}
                                     >
-                                        <motion.button
-                                            onClick={() => { handleLike(); setShowReactionPicker(false); }}
-                                            className={`p-2 rounded-full transition-colors ${isLiked ? 'bg-red-500 text-white' : 'hover:bg-red-100'}`}
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        >
-                                            <Heart size={22} className={isLiked ? 'fill-white' : 'text-red-500'} />
-                                        </motion.button>
-                                        <motion.button
-                                            onClick={() => { handleReaction('fire'); setShowReactionPicker(false); }}
-                                            className={`p-2 rounded-full transition-colors ${userReactions.includes('fire') ? 'bg-orange-500 text-white' : 'hover:bg-orange-100'}`}
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        >
-                                            <Flame size={22} className={userReactions.includes('fire') ? 'fill-white' : 'text-orange-500'} />
-                                        </motion.button>
-                                        <motion.button
-                                            onClick={() => { handleReaction('mindblown'); setShowReactionPicker(false); }}
-                                            className={`p-2 rounded-full transition-colors ${userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' : 'hover:bg-yellow-100'}`}
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        >
-                                            <Zap size={22} className={userReactions.includes('mindblown') ? 'fill-white' : 'text-yellow-500'} />
-                                        </motion.button>
-                                        <motion.button
-                                            onClick={() => { handleReaction('diamond'); setShowReactionPicker(false); }}
-                                            className={`p-2 rounded-full transition-colors ${userReactions.includes('diamond') ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'}`}
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        >
-                                            <Gem size={22} className={userReactions.includes('diamond') ? 'fill-white' : 'text-blue-500'} />
-                                        </motion.button>
+                                        {/* Heart */}
+                                        <div className="relative">
+                                            <motion.div
+                                                onPointerEnter={() => setHoveredReaction('like')}
+                                                onClick={() => { handleLike(); setShowReactionPicker(false); setHoveredReaction(null); }}
+                                                className={`p-2 rounded-full cursor-pointer transition-colors ${hoveredReaction === 'like' || isLiked ? 'bg-red-500 text-white' : 'hover:bg-red-100'}`}
+                                                animate={{ scale: hoveredReaction === 'like' ? 1.4 : 1, y: hoveredReaction === 'like' ? -8 : 0 }}
+                                            >
+                                                <Heart size={24} className={hoveredReaction === 'like' || isLiked ? 'fill-white' : 'text-red-500'} />
+                                            </motion.div>
+                                            {hoveredReaction === 'like' && (
+                                                <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap font-bold">Me gusta</motion.span>
+                                            )}
+                                        </div>
+                                        {/* Fire */}
+                                        <div className="relative">
+                                            <motion.div
+                                                onPointerEnter={() => setHoveredReaction('fire')}
+                                                onClick={() => { handleReaction('fire'); setShowReactionPicker(false); setHoveredReaction(null); }}
+                                                className={`p-2 rounded-full cursor-pointer transition-colors ${hoveredReaction === 'fire' || userReactions.includes('fire') ? 'bg-orange-500 text-white' : 'hover:bg-orange-100'}`}
+                                                animate={{ scale: hoveredReaction === 'fire' ? 1.4 : 1, y: hoveredReaction === 'fire' ? -8 : 0 }}
+                                            >
+                                                <Flame size={24} className={hoveredReaction === 'fire' || userReactions.includes('fire') ? 'fill-white' : 'text-orange-500'} />
+                                            </motion.div>
+                                            {hoveredReaction === 'fire' && (
+                                                <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap font-bold">Fuego 🔥</motion.span>
+                                            )}
+                                        </div>
+                                        {/* Mindblown */}
+                                        <div className="relative">
+                                            <motion.div
+                                                onPointerEnter={() => setHoveredReaction('mindblown')}
+                                                onClick={() => { handleReaction('mindblown'); setShowReactionPicker(false); setHoveredReaction(null); }}
+                                                className={`p-2 rounded-full cursor-pointer transition-colors ${hoveredReaction === 'mindblown' || userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' : 'hover:bg-yellow-100'}`}
+                                                animate={{ scale: hoveredReaction === 'mindblown' ? 1.4 : 1, y: hoveredReaction === 'mindblown' ? -8 : 0 }}
+                                            >
+                                                <Zap size={24} className={hoveredReaction === 'mindblown' || userReactions.includes('mindblown') ? 'fill-white' : 'text-yellow-500'} />
+                                            </motion.div>
+                                            {hoveredReaction === 'mindblown' && (
+                                                <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap font-bold">Increíble ⚡</motion.span>
+                                            )}
+                                        </div>
+                                        {/* Diamond */}
+                                        <div className="relative">
+                                            <motion.div
+                                                onPointerEnter={() => setHoveredReaction('diamond')}
+                                                onClick={() => { handleReaction('diamond'); setShowReactionPicker(false); setHoveredReaction(null); }}
+                                                className={`p-2 rounded-full cursor-pointer transition-colors ${hoveredReaction === 'diamond' || userReactions.includes('diamond') ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'}`}
+                                                animate={{ scale: hoveredReaction === 'diamond' ? 1.4 : 1, y: hoveredReaction === 'diamond' ? -8 : 0 }}
+                                            >
+                                                <Gem size={24} className={hoveredReaction === 'diamond' || userReactions.includes('diamond') ? 'fill-white' : 'text-blue-500'} />
+                                            </motion.div>
+                                            {hoveredReaction === 'diamond' && (
+                                                <motion.span initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap font-bold">Joya 💎</motion.span>
+                                            )}
+                                        </div>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -617,20 +645,28 @@ export default function EnhancedComparisonSlider({
                             {/* Main Reaction Button - shows current reaction or heart */}
                             <motion.button
                                 onPointerDown={() => {
-                                    longPressTimer.current = setTimeout(() => setShowReactionPicker(true), 500);
+                                    longPressTimer.current = setTimeout(() => setShowReactionPicker(true), 400);
                                 }}
                                 onPointerUp={() => {
                                     if (longPressTimer.current) clearTimeout(longPressTimer.current);
-                                    if (!showReactionPicker) handleLike();
+                                    if (!showReactionPicker) {
+                                        handleLike();
+                                    } else if (hoveredReaction) {
+                                        // Select the hovered reaction
+                                        if (hoveredReaction === 'like') handleLike();
+                                        else handleReaction(hoveredReaction as any);
+                                        setShowReactionPicker(false);
+                                        setHoveredReaction(null);
+                                    }
                                 }}
                                 onPointerLeave={() => {
                                     if (longPressTimer.current) clearTimeout(longPressTimer.current);
                                 }}
                                 className={`p-3 rounded-full shadow-lg transition-colors ${userReactions.includes('fire') ? 'bg-orange-500 text-white' :
-                                    userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' :
-                                        userReactions.includes('diamond') ? 'bg-blue-500 text-white' :
-                                            isLiked ? 'bg-red-500 text-white' :
-                                                'bg-white/90 dark:bg-gray-900/90'
+                                        userReactions.includes('mindblown') ? 'bg-yellow-500 text-white' :
+                                            userReactions.includes('diamond') ? 'bg-blue-500 text-white' :
+                                                isLiked ? 'bg-red-500 text-white' :
+                                                    'bg-white/90 dark:bg-gray-900/90'
                                     }`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.95 }}
