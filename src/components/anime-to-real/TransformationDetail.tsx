@@ -116,6 +116,7 @@ export default function TransformationDetail({
                         dict={dict}
                         secretImage={transformation.secretImage}
                         secretPosition={transformation.secretPosition}
+                        poi={transformation.poi}
                     />
                 </div>
 

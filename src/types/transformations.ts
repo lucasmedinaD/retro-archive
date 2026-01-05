@@ -48,5 +48,6 @@ export interface TransformationExtended {
     // Easter Egg: Secret Photo Unlock
     secretImage?: string; // Optional bonus image URL
     secretPosition?: number; // Slider position (0-100) where secret is triggered
+    poi?: Array<{ label: string; x: number; y: number; scale: number }>; // Dynamic zoom points
 }
 
